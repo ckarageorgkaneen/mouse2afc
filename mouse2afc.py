@@ -99,5 +99,6 @@ class Mouse2AFC:
             logger.error('Before send_state_machine()')
             self._bpod.send_state_machine(sma)
             logger.error('Before run_state_machine()')
-            self._bpod.run_state_machine(sma)
+            if not self._bpod.run_state_machine(sma):
+                break
             self._data.Custom.update(i_trial)
