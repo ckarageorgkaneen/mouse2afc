@@ -441,7 +441,7 @@ class CustomData:
 
         # feedback delay
         if self.task_parameters.GUI.FeedbackDelaySelection == \
-                FeedbackDelaySelection.None_:
+                FeedbackDelaySelection.none:
             self.task_parameters.GUI.FeedbackDelay = 0
         elif self.task_parameters.GUI.FeedbackDelaySelection == \
                 FeedbackDelaySelection.AutoIncr:

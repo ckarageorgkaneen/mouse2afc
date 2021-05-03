@@ -329,7 +329,7 @@ class StateMatrix(StateMachine):
                 (pwm_str(RightPort), RightPWM)
             ]
         elif task_parameters.GUI.IncorrectChoiceSignalType == \
-                IncorrectChoiceSignalType.None_:
+                IncorrectChoiceSignalType.none:
             PunishmentDuration = 0.01
             IncorrectChoice_Signal = []
         else:
@@ -346,7 +346,7 @@ class StateMatrix(StateMachine):
                 (pwm_str(CenterPort), CenterPWM),
                 (pwm_str(RightPort), RightPWM)
             ]
-        elif task_parameters.GUI.ITISignalType == ITISignalType.None_:
+        elif task_parameters.GUI.ITISignalType == ITISignalType.none:
             ITI_Signal_Duration = 0.01
             ITI_Signal = []
         else:
