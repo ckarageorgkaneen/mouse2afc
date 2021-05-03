@@ -31,12 +31,12 @@ def error(message):
 class Mouse2AFC:
     def __init__(self, bpod):
         self._bpod = bpod
-        self._task_parameters = TaskParameters()
+        self._task_parameters = TaskParameters().task_parameters
         self._data = Data(self._bpod.session, self._task_parameters)
 
     def _set_custom_data(self):
         for a in range(Const.NUM_EASY_TRIALS):
-            gui_ssc = self._task_parameters.GUI.StimulusSelectionCriteria
+            gui_ssc = self._task_parameters.StimulusSelectionCriteria
             if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
                 # This random value is between 0 and 1, the beta distribution
                 # parameters makes it very likely to very close to zero or very
@@ -45,10 +45,10 @@ class Mouse2AFC:
                 self._data.Custom.StimulusOmega[a] = [
                     betarnd(beta_dist_param, beta_dist_param)]
             elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
-                omega_prob = self._task_parameters.GUI.OmegaTable.OmegaProb
+                omega_prob = self._task_parameters.OmegaTable.OmegaProb.Value
                 index = next(omega_prob.index(prob)
                              for prob in omega_prob if prob > 0)
-                intensity = self._task_parameters.GUI.OmegaTable.Omega[
+                intensity = self._task_parameters.OmegaTable.Omega.Value[
                     index] / 100
             else:
                 error('Unexpected StimulusSelectionCriteria')
@@ -62,7 +62,7 @@ class Mouse2AFC:
             # BUG: Figure out whether this or the previous assignment
             # is the correct one
             self._data.Custom.StimulusOmega[a] = intensity
-            task_experiment_type = self._task_parameters.GUI.ExperimentType
+            task_experiment_type = self._task_parameters.ExperimentType
             if task_experiment_type == ExperimentType.Auditory:
                 dv = CalcAudClickTrain(self._data, a)
             elif task_experiment_type == ExperimentType.LightIntensity:
@@ -85,7 +85,7 @@ class Mouse2AFC:
 
     def _set_current_stimulus(self):
         # Set current stimulus for next trial - set between -100 to +100
-        self._task_parameters.GUI.CurrentStim = (self._data.Custom.DV[0] + (
+        self._task_parameters.CurrentStim = (self._data.Custom.DV[0] + (
             int(self._data.Custom.DV[0] > 0) or -1)) / 0.02
 
     def run(self):
