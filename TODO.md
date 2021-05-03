@@ -1,0 +1,6 @@
+- Implement loading the OmegaTable
+- Run mouse2afc in the emulator plugin and verify the task parameter GUI works as expected
+- Take a long, hard, objective look at the code: determine how it can be simplified
+- Add support for multiple config files (e.g. Import, Export buttons)
+- Make the OmegaTable reactive/interactive
+- Add support for real-time updates in "Current trial" tab fields
