@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>992</width>
+    <width>1004</width>
     <height>674</height>
    </rect>
   </property>
@@ -30,7 +30,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="generalTab">
        <property name="enabled">
@@ -281,7 +281,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>286</width>
+                <width>292</width>
                 <height>181</height>
                </rect>
               </property>
@@ -352,7 +352,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>286</width>
+                <width>292</width>
                 <height>253</height>
                </rect>
               </property>
@@ -463,7 +463,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>290</width>
+                <width>291</width>
                 <height>486</height>
                </rect>
               </property>
@@ -595,7 +595,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>932</width>
+                <width>944</width>
                 <height>512</height>
                </rect>
               </property>
@@ -620,13 +620,6 @@
                   <widget class="QLabel" name="mouseWeightLabel">
                    <property name="text">
                     <string>MouseWeight</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="MouseWeight">
-                   <property name="enabled">
-                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -721,13 +714,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="8" column="1">
-                  <widget class="QCheckBox" name="IsOptoTrial">
-                   <property name="enabled">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="9" column="0">
                   <widget class="QLabel" name="performanceLabel">
                    <property name="text">
@@ -751,6 +737,20 @@
                  </item>
                  <item row="10" column="1">
                   <widget class="QLineEdit" name="AllPerformance">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="1">
+                  <widget class="QLineEdit" name="IsOptoTrial">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="MouseWeight">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -801,6 +801,13 @@
                  <property name="verticalSpacing">
                   <number>10</number>
                  </property>
+                 <item row="0" column="0" colspan="2">
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>Omega Table:</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="tableNoteLabel">
                    <property name="text">
@@ -857,227 +864,8 @@
                  </item>
                  <item row="1" column="0" colspan="2">
                   <widget class="QTableWidget" name="OmegaTable">
-                   <row>
-                    <property name="text">
-                     <string>1</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>2</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>3</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>4</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>5</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>6</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>7</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>8</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>9</string>
-                    </property>
-                   </row>
-                   <row>
-                    <property name="text">
-                     <string>10</string>
-                    </property>
-                   </row>
-                   <column>
-                    <property name="text">
-                     <string>Stim %</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>RDK Coh.</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>P(a)</string>
-                    </property>
-                   </column>
-                   <item row="0" column="0">
-                    <property name="text">
-                     <string>100</string>
-                    </property>
-                   </item>
-                   <item row="0" column="1">
-                    <property name="text">
-                     <string>100</string>
-                    </property>
-                   </item>
-                   <item row="0" column="2">
-                    <property name="text">
-                     <string>9</string>
-                    </property>
-                   </item>
-                   <item row="1" column="0">
-                    <property name="text">
-                     <string>95</string>
-                    </property>
-                   </item>
-                   <item row="1" column="1">
-                    <property name="text">
-                     <string>90</string>
-                    </property>
-                   </item>
-                   <item row="1" column="2">
-                    <property name="text">
-                     <string>8</string>
-                    </property>
-                   </item>
-                   <item row="2" column="0">
-                    <property name="text">
-                     <string>90</string>
-                    </property>
-                   </item>
-                   <item row="2" column="1">
-                    <property name="text">
-                     <string>80</string>
-                    </property>
-                   </item>
-                   <item row="2" column="2">
-                    <property name="text">
-                     <string>7</string>
-                    </property>
-                   </item>
-                   <item row="3" column="0">
-                    <property name="text">
-                     <string>85</string>
-                    </property>
-                   </item>
-                   <item row="3" column="1">
-                    <property name="text">
-                     <string>70</string>
-                    </property>
-                   </item>
-                   <item row="3" column="2">
-                    <property name="text">
-                     <string>6</string>
-                    </property>
-                   </item>
-                   <item row="4" column="0">
-                    <property name="text">
-                     <string>80</string>
-                    </property>
-                   </item>
-                   <item row="4" column="1">
-                    <property name="text">
-                     <string>60</string>
-                    </property>
-                   </item>
-                   <item row="4" column="2">
-                    <property name="text">
-                     <string>5</string>
-                    </property>
-                   </item>
-                   <item row="5" column="0">
-                    <property name="text">
-                     <string>75</string>
-                    </property>
-                   </item>
-                   <item row="5" column="1">
-                    <property name="text">
-                     <string>50</string>
-                    </property>
-                   </item>
-                   <item row="5" column="2">
-                    <property name="text">
-                     <string>4</string>
-                    </property>
-                   </item>
-                   <item row="6" column="0">
-                    <property name="text">
-                     <string>70</string>
-                    </property>
-                   </item>
-                   <item row="6" column="1">
-                    <property name="text">
-                     <string>40</string>
-                    </property>
-                   </item>
-                   <item row="6" column="2">
-                    <property name="text">
-                     <string>3</string>
-                    </property>
-                   </item>
-                   <item row="7" column="0">
-                    <property name="text">
-                     <string>65</string>
-                    </property>
-                   </item>
-                   <item row="7" column="1">
-                    <property name="text">
-                     <string>30</string>
-                    </property>
-                   </item>
-                   <item row="7" column="2">
-                    <property name="text">
-                     <string>2</string>
-                    </property>
-                   </item>
-                   <item row="8" column="0">
-                    <property name="text">
-                     <string>60</string>
-                    </property>
-                   </item>
-                   <item row="8" column="1">
-                    <property name="text">
-                     <string>20</string>
-                    </property>
-                   </item>
-                   <item row="8" column="2">
-                    <property name="text">
-                     <string>1</string>
-                    </property>
-                   </item>
-                   <item row="9" column="0">
-                    <property name="text">
-                     <string>55</string>
-                    </property>
-                   </item>
-                   <item row="9" column="1">
-                    <property name="text">
-                     <string>10</string>
-                    </property>
-                   </item>
-                   <item row="9" column="2">
-                    <property name="text">
-                     <string>0</string>
-                    </property>
-                   </item>
-                  </widget>
-                 </item>
-                 <item row="0" column="0" colspan="2">
-                  <widget class="QLabel" name="label">
-                   <property name="text">
-                    <string>Omega Table:</string>
+                   <property name="enabled">
+                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -1303,7 +1091,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>250</width>
+                <width>262</width>
                 <height>486</height>
                </rect>
               </property>
@@ -1398,7 +1186,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>447</width>
+                <width>453</width>
                 <height>208</height>
                </rect>
               </property>
@@ -1486,7 +1274,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>447</width>
+                <width>453</width>
                 <height>226</height>
                </rect>
               </property>
@@ -1589,7 +1377,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>453</width>
+                <width>459</width>
                 <height>512</height>
                </rect>
               </property>
@@ -1630,7 +1418,7 @@
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QSpinBox" name="ScreenDist"/>
+                  <widget class="QSpinBox" name="ScreenDistCm"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="screenWidthLabel">
@@ -1640,12 +1428,12 @@
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QSpinBox" name="ScreenWidth"/>
+                  <widget class="QSpinBox" name="ScreenWidthCm"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="apertureSizeHeightLabel">
                    <property name="text">
-                    <string>ApertureSizeHeight (cm)</string>
+                    <string>ApertureSizeHeight</string>
                    </property>
                   </widget>
                  </item>
@@ -1655,7 +1443,7 @@
                  <item row="5" column="0">
                   <widget class="QLabel" name="apertureSizeWidthLabel">
                    <property name="text">
-                    <string>ApertureSizeWidth (cm)</string>
+                    <string>ApertureSizeWidth</string>
                    </property>
                   </widget>
                  </item>
@@ -1665,7 +1453,7 @@
                  <item row="6" column="0">
                   <widget class="QLabel" name="centerXLabel">
                    <property name="text">
-                    <string>CenterX (cm)</string>
+                    <string>CenterX</string>
                    </property>
                   </widget>
                  </item>
@@ -1675,7 +1463,7 @@
                  <item row="7" column="0">
                   <widget class="QLabel" name="centerYLabel">
                    <property name="text">
-                    <string>CenterY (cm)</string>
+                    <string>CenterY</string>
                    </property>
                   </widget>
                  </item>
@@ -1711,7 +1499,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>932</width>
+                <width>944</width>
                 <height>512</height>
                </rect>
               </property>
@@ -1836,7 +1624,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>926</width>
+                <width>938</width>
                 <height>217</height>
                </rect>
               </property>
@@ -1914,7 +1702,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>926</width>
+                <width>938</width>
                 <height>217</height>
                </rect>
               </property>
@@ -2015,7 +1803,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>992</width>
+     <width>1004</width>
      <height>22</height>
     </rect>
    </property>
@@ -2023,21 +1811,11 @@
     <property name="title">
      <string>Options</string>
     </property>
-    <addaction name="actionReset_defaults"/>
+    <addaction name="actionReload_defaults"/>
    </widget>
    <addaction name="menuOptions"/>
   </widget>
-  <action name="actionSave">
-   <property name="text">
-    <string>Save</string>
-   </property>
-  </action>
-  <action name="actionSave_as">
-   <property name="text">
-    <string>Save as...</string>
-   </property>
-  </action>
-  <action name="actionReset_defaults">
+  <action name="actionReload_defaults">
    <property name="text">
     <string>Reload defaults</string>
    </property>
