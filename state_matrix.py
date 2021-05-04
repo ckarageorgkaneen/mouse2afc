@@ -91,13 +91,14 @@ class StateMatrix(StateMachine):
         IsLeftRewarded = data.Custom.LeftRewarded[i_trial]
 
         if task_parameters.ExperimentType == ExperimentType.Auditory:
-            DeliverStimulus = [('BNCState', 1)]
+            # In MATLAB: 'BNCState' instead of 'BNC1'
+            DeliverStimulus = [('BNC1', 1)]
             ContDeliverStimulus = []
             StopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [], [('BNCState', 0)])
+                task_parameters.StimAfterPokeOut, [], [('BNC1', 0)])
             ChoiceStopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [('BNCState', 0)], [])
-            EWDStopStimulus = [('BNCState', 0)]
+                task_parameters.StimAfterPokeOut, [('BNC1', 0)], [])
+            EWDStopStimulus = [('BNC1', 0)]
         elif task_parameters.ExperimentType == \
                 ExperimentType.LightIntensity:
             # Divide Intensity by 100 to get fraction value
@@ -118,9 +119,9 @@ class StateMatrix(StateMachine):
         elif task_parameters.ExperimentType == \
                 ExperimentType.GratingOrientation:
             rightPortAngle = VisualStimAngle.get_degrees(
-                task_parameters.VisualStimAnglePortRight)
+                task_parameters.VisualStimAnglePortRight.value)
             leftPortAngle = VisualStimAngle.get_degrees(
-                task_parameters.VisualStimAnglePortLeft)
+                task_parameters.VisualStimAnglePortLeft.value)
             # Calculate the distance between right and left port angle to
             # determine whether we should use the circle arc between the two
             # values in the clock-wise or counter-clock-wise direction to
@@ -145,14 +146,14 @@ class StateMatrix(StateMachine):
             gratingOrientation = mod(gratingOrientation, 360)
             data.Custom.drawParams.stimType = DrawStimType.StaticGratings
             data.Custom.drawParams.gratingOrientation = gratingOrientation
-            data.Custom.drawParams.numCycles = task_parameters.numCycles
+            data.Custom.drawParams.numCycles = task_parameters.NumCycles
             data.Custom.drawParams.cyclesPerSecondDrift = \
-                task_parameters.cyclesPerSecondDrift
-            data.Custom.drawParams.phase = task_parameters.phase
+                task_parameters.CyclesPerSecondDrift
+            data.Custom.drawParams.phase = task_parameters.Phase
             data.Custom.drawParams.gaborSizeFactor = \
-                task_parameters.gaborSizeFactor
+                task_parameters.GaborSizeFactor
             data.Custom.drawParams.gaussianFilterRatio = \
-                task_parameters.gaussianFilterRatio
+                task_parameters.GaussianFilterRatio
             # Start from the 5th byte
             # serializeAndWrite(data.dotsMapped_file, 5,
             #                   data.Custom.drawParams)
@@ -169,35 +170,35 @@ class StateMatrix(StateMachine):
             # Setup the parameters
             # Use 20% of the screen size. Assume apertureSize is the diameter
             task_parameters.circleArea = math.pi * \
-                ((task_parameters.apertureSizeWidth / 2) ** 2)
+                ((task_parameters.ApertureSizeWidth / 2) ** 2)
             task_parameters.nDots = round(
-                task_parameters.circleArea * task_parameters.drawRatio)
+                task_parameters.CircleArea * task_parameters.DrawRatio)
 
             data.Custom.drawParams.stimType = DrawStimType.RDK
-            data.Custom.drawParams.centerX = task_parameters.centerX
-            data.Custom.drawParams.centerY = task_parameters.centerY
+            data.Custom.drawParams.centerX = task_parameters.CenterX
+            data.Custom.drawParams.centerY = task_parameters.CenterY
             data.Custom.drawParams.apertureSizeWidth = \
-                task_parameters.apertureSizeWidth
+                task_parameters.ApertureSizeWidth
             data.Custom.drawParams.apertureSizeHeight = \
-                task_parameters.apertureSizeHeight
-            data.Custom.drawParams.drawRatio = task_parameters.drawRatio
+                task_parameters.ApertureSizeHeight
+            data.Custom.drawParams.drawRatio = task_parameters.DrawRatio
             data.Custom.drawParams.mainDirection = floor(
                 VisualStimAngle.get_degrees(
                     iff(IsLeftRewarded,
-                        task_parameters.VisualStimAnglePortLeft,
-                        task_parameters.VisualStimAnglePortRight)))
+                        task_parameters.VisualStimAnglePortLeft.value,
+                        task_parameters.VisualStimAnglePortRight.value)))
             data.Custom.drawParams.dotSpeed = \
-                task_parameters.dotSpeedDegsPerSec
+                task_parameters.DotSpeedDegsPerSec
             data.Custom.drawParams.dotLifetimeSecs = \
-                task_parameters.dotLifetimeSecs
+                task_parameters.DotLifetimeSecs
             data.Custom.drawParams.coherence = data.Custom.DotsCoherence[
                 i_trial]
             data.Custom.drawParams.screenWidthCm = \
-                task_parameters.screenWidthCm
+                task_parameters.ScreenWidthCm
             data.Custom.drawParams.screenDistCm = \
-                task_parameters.screenDistCm
+                task_parameters.ScreenDistCm
             data.Custom.drawParams.dotSizeInDegs = \
-                task_parameters.dotSizeInDegs
+                task_parameters.DotSizeInDegs
 
             # Start from the 5th byte
             # serializeAndWrite(data.dotsMapped_file, 5,

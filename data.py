@@ -87,6 +87,7 @@ class CustomData:
 
     def __init__(self, task_parameters, Timer, RawData):
         self.task_parameters = task_parameters
+        self.drawParams = drawParams()
         self.Timer = Timer
         self.RawData = RawData
         self.ChoiceLeft = datalist(False)
@@ -127,7 +128,7 @@ class CustomData:
         self.LeftRewarded = datalist(False)
         self.DV = datalist()
         self.TrialStartSysTime = []
-        self.DotsCoherence = None
+        self.DotsCoherence = datalist()
 
     def update(self, i_trial):
         # Standard values
@@ -644,8 +645,8 @@ class CustomData:
                             # probability
                             Intensity = randsample(
                                 self.task_parameters.OmegaTable.columns.Omega,
-                                weights=self.task_parameters.OmegaTable.columns.
-                                OmegaProb
+                                weights=self.task_parameters.OmegaTable.
+                                columns.OmegaProb
                             )[0] / 100
                     else:
                         error('Unexpected StimulusSelectionCriteria')
@@ -791,25 +792,25 @@ class TimerData:
 
 class drawParams:
     def __init__(self):
-        self.stimType = None
-        self.gratingOrientation = None
-        self.numCycles = None
-        self.cyclesPerSecondDrift = None
-        self.phase = None
-        self.gaborSizeFactor = None
-        self.gaussianFilterRatio = None
-        self.centerX = None
-        self.centerY = None
-        self.apertureSizeWidth = None
-        self.apertureSizeHeight = None
-        self.drawRatio = None
-        self.mainDirection = None
-        self.dotSpeed = None
-        self.dotLifetimeSecs = None
-        self.coherence = None
-        self.screenWidthCm = None
-        self.screenDistCm = None
-        self.dotSizeInDegs = None
+        self.StimType = None
+        self.GratingOrientation = None
+        self.NumCycles = None
+        self.CyclesPerSecondDrift = None
+        self.Phase = None
+        self.GaborSizeFactor = None
+        self.GaussianFilterRatio = None
+        self.CenterX = None
+        self.CenterY = None
+        self.ApertureSizeWidth = None
+        self.ApertureSizeHeight = None
+        self.DrawRatio = None
+        self.MainDirection = None
+        self.DotSpeed = None
+        self.DotLifetimeSecs = None
+        self.Coherence = None
+        self.ScreenWidthCm = None
+        self.ScreenDistCm = None
+        self.DotSizeInDegs = None
 
 
 class Data:
@@ -818,7 +819,6 @@ class Data:
         self.RawData = RawData(session)
         self.Timer = TimerData()
         self.Custom = CustomData(task_parameters, self.Timer, self.RawData)
-        self.drawParams = drawParams()
         self.TrialStartTimestamp = datalist()
         self.TrialEndTimestamp = datalist()
         self.SettingsFile = None
