@@ -266,11 +266,11 @@ class CustomData:
                 stim_val = self.StimulusOmega[i_trial] * 100
                 if stim_val < 50:
                     stim_val = 100 - stim_val
-                stim_prob = self.task_parameters.OmegaTable.OmegaProb.Value[
-                    self.task_parameters.OmegaTable.Omega.Value.index(
+                stim_prob = self.task_parameters.OmegaTable.columns.OmegaProb[
+                    self.task_parameters.OmegaTable.columns.Omega.index(
                         stim_val)]
                 sum_all_prob = sum(
-                    self.task_parameters.OmegaTable.OmegaProb.Value)
+                    self.task_parameters.OmegaTable.columns.OmegaProb)
                 stim_prob = (1 + sum_all_prob - stim_prob) / sum_all_prob
                 self.CatchCount[catch_stim_idx] += stim_prob
                 self.LastSuccessCatchTial = i_trial
@@ -582,15 +582,15 @@ class CustomData:
             if self.task_parameters.StimulusSelectionCriteria != \
                     StimulusSelectionCriteria.BetaDistribution:
                 omega_prob_sum = sum(
-                    self.task_parameters.OmegaTable.OmegaProb.Value)
+                    self.task_parameters.OmegaTable.columns.OmegaProb)
                 # Avoid having no probability and avoid dividing by zero
                 if omega_prob_sum == 0:
-                    self.task_parameters.OmegaTable.OmegaProb.Value = [1] * \
-                        len(self.task_parameters.OmegaTable.OmegaProb.Value)
-                self.task_parameters.OmegaTable.OmegaProb.Value = [
+                    self.task_parameters.OmegaTable.columns.OmegaProb = [1] * \
+                        len(self.task_parameters.OmegaTable.columns.OmegaProb)
+                self.task_parameters.OmegaTable.columns.OmegaProb = [
                     omega_prob / omega_prob_sum
                     for omega_prob
-                    in self.task_parameters.OmegaTable.OmegaProb.Value
+                    in self.task_parameters.OmegaTable.columns.OmegaProb
                 ]
             self.Timer.customCalcOmega[i_trial] = time.time()
 
@@ -634,7 +634,7 @@ class CustomData:
                                 self.task_parameters.StartEasyTrials:
                             index = next(prob[0] for prob in enumerate(
                                 self.task_parameters.
-                                OmegaTable.OmegaProb.Value)
+                                OmegaTable.columns.OmegaProb)
                                 if prob[1] > 0)
                             Intensity = \
                                 self.task_parameters.OmegaTable.Omega[
@@ -643,8 +643,8 @@ class CustomData:
                             # Choose a value randomly given the each value
                             # probability
                             Intensity = randsample(
-                                self.task_parameters.OmegaTable.Omega,
-                                weights=self.task_parameters.OmegaTable.
+                                self.task_parameters.OmegaTable.columns.Omega,
+                                weights=self.task_parameters.OmegaTable.columns.
                                 OmegaProb
                             )[0] / 100
                     else:
@@ -689,9 +689,9 @@ class CustomData:
             self.Timer.customGenNewTrials[i_trial] = 0
 
         # Update RDK GUI
-        self.task_parameters.OmegaTable.RDK.Value = [
+        self.task_parameters.OmegaTable.columns.RDK = [
             (value - 50) * 2
-            for value in self.task_parameters.OmegaTable.Omega.Value
+            for value in self.task_parameters.OmegaTable.columns.Omega
         ]
         # Set current stimulus for next trial
         DV = self.DV[i_trial + 1]
@@ -732,7 +732,7 @@ class CustomData:
                 non_zero_prob = [
                     self.task_parameters.OmegaTable.Omega[i] / 100
                     for i, prob in enumerate(
-                        self.task_parameters.OmegaTable.OmegaProb.Value)
+                        self.task_parameters.OmegaTable.columns.OmegaProb)
                     if prob > 0]
                 complement_non_zero_prob = [1 - prob for prob in non_zero_prob]
                 inverse_non_zero_prob = non_zero_prob[::-1]

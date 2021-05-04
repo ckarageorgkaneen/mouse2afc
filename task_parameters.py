@@ -5,6 +5,9 @@ import enum
 
 from AnyQt.QtWidgets import QMainWindow
 from AnyQt.QtWidgets import QApplication
+from AnyQt.QtWidgets import QHeaderView
+from AnyQt.QtWidgets import QTableWidget
+from AnyQt.QtWidgets import QTableWidgetItem
 from AnyQt.QtWidgets import QComboBox
 from AnyQt.QtWidgets import QCheckBox
 from AnyQt.QtWidgets import QAbstractSpinBox
@@ -31,6 +34,14 @@ class AttrDict(dict):
             return AttrDict({
                 key: AttrDict.from_nested_dict(data[key])
                 for key in data})
+
+
+class TaskParametersGUITable:
+
+    def __init__(self, headers, **columns):
+        assert len(headers) == len(columns)
+        self.headers = headers
+        self.columns = AttrDict.from_nested_dict(columns)
 
 
 class TaskParametersGUIConfirmDialog(QDialog):
@@ -85,7 +96,20 @@ class TaskParametersGUI(QMainWindow):
         ui_field = self._field(parameter)
         if ui_field is None:
             return
-        if isinstance(ui_field, QComboBox):
+        if isinstance(ui_field, QTableWidget):
+            assert isinstance(value, TaskParametersGUITable)
+            ui_field.setEditTriggers(QTableWidget.NoEditTriggers)
+            ui_field.setColumnCount(len(value.headers))
+            ui_field.setRowCount(len(next(iter(value.columns.items()))[1]))
+            ui_field.horizontalHeader().setSectionResizeMode(
+                QHeaderView.Stretch)
+            ui_field.setHorizontalHeaderLabels(value.headers)
+            for col, key in enumerate(value.columns.keys()):
+                for row, item in enumerate(value.columns[key]):
+                    ui_field.setItem(row, col, QTableWidgetItem(str(item)))
+            ui_field.resizeColumnsToContents()
+            ui_field.resizeRowsToContents()
+        elif isinstance(ui_field, QComboBox):
             assert isinstance(value, enum.Enum)
             ui_field.addItems(value.__class__.members())
             ui_field.setCurrentIndex(ui_field.findText(value.name))

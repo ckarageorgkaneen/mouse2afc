@@ -45,10 +45,10 @@ class Mouse2AFC:
                 self._data.Custom.StimulusOmega[a] = [
                     betarnd(beta_dist_param, beta_dist_param)]
             elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
-                omega_prob = self._task_parameters.OmegaTable.OmegaProb.Value
+                omega_prob = self._task_parameters.OmegaTable.columns.OmegaProb
                 index = next(omega_prob.index(prob)
                              for prob in omega_prob if prob > 0)
-                intensity = self._task_parameters.OmegaTable.Omega.Value[
+                intensity = self._task_parameters.OmegaTable.columns.Omega[
                     index] / 100
             else:
                 error('Unexpected StimulusSelectionCriteria')

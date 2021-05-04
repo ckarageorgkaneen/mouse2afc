@@ -12,6 +12,8 @@ from definitions.stimulus_selection_criteria import StimulusSelectionCriteria
 from definitions.ttl_wire_usage import TTLWireUsage
 from definitions.visual_stim_angle import VisualStimAngle
 
+from task_parameters import TaskParametersGUITable
+
 from utils import round
 
 AllPerformance = '(Calc. after 1st trial)'
@@ -61,20 +63,11 @@ _omega_stim_pct_values = list(range(100, 50, -5))
 _len_omega = len(_omega_stim_pct_values)
 _omega_prob = [_len_omega - i - 1 for i in range(_len_omega)]
 _omega_rdk = [(prob - 50) * 2 for prob in _omega_stim_pct_values]
-OmegaTable = {
-    'Omega': {
-        'ColumnName': 'Stim %',
-        'Value': _omega_stim_pct_values,
-    },
-    'OmegaProb': {
-        'ColumnName': 'P(a)',
-        'Value': _omega_prob,
-    },
-    'RDK': {
-        'ColumnName': 'RDK Coh.',
-        'Value': _omega_rdk
-    }
-}
+OmegaTable = TaskParametersGUITable(
+    headers=['Stim %', 'RDK Coh.', 'P(a)'],
+    Omega=_omega_stim_pct_values,
+    OmegaProb=_omega_prob,
+    RDK=_omega_rdk)
 OptoBrainRegion = BrainRegion.V1_L
 OptoEndState1 = MatrixState.WaitCenterPortOut
 OptoEndState2 = MatrixState.WaitForChoice
