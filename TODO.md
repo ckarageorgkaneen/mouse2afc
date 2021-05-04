@@ -1,6 +1,7 @@
-- Implement loading the OmegaTable
-- Run mouse2afc in the emulator plugin and verify the task parameter GUI works as expected
-- Take a long, hard, objective look at the code: determine how it can be simplified
+- Find and fix bugs (by repeatedly running the protocol with different parameters)
+- Decide on snake_case vs CamelCase vs camelCase (right now there is no convention)
 - Add support for multiple config files (e.g. Import, Export buttons)
 - Make the OmegaTable reactive/interactive
 - Add support for real-time updates in "Current trial" tab fields
+- Add general reflection support (task parameter GUI reflects running protocol)
+- Take a long, hard, objective look at the code: simplify it
