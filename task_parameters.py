@@ -20,6 +20,10 @@ from AnyQt.QtWidgets import QVBoxLayout
 from AnyQt import uic
 
 
+def fullpath(file):
+    return os.path.join(os.path.dirname(__file__), file)
+
+
 class AttrDict(dict):
 
     def __init__(self, *args, **kwargs):
@@ -61,7 +65,7 @@ class TaskParametersGUIConfirmDialog(QDialog):
 
 class TaskParametersGUI(QMainWindow):
 
-    _file = 'task_parameters.ui'
+    _file = fullpath('task_parameters.ui')
 
     def __init__(self, task_parameters):
         super().__init__()
@@ -147,7 +151,7 @@ class TaskParametersGUI(QMainWindow):
 
 class TaskParameters:
 
-    _default_file = 'config.py'
+    _default_file = fullpath('config.py')
 
     def __init__(self, file_=None, open_gui=True):
         self._file = file_ or self._default_file

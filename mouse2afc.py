@@ -29,9 +29,10 @@ def error(message):
 
 
 class Mouse2AFC:
-    def __init__(self, bpod):
+    def __init__(self, bpod, config_file=None):
         self._bpod = bpod
-        self._task_parameters = TaskParameters().task_parameters
+        self._task_parameters = TaskParameters(
+            file_=config_file).task_parameters
         self._data = Data(self._bpod.session, self._task_parameters)
 
     def _set_custom_data(self):
