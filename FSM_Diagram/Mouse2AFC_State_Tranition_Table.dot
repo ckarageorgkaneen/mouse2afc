@@ -1,0 +1,182 @@
+digraph {
+	"1. ITI_Signal"
+	"2. WaitForCenterPoke"
+	"1. ITI_Signal" -> "2. WaitForCenterPoke" [label="x time"]
+	"2. WaitForCenterPoke"
+	"3. PreStimReward"
+	"2. WaitForCenterPoke" -> "3. PreStimReward" [label=CenterPortIn]
+	"3. PreStimReward"
+	"4. TriggerWaitForStimulus"
+	"3. PreStimReward" -> "4. TriggerWaitForStimulus" [label="x time"]
+	"4. TriggerWaitForStimulus"
+	"5. WaitForStimulus"
+	"4. TriggerWaitForStimulus" -> "5. WaitForStimulus" [label="x time"]
+	"4. TriggerWaitForStimulus"
+	"6. StimDelayGrace"
+	"4. TriggerWaitForStimulus" -> "6. StimDelayGrace" [label=CenterPortOut]
+	"5. WaitForStimulus"
+	"8. stimulus_delivery"
+	"5. WaitForStimulus" -> "8. stimulus_delivery" [label="x time"]
+	"8. stimulus_delivery"
+	"9. early_withdraw"
+	"8. stimulus_delivery" -> "9. early_withdraw" [label=CenterPortOut]
+	"8. stimulus_delivery"
+	"10.BeepMinSampling"
+	"8. stimulus_delivery" -> "10.BeepMinSampling" [label="x time"]
+	"9. early_withdraw"
+	"25.timeOut_EarlyWithdraw"
+	"9. early_withdraw" -> "25.timeOut_EarlyWithdraw" [label="x time"]
+	"25.timeOut_EarlyWithdraw"
+	"26. timeOut_EarlyWithdrawFlashOn"
+	"25.timeOut_EarlyWithdraw" -> "26. timeOut_EarlyWithdrawFlashOn" [label="x time"]
+	"25.timeOut_EarlyWithdraw"
+	"30.ITI"
+	"25.timeOut_EarlyWithdraw" -> "30.ITI" [label="'SoftCode1'"]
+	"26. timeOut_EarlyWithdrawFlashOn"
+	"25.timeOut_EarlyWithdraw"
+	"26. timeOut_EarlyWithdrawFlashOn" -> "25.timeOut_EarlyWithdraw" [label="x time"]
+	"26. timeOut_EarlyWithdrawFlashOn"
+	"30.ITI"
+	"26. timeOut_EarlyWithdrawFlashOn" -> "30.ITI" [label="'SoftCode1'"]
+	"6. StimDelayGrace"
+	"4. TriggerWaitForStimulus"
+	"6. StimDelayGrace" -> "4. TriggerWaitForStimulus" [label=CenterPortIn]
+	"6. StimDelayGrace"
+	"7. broke_fixation"
+	"6. StimDelayGrace" -> "7. broke_fixation" [label="x time"]
+	"7. broke_fixation"
+	"30.ITI"
+	"7. broke_fixation" -> "30.ITI" [label="x time"]
+	"10.BeepMinSampling"
+	"11. CenterPortRewardDelivery"
+	"10.BeepMinSampling" -> "11. CenterPortRewardDelivery" [label="x time"]
+	"10.BeepMinSampling"
+	"12. TriggerWaitChoiceTimer"
+	"10.BeepMinSampling" -> "12. TriggerWaitChoiceTimer" [label=CenterPortOut]
+	"11. CenterPortRewardDelivery"
+	"34. StimulusTime"
+	"11. CenterPortRewardDelivery" -> "34. StimulusTime" [label="x time"]
+	"34. StimulusTime"
+	"13. WaitCenterPort"
+	"34. StimulusTime" -> "13. WaitCenterPort" [label="x time"]
+	"34. StimulusTime"
+	"12. TriggerWaitChoiceTimer"
+	"34. StimulusTime" -> "12. TriggerWaitChoiceTimer" [label=CenterPortOut]
+	"13. WaitCenterPort"
+	"14. WaitForChoice"
+	"13. WaitCenterPort" -> "14. WaitForChoice" [label=CenterPortOut]
+	"13. WaitCenterPort"
+	"15. WaitForRewardStart"
+	"13. WaitCenterPort" -> "15. WaitForRewardStart" [label=RewardIn]
+	"13. WaitCenterPort"
+	"29. timeOUt_MissedChoice"
+	"13. WaitCenterPort" -> "29. timeOUt_MissedChoice" [label="TimerEnd()"]
+	"13. WaitCenterPort"
+	"21. WaitforPunishStart"
+	"13. WaitCenterPort" -> "21. WaitforPunishStart" [label="Punish In + Incorrect Conseqeunce = True"]
+	"13. WaitCenterPort"
+	"20. RegisterWrongWaitCorrect"
+	"13. WaitCenterPort" -> "20. RegisterWrongWaitCorrect" [label="Punish In + Incorrect Conseqeunce = False"]
+	"12. TriggerWaitChoiceTimer"
+	"14. WaitForChoice"
+	"12. TriggerWaitChoiceTimer" -> "14. WaitForChoice" [label="x time"]
+	"14. WaitForChoice"
+	"15. WaitForRewardStart"
+	"14. WaitForChoice" -> "15. WaitForRewardStart" [label=RewardIn]
+	"14. WaitForChoice"
+	"29. timeOUt_MissedChoice"
+	"14. WaitForChoice" -> "29. timeOUt_MissedChoice" [label="TimerEnd(x)"]
+	"14. WaitForChoice"
+	"21. WaitforPunishStart"
+	"14. WaitForChoice" -> "21. WaitforPunishStart" [label="Punish In + Incorrect Conseqeunce = True"]
+	"14. WaitForChoice"
+	"20. RegisterWrongWaitCorrect"
+	"14. WaitForChoice" -> "20. RegisterWrongWaitCorrect" [label="Punish In + Incorrect Conseqeunce = False"]
+	"29. timeOUt_MissedChoice"
+	"30. ITI"
+	"29. timeOUt_MissedChoice" -> "30. ITI" [label="x time"]
+	"20. RegisterWrongWaitCorrect"
+	"14. WaitForChoice"
+	"20. RegisterWrongWaitCorrect" -> "14. WaitForChoice" [label="x time"]
+	"21. WaitforPunishStart"
+	"22. WaitForPunish"
+	"21. WaitforPunishStart" -> "22. WaitForPunish" [label="x time"]
+	"22. WaitForPunish"
+	"23. PunishGrace"
+	"22. WaitForPunish" -> "23. PunishGrace" [label=PunishOut]
+	"22. WaitForPunish"
+	"24. Punishment"
+	"22. WaitForPunish" -> "24. Punishment" [label="TimerEnd(x)"]
+	"23. PunishGrace"
+	"22. WaitForPunish"
+	"23. PunishGrace" -> "22. WaitForPunish" [label=PunishIn]
+	"23. PunishGrace"
+	"28. timeOut_SkippedFeedback"
+	"23. PunishGrace" -> "28. timeOut_SkippedFeedback" [label="x time"]
+	"23. PunishGrace"
+	"28. timeOut_SkippedFeedback"
+	"23. PunishGrace" -> "28. timeOut_SkippedFeedback" [label="TimerEnd(x)"]
+	"23. PunishGrace"
+	"28. timeOut_SkippedFeedback"
+	"23. PunishGrace" -> "28. timeOut_SkippedFeedback" [label=CenterPortIn]
+	"23. PunishGrace"
+	"28. timeOut_SkippedFeedback"
+	"23. PunishGrace" -> "28. timeOut_SkippedFeedback" [label=RewardIn]
+	"24. Punishment"
+	"27. timeOut_IncorrectChoice"
+	"24. Punishment" -> "27. timeOut_IncorrectChoice" [label=PunishOut]
+	"24. Punishment"
+	"34. WaitPunishOut"
+	"24. Punishment" -> "34. WaitPunishOut" [label="x time"]
+	"27. timeOut_IncorrectChoice"
+	"31. ext_ITI"
+	"27. timeOut_IncorrectChoice" -> "31. ext_ITI" [label="IfTimerIsOff(x)"]
+	"34. WaitPunishOut"
+	"27. timeOut_IncorrectChoice"
+	"34. WaitPunishOut" -> "27. timeOut_IncorrectChoice" [label="x time"]
+	"34. WaitPunishOut"
+	"27. timeOut_IncorrectChoice"
+	"34. WaitPunishOut" -> "27. timeOut_IncorrectChoice" [label=PunishOut]
+	"15. WaitForRewardStart"
+	"16. WaitForReward"
+	"15. WaitForRewardStart" -> "16. WaitForReward" [label="x time"]
+	"16. WaitForReward"
+	"17. RewardGrace"
+	"16. WaitForReward" -> "17. RewardGrace" [label=RewardOut]
+	"16. WaitForReward"
+	"18. Reward"
+	"16. WaitForReward" -> "18. Reward" [label="TimerEnd(x)"]
+	"17. RewardGrace"
+	"16. WaitForReward"
+	"17. RewardGrace" -> "16. WaitForReward" [label=RewardIn]
+	"17. RewardGrace"
+	"28. timeOut_SkippedFeedback"
+	"17. RewardGrace" -> "28. timeOut_SkippedFeedback" [label="x time"]
+	"17. RewardGrace"
+	"28. timeOut_SkippedFeedback"
+	"17. RewardGrace" -> "28. timeOut_SkippedFeedback" [label="TimerEnd(x)"]
+	"17. RewardGrace"
+	"28. timeOut_SkippedFeedback"
+	"17. RewardGrace" -> "28. timeOut_SkippedFeedback" [label=CenterPortIn]
+	"17. RewardGrace"
+	"28. timeOut_SkippedFeedback"
+	"17. RewardGrace" -> "28. timeOut_SkippedFeedback" [label=PunishIn]
+	"28. timeOut_SkippedFeedback"
+	"30. ITI"
+	"28. timeOut_SkippedFeedback" -> "30. ITI" [label="x time"]
+	"18. Reward"
+	"19. WaitRewardOut"
+	"18. Reward" -> "19. WaitRewardOut" [label="x time"]
+	"19. WaitRewardOut"
+	"31. ext.ITI"
+	"19. WaitRewardOut" -> "31. ext.ITI" [label="x time"]
+	"19. WaitRewardOut"
+	"31. ext.ITI"
+	"19. WaitRewardOut" -> "31. ext.ITI" [label=RewardOut]
+	"30.ITI"
+	"31. ext_ITI"
+	"30.ITI" -> "31. ext_ITI" [label="x time"]
+	"31. ext_ITI"
+	Exit
+	"31. ext_ITI" -> Exit [label="IfTimerIsOff(x)"]
+}
