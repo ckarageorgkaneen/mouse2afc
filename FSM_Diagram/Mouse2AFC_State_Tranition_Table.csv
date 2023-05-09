@@ -1,61 +1,1 @@
-SOURCE,DEST,TRIGGER
-1. ITI_Signal,2. WaitForCenterPoke,x time
-2. WaitForCenterPoke,3. PreStimReward,CenterPortIn
-3. PreStimReward,4. TriggerWaitForStimulus,x time
-4. TriggerWaitForStimulus,5. WaitForStimulus,x time
-,6. StimDelayGrace,CenterPortOut
-5. WaitForStimulus,8. stimulus_delivery,x time
-8. stimulus_delivery,9. early_withdraw,CenterPortOut
-,10.BeepMinSampling,x time
-9. early_withdraw,25.timeOut_EarlyWithdraw,x time
-25.timeOut_EarlyWithdraw,26. timeOut_EarlyWithdrawFlashOn,x time
-,30.ITI,'SoftCode1'
-26. timeOut_EarlyWithdrawFlashOn,25.timeOut_EarlyWithdraw,x time
-,30.ITI,'SoftCode1'
-6. StimDelayGrace,4. TriggerWaitForStimulus,CenterPortIn
-,7. broke_fixation,x time
-7. broke_fixation,30.ITI,x time
-10.BeepMinSampling,11. CenterPortRewardDelivery,x time
-,12. TriggerWaitChoiceTimer,CenterPortOut
-11. CenterPortRewardDelivery,34. StimulusTime,x time
-34. StimulusTime,13. WaitCenterPort,x time
-,12. TriggerWaitChoiceTimer,CenterPortOut
-13. WaitCenterPort,14. WaitForChoice,CenterPortOut
-,15. WaitForRewardStart,RewardIn
-,29. timeOUt_MissedChoice,TimerEnd()
-,21. WaitforPunishStart,Punish In + Incorrect Conseqeunce = True
-,20. RegisterWrongWaitCorrect,Punish In + Incorrect Conseqeunce = False
-12. TriggerWaitChoiceTimer,14. WaitForChoice,x time
-14. WaitForChoice,15. WaitForRewardStart,RewardIn
-,29. timeOUt_MissedChoice,TimerEnd(x)
-,21. WaitforPunishStart,Punish In + Incorrect Conseqeunce = True
-,20. RegisterWrongWaitCorrect,Punish In + Incorrect Conseqeunce = False
-29. timeOUt_MissedChoice,30. ITI,x time
-20. RegisterWrongWaitCorrect,14. WaitForChoice,x time
-21. WaitforPunishStart,22. WaitForPunish,x time
-22. WaitForPunish,23. PunishGrace,PunishOut
-,24. Punishment,TimerEnd(x)
-23. PunishGrace,22. WaitForPunish,PunishIn
-,28. timeOut_SkippedFeedback,x time
-,28. timeOut_SkippedFeedback,TimerEnd(x)
-,28. timeOut_SkippedFeedback,CenterPortIn
-,28. timeOut_SkippedFeedback,RewardIn
-24. Punishment,27. timeOut_IncorrectChoice,PunishOut
-,34. WaitPunishOut,x time
-27. timeOut_IncorrectChoice,31. ext_ITI,IfTimerIsOff(x)
-34. WaitPunishOut,27. timeOut_IncorrectChoice,x time
-,27. timeOut_IncorrectChoice,PunishOut
-15. WaitForRewardStart,16. WaitForReward,x time
-16. WaitForReward,17. RewardGrace,RewardOut
-,18. Reward,TimerEnd(x)
-17. RewardGrace,16. WaitForReward,RewardIn
-,28. timeOut_SkippedFeedback,x time
-,28. timeOut_SkippedFeedback,TimerEnd(x)
-,28. timeOut_SkippedFeedback,CenterPortIn
-,28. timeOut_SkippedFeedback,PunishIn
-28. timeOut_SkippedFeedback,30. ITI,x time
-18. Reward,19. WaitRewardOut,x time
-19. WaitRewardOut,31. ext.ITI,x time
-,31. ext.ITI,RewardOut
-30.ITI,31. ext_ITI,x time
-31. ext_ITI,Exit,IfTimerIsOff(x)
+SOURCE,DEST,TRIGGER1. ITI_Signal,2. WaitForCenterPoke,TE = ITI_Signal_Duration2. WaitForCenterPoke,3. PreStimReward,CenterPortIn3. PreStimReward,4. TriggerWaitForStimulus,TE = PreStimuDelayCntrReward4. TriggerWaitForStimulus,5. WaitForStimulus,TE = WireTTLDuration,6. StimDelayGrace,CenterPortOut5. WaitForStimulus,8. stimulus_delivery,TE = MinSample8. stimulus_delivery,9. early_withdraw,CenterPortOut,10. BeepMinSampling,TE = StimDelay9. early_withdraw,25. timeOut_EarlyWithdraw,TE = 025. timeOut_EarlyWithdraw,26. timeOut_EarlyWithdrawFlashOn,TE = LEDErrorRate,30. ITI,'SoftCode1'26. timeOut_EarlyWithdrawFlashOn,25. timeOut_EarlyWithdraw,TE = LEDErrorRate,30. ITI,'SoftCode1'6. StimDelayGrace,4. TriggerWaitForStimulus,CenterPortIn,7. broke_fixation,TE = TimeDelayGrace7. broke_fixation,30. ITI,TE = PCTimeOut10. BeepMinSampling,11. CenterPortRewardDelivery,TE = MinSampleBeepDuration,12. TriggerWaitChoiceTimer,CenterPortOut11. CenterPortRewardDelivery,34. StimulusTime,TE = Timer_CPRD34. StimulusTime,13. WaitCenterPortOut,TE = StimulusTime,12. TriggerWaitChoiceTimer,CenterPortOut13. WaitCenterPort,14. WaitForChoice,CenterPortOut,15. WaitForRewardStart,RewardIn,29. timeOUt_MissedChoice,GlobalTimer1_end,21. WaitforPunishStart,Punish In + Incorrect Conseqeunce = True,20. RegisterWrongWaitCorrect,Punish In + Incorrect Conseqeunce = False12. TriggerWaitChoiceTimer,14. WaitForChoice,TE = 0  14. WaitForChoice,15. WaitForRewardStart,RewardIn,29. timeOUt_MissedChoice,GlobalTimer1_end,21. WaitforPunishStart,Punish In + Incorrect Conseqeunce = True,20. RegisterWrongWaitCorrect,Punish In + Incorrect Conseqeunce = False29. timeOUt_MissedChoice,30. ITI,TE = PCTimeOut20. RegisterWrongWaitCorrect,14. WaitForChoice,TE = 021. WaitforPunishStart,22. WaitForPunish,TE = 022. WaitForPunish,23. PunishGrace,PunishOut,24. Punishment,GlobalTimer3_end23. PunishGrace,22. WaitForPunish,PunishIn,28. timeOut_SkippedFeedback,TE = FeedbackDelayGrace,28. timeOut_SkippedFeedback,GlobalTimer3_end,28. timeOut_SkippedFeedback,CenterPortIn,28. timeOut_SkippedFeedback,RewardIn24. Punishment,27. timeOut_IncorrectChoice,PunishOut,32. WaitPunishOut,TE = PunishmentDuration27. timeOut_IncorrectChoice,31. ext_ITI,GlobalTimer4_end32. WaitPunishOut,27. timeOut_IncorrectChoice,TE = WaitFinalPokeOutSec,27. timeOut_IncorrectChoice,PunishOut15. WaitForRewardStart,16. WaitForReward,TE = 016. WaitForReward,17. RewardGrace,RewardOut,18. Reward,GlobalTimer2_end17. RewardGrace,16. WaitForReward,RewardIn,28. timeOut_SkippedFeedback,TE = FeedbackDelayGrace,28. timeOut_SkippedFeedback,GlobalTimer2_end,28. timeOut_SkippedFeedback,CenterPortIn,28. timeOut_SkippedFeedback,PunishIn28. timeOut_SkippedFeedback,30. ITI,TE = PCTimeOut18. Reward,19. WaitRewardOut,TE = RewardDur19. WaitRewardOut,31. ext_ITI,TE = WaitFinalPokeOutSec,31. ext_ITI,RewardOut30. ITI,31. ext_ITI,TE = WireTTLDuration31. ext_ITI,Exit,GlobalTimer5_end,Exit,TE = PCTimeOut
