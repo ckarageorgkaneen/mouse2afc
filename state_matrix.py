@@ -465,6 +465,11 @@ class StateMatrix(StateMachine):
             CenterPortOut: str(MatrixState.TriggerWaitChoiceTimer),
             Bpod.Events.Tup: str(MatrixState.WaitCenterPortOut)},
             output_actions=RewardCenterPort)
+        self.add_state(state_name=str(MatrixState.StimulusTime),
+                       state_timer= max(0,task_parameters.StimulusTime - task_parameters.MinSample - Timer_CPRD - MinSampleBeepDuration),
+                       state_change_conditions={CenterPortOut: str(MatrixState.TriggerWaitChoiceTimer),
+                                                Bpod.Events.Tup: str(MatrixState.WaitCenterPortOut)},
+                        output_actions=()) #TODO add ContStim
         # TODO: Stop stimulus is fired twice in case of center reward and then
         # wait for choice. Fix it such that it'll be always fired once.
         self.add_state(state_name=str(MatrixState.TriggerWaitChoiceTimer),
@@ -562,6 +567,11 @@ class StateMatrix(StateMachine):
                                  )},
                        output_actions=(
             IncorrectChoice_Signal + AirFlowRewardOn))
+        self.add_state(state_name=str(MatrixState.WaitPunishOut),
+                       state_timer= 1, #TODO: = task_parameters.waitfinalpokeoutsec
+                       state_change_conditions={Bpod.Events.Tup: str(MatrixState.timeOut_IncorrectChoice),
+                                                PunishOut: str(MatrixState.timeOut_IncorrectChoice)},
+                        output_actions= ())#TODO add 'GlobalTimer4_end' and WaitForPokeOutStim 
         self.add_state(state_name=str(MatrixState.timeOut_EarlyWithdrawal),
                        state_timer=LEDErrorRate,
                        state_change_conditions={
