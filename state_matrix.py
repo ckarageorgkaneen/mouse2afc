@@ -398,12 +398,10 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
             CenterPortIn: str(MatrixState.PreStimReward)},
             output_actions=[(pwm_str(CenterPort), CenterPWM)])
-        PreStimRewardStateTimer = iff(
-            task_parameters.PreStimuDelayCntrReward,
-            GetValveTimes(task_parameters.PreStimuDelayCntrReward,
-                          CenterPort), 0.01)
         self.add_state(state_name=str(MatrixState.PreStimReward),
-                       state_timer=PreStimRewardStateTimer,
+                       state_timer=iff(task_parameters.PreStimuDelayCntrReward,
+                            GetValveTimes(task_parameters.PreStimuDelayCntrReward,
+                            CenterPort), 0.01),
                        state_change_conditions={Bpod.Events.Tup: str(
                            MatrixState.TriggerWaitForStimulus)},
                        output_actions=iff(
@@ -440,7 +438,7 @@ class StateMatrix(StateMachine):
             Bpod.Events.Tup: str(MatrixState.ITI)},
             output_actions=ErrorFeedback)
         self.add_state(state_name=str(MatrixState.stimulus_delivery),
-                       state_timer=task_parameters.MinSample,
+                       state_timer=task_parameters.MinSample - MinSampleBeepDuration-Timer_CPRD,
                        state_change_conditions={
             CenterPortOut: str(MatrixState.early_withdrawal),
             Bpod.Events.Tup: str(MatrixState.BeepMinSampling)},
@@ -503,7 +501,7 @@ class StateMatrix(StateMachine):
             output_actions=(Wire1OutCorrect + ChoiceStopStimulus + [
                 ('GlobalTimerTrig', EncTrig(1))]))
         self.add_state(state_name=str(MatrixState.WaitForReward),
-                       state_timer=FeedbackDelayCorrect,
+                       state_timer=0,
                        state_change_conditions={
             Bpod.Events.Tup: str(MatrixState.Reward),
             'GlobalTimer1_End': str(MatrixState.Reward),
@@ -543,7 +541,7 @@ class StateMatrix(StateMachine):
             output_actions=(Wire1OutError + ChoiceStopStimulus + [
                            ('GlobalTimerTrig', EncTrig(2))]))
         self.add_state(state_name=str(MatrixState.WaitForPunish),
-                       state_timer=FeedbackDelayError,
+                       state_timer=0,
                        state_change_conditions={
             Bpod.Events.Tup: str(MatrixState.Punishment),
             'GlobalTimer2_End': str(MatrixState.Punishment),
@@ -589,18 +587,14 @@ class StateMatrix(StateMachine):
             output_actions=(ErrorFeedback + [(pwm_str(LeftPort), LeftPWM),
                                              (pwm_str(RightPort), RightPWM)]))
         self.add_state(state_name=str(MatrixState.timeOut_IncorrectChoice),
-                       state_timer=iff(
-            not PCTimeout,
-            task_parameters.TimeOutIncorrectChoice,
-            0.01),
+                       state_timer=0,
             state_change_conditions={
             Bpod.Events.Tup: str(MatrixState.ITI)},
             output_actions=[])
         self.add_state(state_name=str(MatrixState.timeOut_SkippedFeedback),
-                       state_timer=(
-            iff(not PCTimeout,
-                task_parameters.TimeOutSkippedFeedback,
-                0.01)),
+                       state_timer=iff(not PCTimeout,
+                                        task_parameters.TimeOutSkippedFeedback,
+                                        0.01),
             state_change_conditions={
             Bpod.Events.Tup: str(MatrixState.ITI)},
             # TODO: See how to get around this if PCTimeout
@@ -618,8 +612,9 @@ class StateMatrix(StateMachine):
             Bpod.Events.Tup: str(MatrixState.ext_ITI)},
             output_actions=AirFlowRewardOn)
         self.add_state(state_name=str(MatrixState.ext_ITI),
-                       state_timer=iff(
-            not PCTimeout, task_parameters.ITI, 0.01),
+                       state_timer=iff(not PCTimeout,
+                                       task_parameters.ITI,
+                                       0.01),
             state_change_conditions={Bpod.Events.Tup: 'exit'},
             output_actions=AirFlowRewardOn)
 
