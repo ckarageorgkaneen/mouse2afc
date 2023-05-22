@@ -33,3 +33,8 @@ class MatrixState(SpecialEnum):
     timeOut_missed_choice = 29
     ITI = 30
     ext_ITI = 31
+    WaitPunishOut = 32
+    #WaitPunishEnd = 33
+    StimulusTime = 34
+    #triggerTimoutIncorrectChoice = 35
+    #TODO find out if 33 and 35 need to be here or if they can be deleted
