@@ -460,7 +460,7 @@ class StateMatrix(StateMachine):
                        state_timer=Timer_CPRD,
                        state_change_conditions={
                            CenterPortOut: str(MatrixState.TriggerWaitChoiceTimer),
-                           Bpod.Events.Tup: str(MatrixState.WaitCenterPortOut)},
+                           Bpod.Events.Tup: str(MatrixState.StimulusTime)},
                        output_actions=RewardCenterPort)
         self.add_state(state_name=str(MatrixState.StimulusTime),
                        state_timer= max(0,task_parameters.StimulusTime
@@ -485,7 +485,7 @@ class StateMatrix(StateMachine):
                            CenterPortOut: str(MatrixState.WaitForChoice),
                            LeftPortIn: LeftActionState,
                            RightPortIn: RightActionState,
-                           'GlobalTimer4_End': str(MatrixState.timeOut_missed_choice
+                           'GlobalTimer1_End': str(MatrixState.timeOut_missed_choice
                                     )},
                        output_actions=(StopStimulus + ExtendedStimulus
                                        + [('GlobalTimerTrig', EncTrig(4))]))
@@ -494,7 +494,7 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
                            LeftPortIn: LeftActionState,
                            RightPortIn: RightActionState,
-                           'GlobalTimer4_End': str(MatrixState.timeOut_missed_choice)},
+                           'GlobalTimer1_End': str(MatrixState.timeOut_missed_choice)},
                        output_actions=(StopStimulus + ExtendedStimulus))
         self.add_state(state_name=str(MatrixState.WaitForRewardStart),
                        state_timer=0,
@@ -505,8 +505,7 @@ class StateMatrix(StateMachine):
         self.add_state(state_name=str(MatrixState.WaitForReward),
                        state_timer=0,
                        state_change_conditions={
-                           Bpod.Events.Tup: str(MatrixState.Reward),
-                           'GlobalTimer1_End': str(MatrixState.Reward),
+                           'GlobalTimer2_End': str(MatrixState.Reward),
                            RewardOut: str(MatrixState.RewardGrace)},
                            output_actions=AirFlowRewardOff)
         self.add_state(state_name=str(MatrixState.RewardGrace),
@@ -514,7 +513,7 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
                            RewardIn: str(MatrixState.WaitForReward),
                            Bpod.Events.Tup: str(MatrixState.timeOut_SkippedFeedback),
-                           'GlobalTimer1_End': str(MatrixState.timeOut_SkippedFeedback),
+                           'GlobalTimer2_End': str(MatrixState.timeOut_SkippedFeedback),
                            CenterPortIn: str(MatrixState.timeOut_SkippedFeedback),
                            PunishIn: str(MatrixState.timeOut_SkippedFeedback)},
                        output_actions=AirFlowRewardOn)
@@ -526,8 +525,8 @@ class StateMatrix(StateMachine):
         self.add_state(state_name=str(MatrixState.WaitRewardOut),
                        state_timer=1,
                        state_change_conditions={
-                           Bpod.Events.Tup: str(MatrixState.ITI),
-                           RewardOut: str(MatrixState.ITI)},
+                           Bpod.Events.Tup: str(MatrixState.ext_ITI),
+                           RewardOut: str(MatrixState.ext_ITI)},
                        output_actions=[])
         self.add_state(state_name=str(MatrixState.RegisterWrongWaitCorrect),
                        state_timer=0,
@@ -543,8 +542,7 @@ class StateMatrix(StateMachine):
         self.add_state(state_name=str(MatrixState.WaitForPunish),
                        state_timer=0,
                        state_change_conditions={
-                           Bpod.Events.Tup: str(MatrixState.Punishment),
-                           'GlobalTimer2_End': str(MatrixState.Punishment),
+                           'GlobalTimer3_End': str(MatrixState.Punishment),
                            PunishOut: str(MatrixState.PunishGrace)},
                        output_actions=AirFlowRewardOff)
         self.add_state(state_name=str(MatrixState.PunishGrace),
@@ -552,14 +550,15 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
                            PunishIn: str(MatrixState.WaitForPunish),
                            Bpod.Events.Tup: str(MatrixState.timeOut_SkippedFeedback),
-                           'GlobalTimer2_End': str(MatrixState.timeOut_SkippedFeedback),
+                           'GlobalTimer3_End': str(MatrixState.timeOut_SkippedFeedback),
                            CenterPortIn: str(MatrixState.timeOut_SkippedFeedback),
                            RewardIn: str(MatrixState.timeOut_SkippedFeedback)},
                        output_actions=[])
         self.add_state(state_name=str(MatrixState.Punishment),
                        state_timer=PunishmentDuration,
                        state_change_conditions={
-                           Bpod.Events.Tup: str(MatrixState.timeOut_IncorrectChoice)},
+                           Bpod.Events.Tup: str(MatrixState.WaitPunishOut),
+                           PunishOut: str(MatrixState.timeOut_IncorrectChoice)},
                        output_actions=(IncorrectChoice_Signal + AirFlowRewardOn))
         self.add_state(state_name=str(MatrixState.WaitPunishOut),
                        state_timer= 1, #TODO: = task_parameters.waitfinalpokeoutsec
@@ -570,20 +569,20 @@ class StateMatrix(StateMachine):
         self.add_state(state_name=str(MatrixState.timeOut_EarlyWithdrawal),
                        state_timer=LEDErrorRate,
                        state_change_conditions={
-                           'GlobalTimer3_End': str(MatrixState.ITI),
+                           'SoftCode1': str(MatrixState.ITI),
                            Bpod.Events.Tup: str(MatrixState.timeOut_EarlyWithdrawalFlashOn)},
                        output_actions=ErrorFeedback)
         self.add_state(state_name=str(MatrixState.timeOut_EarlyWithdrawalFlashOn),
                        state_timer=LEDErrorRate,
                        state_change_conditions={
-                           'GlobalTimer3_End': str(MatrixState.ITI),
+                           'SoftCode1': str(MatrixState.ITI),
                            Bpod.Events.Tup: str(MatrixState.timeOut_EarlyWithdrawal)},
                        output_actions=(ErrorFeedback + [(pwm_str(LeftPort), LeftPWM),
                                                         (pwm_str(RightPort), RightPWM)]))
         self.add_state(state_name=str(MatrixState.timeOut_IncorrectChoice),
                        state_timer=0,
                        state_change_conditions={
-                           Bpod.Events.Tup: str(MatrixState.ITI)},
+                           'Condition4': str(MatrixState.ext_ITI)},
                        output_actions=[])
         self.add_state(state_name=str(MatrixState.timeOut_SkippedFeedback),
                        state_timer=iff(not PCTimeout,
@@ -609,7 +608,8 @@ class StateMatrix(StateMachine):
                                        task_parameters.ITI,
                                        0.01),
                        state_change_conditions={
-                           Bpod.Events.Tup: 'exit'},
+                           Bpod.Events.Tup: 'exit',
+                           'Condition5': 'exit'},
                        output_actions=AirFlowRewardOn)
 
         # If Optogenetics/2-Photon is enabled for a particular state, then we
