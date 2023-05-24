@@ -13,6 +13,7 @@ from definitions.incorrect_choice_signal_type import IncorrectChoiceSignalType
 from definitions.iti_signal_type import ITISignalType
 from definitions.matrix_state import MatrixState
 from definitions.visual_stim_angle import VisualStimAngle
+from definitions.stim_after_poke_out import StimAfterPokeOut
 
 from utils import EncTrig
 from utils import GetValveTimes
@@ -94,11 +95,7 @@ class StateMatrix(StateMachine):
             # In MATLAB: 'BNCState' instead of 'BNC1'
             DeliverStimulus = [('BNC1', 1)]
             ContDeliverStimulus = []
-            StopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [], [('BNC1', 0)])
-            ChoiceStopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [('BNC1', 0)], [])
-            EWDStopStimulus = [('BNC1', 0)]
+            StopStimulus = [('BNC1', 0)]
         elif task_parameters.ExperimentType == \
                 ExperimentType.LightIntensity:
             # Divide Intensity by 100 to get fraction value
@@ -112,10 +109,7 @@ class StateMatrix(StateMachine):
                 (pwm_str(RightPort), RightPWMStim)
             ]
             ContDeliverStimulus = DeliverStimulus
-            StopStimulus = iff(
-                task_parameters.StimAfterPokeOut, DeliverStimulus, [])
-            ChoiceStopStimulus = []
-            EWDStopStimulus = []
+            StopStimulus =  []
         elif task_parameters.ExperimentType == \
                 ExperimentType.GratingOrientation:
             rightPortAngle = VisualStimAngle.get_degrees(
@@ -161,11 +155,7 @@ class StateMatrix(StateMachine):
 
             DeliverStimulus = [('SoftCode', 5)]
             ContDeliverStimulus = []
-            StopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [], [('SoftCode', 6)])
-            ChoiceStopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [('SoftCode', 6)], [])
-            EWDStopStimulus = [('SoftCode', 6)]
+            StopStimulus =  [('SoftCode', 6)]
         elif task_parameters.ExperimentType == ExperimentType.RandomDots:
             # Setup the parameters
             # Use 20% of the screen size. Assume apertureSize is the diameter
@@ -208,13 +198,28 @@ class StateMatrix(StateMachine):
 
             DeliverStimulus = [('SoftCode', 5)]
             ContDeliverStimulus = []
-            StopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [], [('SoftCode', 6)])
-            ChoiceStopStimulus = iff(
-                task_parameters.StimAfterPokeOut, [('SoftCode', 6)], [])
-            EWDStopStimulus = [('SoftCode', 6)]
+            StopStimulus = [('SoftCode', 6)]
         else:
             error('Unexpected ExperimentType')
+
+        if task_parameters.StimAfterPokeOut == StimAfterPokeOut.NotUsed:
+            WaitForDecisionStim = StopStimulus
+            WaitFeedbackStim = StopStimulus
+            WaitForPokeOutStim = StopStimulus
+        elif task_parameters.StimAfterPokeOut == StimAfterPokeOut.UntilFeedbackStart:
+            WaitForDecisionStim = ContDeliverStimulus
+            WaitFeedbackStim = StopStimulus
+            WaitForPokeOutStim = StopStimulus
+        elif task_parameters.StimAfterPokeOut == StimAfterPokeOut.UntilFeedbackEnd:
+            WaitForDecisionStim = ContDeliverStimulus
+            WaitFeedbackStim = ContDeliverStimulus
+            WaitForPokeOutStim = StopStimulus
+        elif task_parameters.StimAfterPokeOut == StimAfterPokeOut.UntilEndofTrial:
+            WaitForDecisionStim = ContDeliverStimulus
+            WaitFeedbackStim = ContDeliverStimulus
+            WaitForPokeOutStim = ContDeliverStimulus
+        else:
+            error('Unexpected StimAfterPokeOut Option')
 
         # Valve opening is a bitmap. Open each valve separately by raising 2 to
         # the power of port number - 1
@@ -419,7 +424,7 @@ class StateMatrix(StateMachine):
                        state_timer=0,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.timeOut_EarlyWithdrawal)},
-                       output_actions= EWDStopStimulus + [('SoftCode', 1)])
+                       output_actions= StopStimulus + [('SoftCode', 1)])
         self.add_state(state_name=str(MatrixState.BeepMinSampling),
                        state_timer=MinSampleBeepDuration,
                        state_change_conditions={
@@ -447,7 +452,7 @@ class StateMatrix(StateMachine):
                        state_timer=0,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.WaitForChoice)},
-                       output_actions=(StopStimulus + ExtendedStimulus
+                       output_actions=(WaitForDecisionStim + ExtendedStimulus
                                        + [('GlobalTimerTrig', EncTrig(1))]))
         self.add_state(state_name=str(MatrixState.WaitCenterPortOut),
                        state_timer=0,
@@ -457,7 +462,7 @@ class StateMatrix(StateMachine):
                            RightPortIn: RightActionState,
                            'GlobalTimer1_End': str(MatrixState.timeOut_missed_choice
                                     )},
-                       output_actions=(StopStimulus + ExtendedStimulus
+                       output_actions=(WaitForDecisionStim + ExtendedStimulus
                                        + [('GlobalTimerTrig', EncTrig(1))]))
         self.add_state(state_name=str(MatrixState.WaitForChoice),
                        state_timer=0,
@@ -465,19 +470,19 @@ class StateMatrix(StateMachine):
                            LeftPortIn: LeftActionState,
                            RightPortIn: RightActionState,
                            'GlobalTimer1_End': str(MatrixState.timeOut_missed_choice)},
-                       output_actions=(StopStimulus + ExtendedStimulus))
+                       output_actions=(WaitForDecisionStim + ExtendedStimulus))
         self.add_state(state_name=str(MatrixState.WaitForRewardStart),
                        state_timer=0,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.WaitForReward)},
-                       output_actions=(Wire1OutCorrect + ChoiceStopStimulus
+                       output_actions=(Wire1OutCorrect + WaitFeedbackStim
                                        + [('GlobalTimerTrig', EncTrig(2))]))
         self.add_state(state_name=str(MatrixState.WaitForReward),
                        state_timer=0,
                        state_change_conditions={
                            'GlobalTimer2_End': str(MatrixState.Reward),
                            RewardOut: str(MatrixState.RewardGrace)},
-                           output_actions=ChoiceStopStimulus)
+                           output_actions=WaitFeedbackStim)
         self.add_state(state_name=str(MatrixState.RewardGrace),
                        state_timer=task_parameters.FeedbackDelayGrace,
                        state_change_conditions={
@@ -486,35 +491,35 @@ class StateMatrix(StateMachine):
                            'GlobalTimer2_End': str(MatrixState.timeOut_SkippedFeedback),
                            CenterPortIn: str(MatrixState.timeOut_SkippedFeedback),
                            PunishIn: str(MatrixState.timeOut_SkippedFeedback)},
-                       output_actions=ChoiceStopStimulus)
+                       output_actions=WaitFeedbackStim)
         self.add_state(state_name=str(MatrixState.Reward),
                        state_timer=ValveTime,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.WaitRewardOut)},
-                       output_actions= ChoiceStopStimulus + [('Valve', ValveCode)])
+                       output_actions= WaitFeedbackStim + [('Valve', ValveCode)])
         self.add_state(state_name=str(MatrixState.WaitRewardOut),
                        state_timer=1,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.ext_ITI),
                            RewardOut: str(MatrixState.ext_ITI)},
-                       output_actions= [('GlobalTimerTrig', EncTrig(5))] ) # TODO + WaitForPokeOutStim
+                       output_actions= [('GlobalTimerTrig', EncTrig(5))] + WaitForPokeOutStim )
         self.add_state(state_name=str(MatrixState.RegisterWrongWaitCorrect),
                        state_timer=0,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.WaitForChoice)},
-                       output_actions=ChoiceStopStimulus)
+                       output_actions=WaitFeedbackStim)
         self.add_state(state_name=str(MatrixState.WaitForPunishStart),
                        state_timer=0,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.WaitForPunish)},
-                       output_actions=(Wire1OutError + ChoiceStopStimulus
+                       output_actions=(Wire1OutError + WaitFeedbackStim
                                        + [('GlobalTimerTrig', EncTrig(3))]))
         self.add_state(state_name=str(MatrixState.WaitForPunish),
                        state_timer=0,
                        state_change_conditions={
                            'GlobalTimer3_End': str(MatrixState.Punishment),
                            PunishOut: str(MatrixState.PunishGrace)},
-                       output_actions=ChoiceStopStimulus)
+                       output_actions=WaitFeedbackStim)
         self.add_state(state_name=str(MatrixState.PunishGrace),
                        state_timer=task_parameters.FeedbackDelayGrace,
                        state_change_conditions={
@@ -523,19 +528,19 @@ class StateMatrix(StateMachine):
                            'GlobalTimer3_End': str(MatrixState.timeOut_SkippedFeedback),
                            CenterPortIn: str(MatrixState.timeOut_SkippedFeedback),
                            RewardIn: str(MatrixState.timeOut_SkippedFeedback)},
-                       output_actions=ChoiceStopStimulus)
+                       output_actions=WaitFeedbackStim)
         self.add_state(state_name=str(MatrixState.Punishment),
                        state_timer=PunishmentDuration,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.WaitPunishOut),
                            PunishOut: str(MatrixState.timeOut_IncorrectChoice)},
-                       output_actions=(IncorrectChoice_Signal + ChoiceStopStimulus))
+                       output_actions=(IncorrectChoice_Signal + WaitFeedbackStim))
         self.add_state(state_name=str(MatrixState.WaitPunishOut),
                        state_timer= 1, #TODO: = task_parameters.waitfinalpokeoutsec
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.timeOut_IncorrectChoice),
                            PunishOut: str(MatrixState.timeOut_IncorrectChoice)},
-                       output_actions= [('GlobalTimerTrig', EncTrig(4))]) # TODO + WaitForPokeOutStim
+                       output_actions= [('GlobalTimerTrig', EncTrig(4))] + WaitForPokeOutStim)
         self.add_state(state_name=str(MatrixState.timeOut_EarlyWithdrawal),
                        state_timer=LEDErrorRate,
                        state_change_conditions={
