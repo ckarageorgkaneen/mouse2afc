@@ -11,6 +11,7 @@ from definitions.mouse_state import MouseState
 from definitions.stimulus_selection_criteria import StimulusSelectionCriteria
 from definitions.ttl_wire_usage import TTLWireUsage
 from definitions.visual_stim_angle import VisualStimAngle
+from definitions.stim_after_poke_out import StimAfterPokeOut
 
 from task_parameters import TaskParametersGUITable
 
@@ -95,7 +96,7 @@ ShowST = 1
 ShowTrialRate = 1
 ShowVevaiometric = 1
 StartEasyTrials = 10
-StimAfterPokeOut = False
+StimAfterPokeOut = StimAfterPokeOut.NotUsed
 StimDelayMax = 0.6
 StimDelayMin = 0.3
 StimDelay = StimDelayMin
