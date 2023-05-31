@@ -331,7 +331,7 @@ class CustomData:
         self.CenterPortRewAmount[
             i_trial + 1] = self.task_parameters.CenterPortRewAmount
         self.PreStimCntrReward[
-            i_trial + 1] = self.task_parameters.PreStimuDelayCntrReward
+            i_trial + 1] = self.task_parameters.PreStimDelayCntrReward
         self.Timer.customExtractData[i_trial] = time.time()
 
         # IF we are running grating experiments,

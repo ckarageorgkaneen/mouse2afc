@@ -363,7 +363,7 @@ class StateMatrix(StateMachine):
             task_parameters.TimeOutEarlyWithdrawal,
             task_parameters.TimeOutEarlyWithdrawal,
             0.01))
-        self.set_global_timer(4, task_parameters.ChoiceDeadLine)
+        self.set_global_timer(4, task_parameters.ChoiceDeadline)
         self.add_state(state_name=str(MatrixState.ITI_Signal),
                        state_timer=ITI_Signal_Duration,
                        state_change_conditions={
@@ -375,12 +375,12 @@ class StateMatrix(StateMachine):
                            CenterPortIn: str(MatrixState.PreStimReward)},
                        output_actions=[(pwm_str(CenterPort), CenterPWM)])
         self.add_state(state_name=str(MatrixState.PreStimReward),
-                       state_timer=iff(task_parameters.PreStimuDelayCntrReward,
-                                       GetValveTimes(task_parameters.PreStimuDelayCntrReward,
+                       state_timer=iff(task_parameters.PreStimDelayCntrReward,
+                                       GetValveTimes(task_parameters.PreStimDelayCntrReward,
                                        CenterPort), 0.01),
                        state_change_conditions={
                            Bpod.Events.Tup:str(MatrixState.TriggerWaitForStimulus)},
-                       output_actions=iff(task_parameters.PreStimuDelayCntrReward,
+                       output_actions=iff(task_parameters.PreStimDelayCntrReward,
                                           [('Valve', CenterValve)], []))
         # The next method is useful to close the 2 - photon shutter. It is
         # enabled by setting Optogenetics StartState to this state and end
