@@ -283,15 +283,21 @@ class StateMatrix(StateMachine):
 
         # CatchTrial
         FeedbackDelayCorrect = iff(data.Custom.CatchTrial[
-            i_trial], Const.FEEDBACK_CATCH_CORRECT_SEC,
-            task_parameters.FeedbackDelay)
+            i_trial], Const.FEEDBACK_CATCH_MAX_SEC,
+            max(task_parameters.FeedbackDelay,0.01))
 
         # GUI option CatchError
-        FeedbackDelayError = iff(task_parameters.CatchError,
-                                 Const.FEEDBACK_CATCH_INCORRECT_SEC,
-                                 task_parameters.FeedbackDelay)
+        FeedbackDelayPunish = iff(task_parameters.CatchError,
+                                  Const.FEEDBACK_CATCH_MAX_SEC,
+                                  max(task_parameters.FeedbackDelay,0.01))
         SkippedFeedbackSignal = iff(
             task_parameters.CatchError, [], ErrorFeedback)
+        
+        #Incorrect Timeout
+        IncorrectTimeout = iff(not task_parameters.PCTimeout,
+                               task_parameters.TimeOutIncorrectChoice
+                               + task_parameters.ITI,
+                               .01)
 
         # Incorrect Choice signal
         if task_parameters.IncorrectChoiceSignalType == \
@@ -357,13 +363,10 @@ class StateMatrix(StateMachine):
 
         PCTimeout = task_parameters.PCTimeout
         # Build state matrix
-        self.set_global_timer(1, FeedbackDelayCorrect)
-        self.set_global_timer(2, FeedbackDelayError)
-        self.set_global_timer(3, iff(
-            task_parameters.TimeOutEarlyWithdrawal,
-            task_parameters.TimeOutEarlyWithdrawal,
-            0.01))
-        self.set_global_timer(4, task_parameters.ChoiceDeadline)
+        self.set_global_timer(1, task_parameters.ChoiceDeadline)
+        self.set_global_timer(2, FeedbackDelayCorrect)
+        self.set_global_timer(3, FeedbackDelayPunish)
+        self.set_global_timer(4, IncorrectTimeout)
         self.add_state(state_name=str(MatrixState.ITI_Signal),
                        state_timer=ITI_Signal_Duration,
                        state_change_conditions={
