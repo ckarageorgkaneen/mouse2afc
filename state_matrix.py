@@ -65,10 +65,9 @@ class StateMatrix(StateMachine):
     def __init__(self, bpod, task_parameters, data, i_trial):
         super().__init__(bpod)
         # Define ports
-        lmr_air_ports = task_parameters.Ports_LMRAir
-        LeftPort = floor(mod(lmr_air_ports / 1000, 10))
-        CenterPort = floor(mod(lmr_air_ports / 100, 10))
-        RightPort = floor(mod(lmr_air_ports / 10, 10))
+        LeftPort = floor(mod(task_parameters.Ports_LMRAir / 100000, 10))
+        CenterPort = floor(mod(task_parameters.Ports_LMRAir / 10000, 10))
+        RightPort = floor(mod(task_parameters.Ports_LMRAir / 1000, 10))
         AirSolenoid = mod(task_parameters.Ports_LMRAir, 10)
         LeftPortOut = port_str(LeftPort, out=True)
         CenterPortOut = port_str(CenterPort, out=True)
