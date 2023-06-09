@@ -16,9 +16,13 @@ random_unif = np.random.uniform
 randperm = np.random.permutation
 diff = np.diff
 polyval = np.polyval
-betarnd = random.betavariate
+betarnd = np.random.beta
 # TODO: verify correctness that randsample is equivalent to random.choices
 randsample = random.choices
+concat = np.concatenate
+ones = np.ones
+ceil = np.ceil
+zeros = np.zeros
 
 
 def iff(condition, value1, value2):
@@ -173,3 +177,11 @@ def GetValveTimes(LiquidAmount, TargetValves):
         ValveTimes[x] /= 1000
     result = ValveTimes[0] if nValves == 1 else ValveTimes
     return result
+
+def ControlledRandom(probability,_NumTrialsToGenerate):
+        _NumPositiveTrials = _NumTrialsToGenerate * probability
+        OneZeroArr = concat((ones(int(ceil(_NumPositiveTrials))),
+                             zeros(int(ceil(_NumTrialsToGenerate-_NumPositiveTrials)))))
+        OneZeroArr = randperm(len(OneZeroArr))
+        OneZeroArr = OneZeroArr[:_NumTrialsToGenerate].astype(int).tolist()
+        return OneZeroArr
