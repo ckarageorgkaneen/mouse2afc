@@ -23,6 +23,7 @@ concat = np.concatenate
 ones = np.ones
 ceil = np.ceil
 zeros = np.zeros
+randsample = np.random.choice
 
 
 def iff(condition, value1, value2):
@@ -68,11 +69,11 @@ def CalcAudClickTrain(data, trial_num):
 
 
 def CalcLightIntensity(data, trial_num):
-    data.Custom.LightIntensityLeft[trial_num] = \
-        round(data.Custom.StimulusOmega[trial_num] * 100)
-    data.Custom.LightIntensityRight[trial_num] = \
-        round((1 - data.Custom.StimulusOmega[trial_num]) * 100)
-    dv = (data.Custom.StimulusOmega[trial_num] * 2) - 1
+    data.Custom.Trials.LightIntensityLeft[trial_num] = \
+        round(data.Custom.Trials.StimulusOmega[trial_num] * 100)
+    data.Custom.Trials.LightIntensityRight[trial_num] = \
+        round((1 - data.Custom.Trials.StimulusOmega[trial_num]) * 100)
+    dv = (data.Custom.Trials.StimulusOmega[trial_num] * 2) - 1
     return dv
 
 

@@ -13,8 +13,11 @@ from utils import CalcAudClickTrain
 from utils import CalcDotsCoherence
 from utils import CalcGratingOrientation
 from utils import CalcLightIntensity
+from utils import ControlledRandom
+from utils import iff
 from utils import betarnd
 from utils import rand
+from utils import randsample
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +30,8 @@ def error(message):
     logger.error(message)
     raise Mouse2AFCError(message)
 
+NumTrialsToGenerate = 1
+StartFrom = 1
 
 class Mouse2AFC:
     def __init__(self, bpod, config_file=None):
@@ -35,33 +40,47 @@ class Mouse2AFC:
             file_=config_file).task_parameters
         self._data = Data(self._bpod.session, self._task_parameters)
 
-    def _set_custom_data(self):
-        for a in range(Const.NUM_EASY_TRIALS):
-            gui_ssc = self._task_parameters.StimulusSelectionCriteria
-            if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
-                # This random value is between 0 and 1, the beta distribution
-                # parameters makes it very likely to very close to zero or very
-                # close to 1.
-                beta_dist_param = self._task_parameters.BetaDistAlphaNBeta / 4
-                self._data.Custom.StimulusOmega[a] = [
-                    betarnd(beta_dist_param, beta_dist_param)]
-            elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
-                omega_prob = self._task_parameters.OmegaTable.columns.OmegaProb
-                index = next(omega_prob.index(prob)
-                             for prob in omega_prob if prob > 0)
-                intensity = self._task_parameters.OmegaTable.columns.Omega[
-                    index] / 100
+    def _assign_future_trials(self):
+        is_left_rewarded = ControlledRandom((1 - self._task_parameters.LeftBias),NumTrialsToGenerate)
+        StartFrom = 1
+        lastidx = StartFrom
+        for a in range(NumTrialsToGenerate-1): 
+            #If it's a fifty-fifty trial, then place stimulus in the middle
+            if rand(1,1) < self._task_parameters.Percent50Fifty and (lastidx + a) > self._task_parameters.StartEasyTrials:
+                StimulusOmega = .5
             else:
-                error('Unexpected StimulusSelectionCriteria')
-            # Randomly choose right or left
-            is_left_rewarded = bool(rand(1, 1) >= 0.5)
-            # In case of beta distribution, our distribution is symmetric,
-            # so prob < 0.5 is == prob > 0.5, so we can just pick the value
-            # that corrects the bias
-            if not is_left_rewarded and intensity >= 0.5:
-                intensity = 1 - intensity
-            # BUG: Figure out whether this or the previous assignment
-            # is the correct one
+                gui_ssc = self._task_parameters.StimulusSelectionCriteria
+                beta_dist = self._task_parameters.BetaDistAlphaNBeta
+                if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
+                    # Divide beta by 4 if we are in an easy trial
+                    BetaDiv = iff((lastidx+a) <= self._task_parameters.StartEasyTrials,4,1)
+                    StimulusOmega = betarnd(beta_dist/BetaDiv,beta_dist/BetaDiv,1)
+                    StimulusOmega = iff(StimulusOmega < 0.1, 0.1, StimulusOmega)
+                    StimulusOmega = iff(StimulusOmega > 0.9,0.9,StimulusOmega)
+                elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
+                    if (lastidx+a) <= self._task_parameters.StartEasyTrialsa:
+                        omega_prob = self._task_parameters.OmegaTable.columns.OmegaProb
+                        index = next(omega_prob.index(prob)
+                                    for prob in omega_prob if prob > 0)
+                        StimulusOmega = self._task_parameters.OmegaTable.columns.Omega[
+                            index] / 100
+                    else:
+                        #Choose a value randomly given the each value probability
+                        StimulusOmega = randsample(self._task_parameters.OmegaTable.columns.Omega,1,1,omega_prob/100)
+                else:
+                    error('Unexpected StimulusSelectionCriteria')
+
+                if (is_left_rewarded(a+1) and StimulusOmega < 0.5) or (not is_left_rewarded(a+1) and StimulusOmega >= 0.5):
+                    StimulusOmega = -StimulusOmega + 1
+            
+            Trial = self._data.Custom.Trials[lastidx+a]
+            Trial.StimulusOmega = StimulusOmega
+            if StimulusOmega != 0.5:
+                Trial.LeftRewarded = StimulusOmega > 0.5
+            else:
+                Trial.LeftRewarded = rand() < .5
+            self._data.Custom.Trials[lastidx+a] = Trial
+            # TODO relocate the following chunk of code
             self._data.Custom.StimulusOmega[a] = intensity
             task_experiment_type = self._task_parameters.ExperimentType
             if task_experiment_type == ExperimentType.Auditory:
@@ -83,14 +102,15 @@ class Mouse2AFC:
                     rand() < 0.5)  # It's equal distribution
             # cross - modality difficulty for plotting
             self._data.Custom.DV[a] = dv
+        StartFrom = StartFrom + NumTrialsToGenerate
 
     def _set_current_stimulus(self):
         # Set current stimulus for next trial - set between -100 to +100
-        self._task_parameters.CurrentStim = (self._data.Custom.DV[0] + (
-            int(self._data.Custom.DV[0] > 0) or -1)) / 0.02
+        self._task_parameters.CurrentStim = (self._data.Custom.Trials.DV[0] + (
+            int(self._data.Custom.Trials.DV[0] > 0) or -1)) / 0.02
 
     def run(self):
-        self._set_custom_data()
+        self._assign_future_trials()
         self._set_current_stimulus()
         i_trial = 0
         while True:
