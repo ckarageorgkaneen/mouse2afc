@@ -123,3 +123,4 @@ class Mouse2AFC:
             if not self._bpod.run_state_machine(sma):
                 break
             self._data.Custom.update(i_trial)
+            i_trial += 1

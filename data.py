@@ -29,6 +29,7 @@ from utils import CalcDotsCoherence
 
 logger = logging.getLogger(__name__)
 
+NUM_OF_TRIALS = 800 #This can be changed. 800 is arbitrary
 
 def error(message):
     logger.error(message)
@@ -39,7 +40,7 @@ def warning(message):
     logger.warning(message)
 
 
-def datalist(value=0, size=Const.NUM_EASY_TRIALS):
+def datalist(value=0, size=NUM_OF_TRIALS):
     return [value] * size
 
 
@@ -794,17 +795,17 @@ class trials:
         self.OptoEnabled = datalist(False)
         self.Rewarded = datalist(False)
         self.RewardAfterMinSampling = datalist(False)
-        self.PreStimCounterReward = None
-        self.PreStimCntrReward = datalist(size=Const.NUM_EASY_TRIALS + 1)
+        self.PreStimCounterReward = datalist(None)
+        self.PreStimCntrReward = datalist(size=NUM_OF_TRIALS + 1)
         self.MinSample = datalist()
         self.LightIntensityLeft = datalist()
         self.LightIntensityRight = datalist()
         self.GratingOrientation = datalist()
-        self.RewardMagnitude = [[
+        self.RewardMagnitude = datalist([
             self.task_parameters.RewardAmount,
             self.task_parameters.RewardAmount
-        ] for i in range(Const.NUM_EASY_TRIALS)]
-        self.RewardReceivedTotal = datalist(size=Const.NUM_EASY_TRIALS + 1)
+        ])
+        self.RewardReceivedTotal = datalist(size=NUM_OF_TRIALS + 1)
         self.ReactionTime = datalist()
         self.CenterPortRewAmount = datalist(
             self.task_parameters.CenterPortRewAmount)
@@ -816,7 +817,7 @@ class trials:
         self.StimDelay = datalist()
         self.LeftRewarded = datalist(False)
         self.DV = datalist()
-        self.TrialStartSysTime = []
+        self.TrialStartSysTime = datalist(None)
         self.DotsCoherence = datalist()
 
 class Data:
