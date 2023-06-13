@@ -27,6 +27,21 @@ from utils import CalcLightIntensity
 from utils import CalcGratingOrientation
 from utils import CalcDotsCoherence
 
+from definitions.constant import Constant as Const
+from definitions.stimulus_selection_criteria \
+    import StimulusSelectionCriteria
+from definitions.experiment import ExperimentType
+
+from utils import CalcAudClickTrain
+from utils import CalcDotsCoherence
+from utils import CalcGratingOrientation
+from utils import CalcLightIntensity
+from utils import ControlledRandom
+from utils import iff
+from utils import betarnd
+from utils import rand
+from utils import randsample
+
 logger = logging.getLogger(__name__)
 
 NUM_OF_TRIALS = 800 #This can be changed. 800 is arbitrary
@@ -92,6 +107,47 @@ class CustomData:
         self.Timer = Timer
         self.RawData = RawData
         self.Trials = trials(task_parameters)
+        self.DVsAlreadyGenerated = 0
+
+    def assign_future_trials(self,StartFrom,NumTrialsToGenerate):
+        is_left_rewarded = ControlledRandom((1 - self.task_parameters.LeftBias),NumTrialsToGenerate)
+        for a in range(NumTrialsToGenerate):
+            #If it's a fifty-fifty trial, then place stimulus in the middle
+            if rand(1,1) < self.task_parameters.Percent50Fifty and (a) > self.task_parameters.StartEasyTrials:
+                StimulusOmega = .5
+            else:
+                gui_ssc = self.task_parameters.StimulusSelectionCriteria
+                beta_dist = self.task_parameters.BetaDistAlphaNBeta
+                if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
+                    # Divide beta by 4 if we are in an easy trial
+                    BetaDiv = iff((a) <= self.task_parameters.StartEasyTrials,4,1)
+                    StimulusOmega = betarnd(beta_dist/BetaDiv,beta_dist/BetaDiv,1)
+                    StimulusOmega = iff(StimulusOmega < 0.1, 0.1, StimulusOmega)
+                    StimulusOmega = iff(StimulusOmega > 0.9,0.9,StimulusOmega)
+                elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
+                    if (a) <= self.task_parameters.StartEasyTrials:
+                        omega_prob = self.task_parameters.OmegaTable.columns.OmegaProb
+                        index = next(omega_prob.index(prob)
+                                    for prob in omega_prob if prob > 0)
+                        StimulusOmega = self.task_parameters.OmegaTable.columns.Omega[
+                            index] / 100
+                    else:
+                        #Choose a value randomly given the each value probability
+                        StimulusOmega = randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob/100)
+                else:
+                    error('Unexpected StimulusSelectionCriteria')
+
+                if (is_left_rewarded[a] and StimulusOmega < 0.5) or (not is_left_rewarded[a] and StimulusOmega >= 0.5):
+                    StimulusOmega = -StimulusOmega + 1
+
+            Trial = self.Trials
+            Trial.StimulusOmega[a] = StimulusOmega
+            if StimulusOmega != 0.5:
+                Trial.LeftRewarded[a] = StimulusOmega > 0.5
+            else:
+                Trial.LeftRewarded[a] = rand() < .5
+            self.Trials = Trial
+        self.DVsAlreadyGenerated = StartFrom + NumTrialsToGenerate
 
     def update(self, i_trial):
         # Standard values
@@ -336,15 +392,15 @@ class CustomData:
             elif self.task_parameters.MinSampleType == \
                     MinSampleType.AutoIncr:
                 # Check if animal completed pre-stimulus delay successfully
-                if not self.FixBroke[i_trial]:
-                    if self.Rewarded[i_trial]:
-                        min_sample_incremented = self.MinSample[
+                if not self.Trials.FixBroke[i_trial]:
+                    if self.Trials.Rewarded[i_trial]:
+                        min_sample_incremented = self.Trials.MinSample[
                             i_trial] + self.task_parameters.MinSampleIncr
                         self.task_parameters.MinSample = min(
                             self.task_parameters.MinSampleMax,
                             max(self.task_parameters.MinSampleMin,
                                 min_sample_incremented))
-                    elif self.EarlyWithdrawal[i_trial]:
+                    elif self.Trials.EarlyWithdrawal[i_trial]:
                         min_sample_decremented = self.MinSample[
                             i_trial] - self.task_parameters.MinSampleDecr
                         self.task_parameters.MinSample = max(
@@ -513,7 +569,7 @@ class CustomData:
                         self.task_parameters.Performance, ' - ',
                         f'{performance * 100:.2f}', '#/',
                         str(NUM_LAST_TRIALS), 'T']
-                rewardedTrialsCount = sum(self.Rewarded[
+                rewardedTrialsCount = sum(self.Trials.Rewarded[
                     i_trial - NUM_LAST_TRIALS + 1: i_trial + 1])
                 performance = rewardedTrialsCount / NUM_LAST_TRIALS
                 self.task_parameters.AllPerformance = [
@@ -557,6 +613,7 @@ class CustomData:
                     in self.task_parameters.OmegaTable.columns.OmegaProb
                 ]
             self.Timer.customCalcOmega[i_trial] = time.time()
+            self.assign_future_trials(i_trial+1,Const.PRE_GENERATE_TRIAL_COUNT)
 
             # make future trials
             lastidx = len(self.DV) - 1
@@ -570,57 +627,6 @@ class CustomData:
                               for l_rewarded in IsLeftRewarded]
             self.Timer.customPrepNewTrials[i_trial] = time.time()
             for a in range(Const.PRE_GENERATE_TRIAL_COUNT):
-                # If it's a fifty-fifty trial, then place stimulus in the
-                # middle 50Fifty trials
-                if rand(1, 1) < self.task_parameters.Percent50Fifty and \
-                    (lastidx + a) > \
-                        self.task_parameters.StartEasyTrials:
-                    self.Trials.StimulusOmega[lastidx + a] = 0.5
-                else:
-                    if self.task_parameters.StimulusSelectionCriteria == \
-                            StimulusSelectionCriteria.BetaDistribution:
-                        # Divide beta by 4 if we are in an easy trial
-                        beta_div_condition = (lastidx + a) <= \
-                            self.task_parameters.StartEasyTrials
-                        BetaDiv = iff(beta_div_condition, 4, 1)
-                        betarnd_param = \
-                            self.task_parameters.BetaDistAlphaNBeta / \
-                            BetaDiv
-                        Intensity = betarnd(betarnd_param, betarnd_param)
-                        # prevent extreme values
-                        Intensity = iff(Intensity < 0.1, 0.1, Intensity)
-                        # prevent extreme values
-                        Intensity = iff(Intensity > 0.9, 0.9, Intensity)
-                    elif self.task_parameters.\
-                        StimulusSelectionCriteria == \
-                            StimulusSelectionCriteria.DiscretePairs:
-                        if (lastidx + a) <= \
-                                self.task_parameters.StartEasyTrials:
-                            index = next(prob[0] for prob in enumerate(
-                                self.task_parameters.
-                                OmegaTable.columns.OmegaProb)
-                                if prob[1] > 0)
-                            Intensity = \
-                                self.task_parameters.OmegaTable.Omega[
-                                    index] / 100
-                        else:
-                            # Choose a value randomly given the each value
-                            # probability
-                            Intensity = randsample(
-                                self.task_parameters.OmegaTable.columns.Omega,
-                                weights=self.task_parameters.OmegaTable.
-                                columns.OmegaProb
-                            )[0] / 100
-                    else:
-                        error('Unexpected StimulusSelectionCriteria')
-                    # In case of beta distribution, our distribution is
-                    # symmetric, so prob < 0.5 is == prob > 0.5, so we can
-                    # just pick the value that corrects the bias
-                    if (IsLeftRewarded[a] and Intensity < 0.5) or \
-                       (not IsLeftRewarded[a] and Intensity >= 0.5):
-                        Intensity = -Intensity + 1
-                    self.StimulusOmega[lastidx + a] = Intensity
-
                 if self.task_parameters.ExperimentType == \
                         ExperimentType.Auditory:
                     DV = CalcAudClickTrain(lastidx + a)
