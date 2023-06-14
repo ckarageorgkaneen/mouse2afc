@@ -24,6 +24,7 @@ ones = np.ones
 ceil = np.ceil
 zeros = np.zeros
 randsample = np.random.choice
+shuffle = np.random.shuffle
 
 
 def iff(condition, value1, value2):
@@ -183,6 +184,6 @@ def ControlledRandom(probability,_NumTrialsToGenerate):
         _NumPositiveTrials = _NumTrialsToGenerate * probability
         OneZeroArr = concat((ones(int(ceil(_NumPositiveTrials))),
                              zeros(int(ceil(_NumTrialsToGenerate-_NumPositiveTrials)))))
-        OneZeroArr = randperm(len(OneZeroArr))
+        shuffle(OneZeroArr)
         OneZeroArr = OneZeroArr[:_NumTrialsToGenerate].astype(int).tolist()
         return OneZeroArr
