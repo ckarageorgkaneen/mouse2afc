@@ -134,7 +134,7 @@ class CustomData:
                             index] / 100
                     else:
                         #Choose a value randomly given the each value probability
-                        StimulusOmega = randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob)/100
+                        StimulusOmega = ((randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob)/100).tolist())[0]
                 else:
                     error('Unexpected StimulusSelectionCriteria')
 
