@@ -111,42 +111,67 @@ class CustomData:
 
     def assign_future_trials(self,StartFrom,NumTrialsToGenerate):
         is_left_rewarded = ControlledRandom((1 - self.task_parameters.LeftBias),NumTrialsToGenerate)
+        lastidx = StartFrom
         for a in range(NumTrialsToGenerate):
             #If it's a fifty-fifty trial, then place stimulus in the middle
-            if rand(1,1) < self.task_parameters.Percent50Fifty and (a) > self.task_parameters.StartEasyTrials:
+            if rand(1,1) < self.task_parameters.Percent50Fifty and (lastidx+a) > self.task_parameters.StartEasyTrials:
                 StimulusOmega = .5
             else:
                 gui_ssc = self.task_parameters.StimulusSelectionCriteria
                 beta_dist = self.task_parameters.BetaDistAlphaNBeta
                 if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
                     # Divide beta by 4 if we are in an easy trial
-                    BetaDiv = iff((a) <= self.task_parameters.StartEasyTrials,4,1)
+                    BetaDiv = iff((lastidx+a) <= self.task_parameters.StartEasyTrials,4,1)
                     StimulusOmega = betarnd(beta_dist/BetaDiv,beta_dist/BetaDiv,1)
                     StimulusOmega = iff(StimulusOmega < 0.1, 0.1, StimulusOmega)
                     StimulusOmega = iff(StimulusOmega > 0.9,0.9,StimulusOmega)
                 elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
-                    if (a) <= self.task_parameters.StartEasyTrials:
-                        omega_prob = self.task_parameters.OmegaTable.columns.OmegaProb
+                    omega_prob = self.task_parameters.OmegaTable.columns.OmegaProb
+                    if (lastidx+a) <= self.task_parameters.StartEasyTrials:
                         index = next(omega_prob.index(prob)
                                     for prob in omega_prob if prob > 0)
                         StimulusOmega = self.task_parameters.OmegaTable.columns.Omega[
                             index] / 100
                     else:
                         #Choose a value randomly given the each value probability
-                        StimulusOmega = randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob/100)
+                        StimulusOmega = randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob)/100
                 else:
                     error('Unexpected StimulusSelectionCriteria')
 
                 if (is_left_rewarded[a] and StimulusOmega < 0.5) or (not is_left_rewarded[a] and StimulusOmega >= 0.5):
                     StimulusOmega = -StimulusOmega + 1
 
-            Trial = self.Trials
-            Trial.StimulusOmega[a] = StimulusOmega
+            self.Trials.StimulusOmega[lastidx+a] = StimulusOmega
             if StimulusOmega != 0.5:
-                Trial.LeftRewarded[a] = StimulusOmega > 0.5
+                self.Trials.LeftRewarded[lastidx+a] = StimulusOmega > 0.5
             else:
-                Trial.LeftRewarded[a] = rand() < .5
-            self.Trials = Trial
+                self.Trials.LeftRewarded[lastidx+a] = rand() < .5
+            
+            if self.task_parameters.ExperimentType == \
+                    ExperimentType.Auditory:
+                DV = CalcAudClickTrain(lastidx + a)
+            elif self.task_parameters.ExperimentType == \
+                    ExperimentType.LightIntensity:
+                DV = CalcLightIntensity(self, lastidx + a)
+            elif self.task_parameters.ExperimentType == \
+                    ExperimentType.GratingOrientation:
+                DV = CalcGratingOrientation(lastidx + a)
+            elif self.task_parameters.ExperimentType == \
+                    ExperimentType.RandomDots:
+                DV = CalcDotsCoherence(lastidx + a)
+            else:
+                error('Unexpected ExperimentType')
+            if DV > 0:
+                self.Trials.LeftRewarded[lastidx + a] = True
+            elif DV < 0:
+                self.Trials.LeftRewarded[lastidx + a] = False
+            else:
+                # It's equal distribution
+                self.Trials.LeftRewarded[lastidx + a] = rand() < 0.5
+            # cross-modality difficulty for plotting
+            #  0 <= (left - right) / (left + right) <= 1
+            self.Trials.DV[lastidx + a] = DV
+
         self.DVsAlreadyGenerated = StartFrom + NumTrialsToGenerate
 
     def update(self, i_trial):
@@ -580,7 +605,7 @@ class CustomData:
 
         # Create future trials
         # Check if its time to generate more future trials
-        if i_trial > len(self.Trials.DV) - Const.PRE_GENERATE_TRIAL_CHECK:
+        if i_trial+1 >= self.DVsAlreadyGenerated:
             # Do bias correction only if we have enough trials
             # sum(ndxRewd) > Const.BIAS_CORRECT_MIN_RWD_TRIALS
             if self.task_parameters.CorrectBias and i_trial > 7:
@@ -615,42 +640,6 @@ class CustomData:
             self.Timer.customCalcOmega[i_trial] = time.time()
             self.assign_future_trials(i_trial+1,Const.PRE_GENERATE_TRIAL_COUNT)
 
-            # make future trials
-            lastidx = len(self.DV) - 1
-            # Generate guaranteed equal possibility of >0.5 and <0.5
-            IsLeftRewarded = [0] * round(
-                Const.PRE_GENERATE_TRIAL_COUNT * LeftBias) + [1] * round(
-                Const.PRE_GENERATE_TRIAL_COUNT * (1 - LeftBias))
-            # Shuffle array and convert it
-            random.Shuffle(IsLeftRewarded)
-            IsLeftRewarded = [l_rewarded > LeftBias
-                              for l_rewarded in IsLeftRewarded]
-            self.Timer.customPrepNewTrials[i_trial] = time.time()
-            for a in range(Const.PRE_GENERATE_TRIAL_COUNT):
-                if self.task_parameters.ExperimentType == \
-                        ExperimentType.Auditory:
-                    DV = CalcAudClickTrain(lastidx + a)
-                elif self.task_parameters.ExperimentType == \
-                        ExperimentType.LightIntensity:
-                    DV = CalcLightIntensity(lastidx + a, self)
-                elif self.task_parameters.ExperimentType == \
-                        ExperimentType.GratingOrientation:
-                    DV = CalcGratingOrientation(lastidx + a)
-                elif self.task_parameters.ExperimentType == \
-                        ExperimentType.RandomDots:
-                    DV = CalcDotsCoherence(lastidx + a)
-                else:
-                    error('Unexpected ExperimentType')
-                if DV > 0:
-                    self.Trials.LeftRewarded[lastidx + a] = True
-                elif DV < 0:
-                    self.Trials.LeftRewarded[lastidx + a] = False
-                else:
-                    # It's equal distribution
-                    self.Trials.LeftRewarded[lastidx + a] = rand() < 0.5
-                # cross-modality difficulty for plotting
-                #  0 <= (left - right) / (left + right) <= 1
-                self.Trials.DV[lastidx + a] = DV
             self.Timer.customGenNewTrials[i_trial] = time.time()
         else:
             self.Timer.customAdjustBias[i_trial] = 0
@@ -821,7 +810,7 @@ class trials:
         self.LastSuccessCatchTrial = True
         self.StimulusOmega = datalist()
         self.StimDelay = datalist()
-        self.LeftRewarded = datalist(False)
+        self.LeftRewarded = datalist(None)
         self.DV = datalist()
         self.TrialStartSysTime = datalist(None)
         self.DotsCoherence = datalist()
