@@ -766,45 +766,45 @@ class trials:
     _DEFAULT_CATCH_COUNT_LEN = 21
     def __init__(self,task_parameters):
         self.task_parameters = task_parameters
-        self.ChoiceLeft = datalist(False)
-        self.ChoiceCorrect = datalist(False)
-        self.Feedback = datalist(False)
-        self.FeedbackTime = datalist(False)
+        self.ChoiceLeft = datalist(None)
+        self.ChoiceCorrect = datalist(None)
+        self.Feedback = datalist(None)
+        self.FeedbackTime = datalist(None)
         self.FeedbackDelay = datalist(None)
-        self.FixBroke = datalist(False)
-        self.EarlyWithdrawal = datalist(False)
-        self.MissedChoice = datalist(False)
+        self.FixBroke = datalist(None)
+        self.EarlyWithdrawal = datalist(None)
+        self.MissedChoice = datalist(None)
         self.FixDur = datalist(None)
         self.MT = datalist(None)
-        self.CatchTrial = datalist(False)
+        self.CatchTrial = datalist(None)
         self.ST = datalist(None)
-        self.OptoEnabled = datalist(False)
-        self.Rewarded = datalist(False)
+        self.OptoEnabled = datalist(None)
+        self.Rewarded = datalist(None)
         self.RewardAfterMinSampling = datalist(False)
         self.PreStimCounterReward = datalist(None)
         self.PreStimCntrReward = datalist(size=NUM_OF_TRIALS + 1)
-        self.MinSample = datalist()
+        self.MinSample = datalist(None)
         self.LightIntensityLeft = datalist()
         self.LightIntensityRight = datalist()
-        self.GratingOrientation = datalist()
+        self.GratingOrientation = datalist(None)
         self.RewardMagnitude = datalist([
             self.task_parameters.RewardAmount,
             self.task_parameters.RewardAmount
         ])
         self.RewardReceivedTotal = datalist(size=NUM_OF_TRIALS + 1)
-        self.ReactionTime = datalist()
+        self.ReactionTime = datalist(None)
         self.CenterPortRewAmount = datalist(
             self.task_parameters.CenterPortRewAmount)
-        self.TrialNumber = datalist()
-        self.ForcedLEDTrial = datalist(False)
+        self.TrialNumber = datalist(None)
+        self.ForcedLEDTrial = datalist(None)
         self.CatchCount = datalist(size=self._DEFAULT_CATCH_COUNT_LEN)
         self.LastSuccessCatchTrial = True
-        self.StimulusOmega = datalist()
-        self.StimDelay = datalist()
+        self.StimulusOmega = datalist(None)
+        self.StimDelay = datalist(None)
         self.LeftRewarded = datalist(None)
         self.DV = datalist()
         self.TrialStartSysTime = datalist(None)
-        self.DotsCoherence = datalist()
+        self.DotsCoherence = datalist(None)
 
 class Data:
     def __init__(self, session, task_parameters):
