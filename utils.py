@@ -69,11 +69,11 @@ def CalcAudClickTrain(data, trial_num):
 
 
 def CalcLightIntensity(data, trial_num):
-    data.Custom.Trials.LightIntensityLeft[trial_num] = \
-        round(data.Custom.Trials.StimulusOmega[trial_num] * 100)
-    data.Custom.Trials.LightIntensityRight[trial_num] = \
-        round((1 - data.Custom.Trials.StimulusOmega[trial_num]) * 100)
-    dv = (data.Custom.Trials.StimulusOmega[trial_num] * 2) - 1
+    data.Trials.LightIntensityLeft[trial_num] = \
+        round(data.Trials.StimulusOmega[trial_num] * 100)
+    data.Trials.LightIntensityRight[trial_num] = \
+        round((1 - data.Trials.StimulusOmega[trial_num]) * 100)
+    dv = (data.Trials.StimulusOmega[trial_num] * 2) - 1
     return dv
 
 
