@@ -146,31 +146,6 @@ class CustomData:
                 self.Trials.LeftRewarded[lastidx+a] = StimulusOmega > 0.5
             else:
                 self.Trials.LeftRewarded[lastidx+a] = rand() < .5
-            
-            if self.task_parameters.ExperimentType == \
-                    ExperimentType.Auditory:
-                DV = CalcAudClickTrain(lastidx + a)
-            elif self.task_parameters.ExperimentType == \
-                    ExperimentType.LightIntensity:
-                DV = CalcLightIntensity(self, lastidx + a)
-            elif self.task_parameters.ExperimentType == \
-                    ExperimentType.GratingOrientation:
-                DV = CalcGratingOrientation(lastidx + a)
-            elif self.task_parameters.ExperimentType == \
-                    ExperimentType.RandomDots:
-                DV = CalcDotsCoherence(lastidx + a)
-            else:
-                error('Unexpected ExperimentType')
-            if DV > 0:
-                self.Trials.LeftRewarded[lastidx + a] = True
-            elif DV < 0:
-                self.Trials.LeftRewarded[lastidx + a] = False
-            else:
-                # It's equal distribution
-                self.Trials.LeftRewarded[lastidx + a] = rand() < 0.5
-            # cross-modality difficulty for plotting
-            #  0 <= (left - right) / (left + right) <= 1
-            self.Trials.DV[lastidx + a] = DV
 
         self.DVsAlreadyGenerated = StartFrom + NumTrialsToGenerate
 
@@ -646,6 +621,22 @@ class CustomData:
             self.Timer.customCalcOmega[i_trial] = 0
             self.Timer.customPrepNewTrials[i_trial] = 0
             self.Timer.customGenNewTrials[i_trial] = 0
+
+        if self.task_parameters.ExperimentType == \
+                    ExperimentType.Auditory:
+                DV = CalcAudClickTrain(self,i_trial+1)
+        elif self.task_parameters.ExperimentType == \
+                ExperimentType.LightIntensity:
+            DV = CalcLightIntensity(self, i_trial+1)
+        elif self.task_parameters.ExperimentType == \
+                ExperimentType.GratingOrientation:
+            DV = CalcGratingOrientation(self,i_trial+1)
+        elif self.task_parameters.ExperimentType == \
+                ExperimentType.RandomDots:
+            DV = CalcDotsCoherence(self, i_trial+1)
+        else:
+            error('Unexpected ExperimentType')
+        self.Trials.DV[i_trial+1] = DV
 
         # Update RDK GUI
         self.task_parameters.OmegaTable.columns.RDK = [
