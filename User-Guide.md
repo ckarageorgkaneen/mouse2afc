@@ -31,7 +31,8 @@
 6. Navigate to where you installed the repository: `cd YOUR_FOLDER` and type: `python utils/install.py`
 7. Navigate into `base/pybpod` in `YOUR_FOLDER` and type `pip install -e .`
 
-### 3. Setting Up the Protocol in PyBpod
+## Using PyBpod
+### 1. Setting Up the Protocol in PyBpod
 1. Navigate to `YOUR_FOLDER` in terminal, do: `start-pybpod`. This should pop up
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/520fb3cd-6d37-4749-9103-3b93f2294cc7)
 
@@ -107,7 +108,7 @@ BPOD_WIRED_PORTS_ENABLED = [True, True, True, True]
 BPOD_BEHAVIOR_PORTS_ENABLED = [True, True, True, False, False, False, False, False]
 ```
 
-### 4. Running the Protocol
+### 2. Running the Protocol
 1. Navitgate to `YOUR_FOLDER' in terminal, excute `start-pybpod`
 2. In the upper left corner, select `Open` and selected the project you created in the previous step
 3. In the projects tab, go to boards, select the board you created and check `Emulator mode`:
@@ -134,6 +135,7 @@ and this should pop open:
 9. Once more it `Save`
 10. Click `Run` and hit the check box to poke in and out as a mouse
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b3d15233-307a-4d39-b265-526eb7508ab7)
+11. When done using, click `Kill`, and `Save`. All the data is saved in a folder created in your subject's folder **This is vague**
 
 
 
