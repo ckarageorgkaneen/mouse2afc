@@ -13,11 +13,12 @@
 
 2. Follow the intructions
      - `utils` is the folder where you downloaded the `.yml` file.
-3. In terminal type `conda activate pybpod-environment` (or just `activate pybpod-environment` depending on your system) **DOUBLE CHECK**
+     - This step will take a couple minutes. The line in terminal `Collect package metadata (repodata.json)` should be loading
+3. In terminal type `conda activate pybpod-environment` (Once step 2 finishes, the terminal should print this out and you can copy and paste it)
 4. Do a `pip install --upgrade pip`
 
 ### 2. Cloning the Repository
-1. Go to [this](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html) Github repository
+1. Go to [this](https://github.com/ckarageorgkaneen/pybpod) Github repository
 2. Click the green button labeled ` < > Code ` as seen in the image below 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/5b579fcd-c308-4be1-8368-07a6a7a5b7e9)
 
@@ -29,7 +30,8 @@
      - Where `LINK` is the one you just copied and `YOUR_FOLDER` which is up to you to name (just `pybpod` will be fine)
      - This step will create a folder, `FOLDER_NAME`, in the directory you nagivated to and download the repository along with its submodles into that folder
 6. Navigate to where you installed the repository: `cd YOUR_FOLDER` and type: `python utils/install.py`
-7. Navigate into `base/pybpod` in `YOUR_FOLDER` and type `pip install -e .`
+     - This will take a couple minutes
+7. Navigate into `base/pybpod` with `cd base/pybpod` and type `pip install -e .`
 
 ## Using PyBpod
 ### 1. Setting Up the Protocol in PyBpod
@@ -107,6 +109,7 @@ BPOD_BNC_PORTS_ENABLED = [True,True]
 BPOD_WIRED_PORTS_ENABLED = [True, True, True, True]
 BPOD_BEHAVIOR_PORTS_ENABLED = [True, True, True, False, False, False, False, False]
 ```
+Hit save. Now close the program and restart it. 
 
 ### 2. Running the Protocol
 1. Navitgate to `YOUR_FOLDER' in terminal, excute `start-pybpod`
