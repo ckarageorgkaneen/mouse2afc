@@ -114,8 +114,9 @@ Hit save. Now close the program and restart it.
 ### 2. Running the Protocol
 1. Navitgate to `YOUR_FOLDER' in terminal, excute `start-pybpod`
 2. In the upper left corner, select `Open` and selected the project you created in the previous step
-3. In the projects tab, go to boards, select the board you created and check `Emulator mode`:
+3. In the projects tab, go to boards, select the board you created then on the details tab check `Emulator mode`:
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7809599d-46c5-4739-a510-5864528de451)
+If the details tab does not load this information, save the project, close the project by right clicking on the project name and selecting `Close` and reopen the project with the `Open` button. If this doesn't work, quit the program and restart. 
 
 4. Still there, click `Console`. You should see something like this:
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/f45ca25c-d40c-445d-95c0-a035906b040f)
