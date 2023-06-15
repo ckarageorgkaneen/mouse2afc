@@ -1,5 +1,5 @@
 # User Guide running Mouse2AFC on PyBpod
-#### The goal of this doc is to provide intructions how to install and set up pybpod for the Mouse2AFC protocol.
+#### The goal of this document is to provide intructions on how to install and set up pybpod to run the Mouse2AFC protocol.
 #### It will be a copy of the instructions provide by [Pybpod](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html) but with more detail as well as some modification for this use case.
 
 ## Prerequisits for Installation
@@ -8,11 +8,11 @@
 
 ## Installation
 ### 1. Setup and Activate the Virtual Environment
-1. Got to the [Pybpod](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html) website and see step 2 of installation. 
+1. Got to the [Pybpod wesbite](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html) and see step 2 of installation. 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/2f705022-145e-40f1-92d6-d42199138465)
 
 2. Follow the intructions
-     - `utils` is the folder where you downloaded the `.yml` file\
+     - `utils` is the folder where you downloaded the `.yml` file.
 3. In terminal type `conda activate pybpod-environment` (or just `activate pybpod-environment` depending on your system) **DOUBLE CHECK**
 4. Do a `pip install --upgrade pip`
 
@@ -51,7 +51,7 @@ libGL error: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: can
 libGL error: failed to load driver: swrast
 ```
 
-For detailed intructions how everything works at the [PyBpod Website](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/basic-usage.html). There are many features PyBpod has but we will not be using them. This doc will have the basics on how to get the protocol up and running.
+For detailed intructions how everything works go to the [PyBpod Website](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/basic-usage.html). There are many features PyBpod offers but we will not be using them. This doc will have the basics on how to get the protocol up and running.
 
 2. In the upper left corner, select `New`                                    
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b9db7442-3b70-4379-811c-b6fbd115b53c)
@@ -59,7 +59,7 @@ For detailed intructions how everything works at the [PyBpod Website](https://py
 You will see in the `Projects` tab, it has been populated with this:                              
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/e5ecd9dd-013b-47a6-90eb-b1bd28520024)
 
-3. By right clicking on `Experiments`,`Subjects`,`Bpod Boards` and `Users` you will be able to add each spective item.                       
+3. By right clicking on `Experiments`,`Subjects`,`Bpod Boards` and `Users` you will be able to add each respective item.                       
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/adbb002a-e12f-41ac-be25-226dea92dec2)
 
 4. Add each of these and in the newly created experiment right click once more to add a setup then select it. You should have something that looks like this:
