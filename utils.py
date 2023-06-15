@@ -16,9 +16,15 @@ random_unif = np.random.uniform
 randperm = np.random.permutation
 diff = np.diff
 polyval = np.polyval
-betarnd = random.betavariate
+betarnd = np.random.beta
 # TODO: verify correctness that randsample is equivalent to random.choices
 randsample = random.choices
+concat = np.concatenate
+ones = np.ones
+ceil = np.ceil
+zeros = np.zeros
+randsample = np.random.choice
+shuffle = np.random.shuffle
 
 
 def iff(condition, value1, value2):
@@ -64,11 +70,11 @@ def CalcAudClickTrain(data, trial_num):
 
 
 def CalcLightIntensity(data, trial_num):
-    data.Custom.LightIntensityLeft[trial_num] = \
-        round(data.Custom.StimulusOmega[trial_num] * 100)
-    data.Custom.LightIntensityRight[trial_num] = \
-        round((1 - data.Custom.StimulusOmega[trial_num]) * 100)
-    dv = (data.Custom.StimulusOmega[trial_num] * 2) - 1
+    data.Trials.LightIntensityLeft[trial_num] = \
+        round(data.Trials.StimulusOmega[trial_num] * 100)
+    data.Trials.LightIntensityRight[trial_num] = \
+        round((1 - data.Trials.StimulusOmega[trial_num]) * 100)
+    dv = (data.Trials.StimulusOmega[trial_num] * 2) - 1
     return dv
 
 
@@ -173,3 +179,11 @@ def GetValveTimes(LiquidAmount, TargetValves):
         ValveTimes[x] /= 1000
     result = ValveTimes[0] if nValves == 1 else ValveTimes
     return result
+
+def ControlledRandom(probability,_NumTrialsToGenerate):
+        _NumPositiveTrials = _NumTrialsToGenerate * probability
+        OneZeroArr = concat((ones(int(ceil(_NumPositiveTrials))),
+                             zeros(int(ceil(_NumTrialsToGenerate-_NumPositiveTrials)))))
+        shuffle(OneZeroArr)
+        OneZeroArr = OneZeroArr[:_NumTrialsToGenerate].astype(int).tolist()
+        return OneZeroArr

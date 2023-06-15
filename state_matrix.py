@@ -65,10 +65,9 @@ class StateMatrix(StateMachine):
     def __init__(self, bpod, task_parameters, data, i_trial):
         super().__init__(bpod)
         # Define ports
-        lmr_air_ports = task_parameters.Ports_LMRAir
-        LeftPort = floor(mod(lmr_air_ports / 1000, 10))
-        CenterPort = floor(mod(lmr_air_ports / 100, 10))
-        RightPort = floor(mod(lmr_air_ports / 10, 10))
+        LeftPort = floor(mod(task_parameters.Ports_LMRAir / 100000, 10))
+        CenterPort = floor(mod(task_parameters.Ports_LMRAir / 10000, 10))
+        RightPort = floor(mod(task_parameters.Ports_LMRAir / 1000, 10))
         AirSolenoid = mod(task_parameters.Ports_LMRAir, 10)
         LeftPortOut = port_str(LeftPort, out=True)
         CenterPortOut = port_str(CenterPort, out=True)
@@ -89,7 +88,7 @@ class StateMatrix(StateMachine):
 
         LEDErrorRate = DEFAULT_LED_ERROR_RATE
 
-        IsLeftRewarded = data.Custom.LeftRewarded[i_trial]
+        IsLeftRewarded = data.Custom.Trials.LeftRewarded[i_trial]
 
         if task_parameters.ExperimentType == ExperimentType.Auditory:
             # In MATLAB: 'BNCState' instead of 'BNC1'
@@ -100,9 +99,9 @@ class StateMatrix(StateMachine):
                 ExperimentType.LightIntensity:
             # Divide Intensity by 100 to get fraction value
             LeftPWMStim = round(
-                data.Custom.LightIntensityLeft[i_trial] * LeftPWM / 100)
+                data.Custom.Trials.LightIntensityLeft[i_trial] * LeftPWM / 100)
             RightPWMStim = round(
-                data.Custom.LightIntensityRight[
+                data.Custom.Trials.LightIntensityRight[
                     i_trial] * RightPWM / 100)
             DeliverStimulus = [
                 (pwm_str(LeftPort), LeftPWMStim),
@@ -123,13 +122,13 @@ class StateMatrix(StateMachine):
             ccw = iff(mod(rightPortAngle - leftPortAngle, 360) < mod(
                 leftPortAngle - rightPortAngle, 360), True, False)
             if ccw:
-                finalDV = data.Custom.DV[i_trial]
+                finalDV = data.Custom.Trials.DV[i_trial]
                 if rightPortAngle < leftPortAngle:
                     rightPortAngle += 360
                 angleDiff = rightPortAngle - leftPortAngle
                 minAngle = leftPortAngle
             else:
-                finalDV = -data.Custom.DV[i_trial]
+                finalDV = -data.Custom.Trials.DV[i_trial]
                 if leftPortAngle < rightPortAngle:
                     leftPortAngle += 360
                 angleDiff = leftPortAngle - rightPortAngle
@@ -181,7 +180,7 @@ class StateMatrix(StateMachine):
                 task_parameters.DotSpeedDegsPerSec
             data.Custom.drawParams.dotLifetimeSecs = \
                 task_parameters.DotLifetimeSecs
-            data.Custom.drawParams.coherence = data.Custom.DotsCoherence[
+            data.Custom.drawParams.coherence = data.Custom.Trials.DotsCoherence[
                 i_trial]
             data.Custom.drawParams.screenWidthCm = \
                 task_parameters.ScreenWidthCm
@@ -233,11 +232,11 @@ class StateMatrix(StateMachine):
         AirSolenoidOn = AirSolenoid
 
         LeftValveTime = GetValveTimes(
-            data.Custom.RewardMagnitude[i_trial][0], LeftPort)
+            data.Custom.Trials.RewardMagnitude[i_trial][0], LeftPort)
         CenterValveTime = GetValveTimes(
-            data.Custom.CenterPortRewAmount[i_trial], CenterPort)
+            data.Custom.Trials.CenterPortRewAmount[i_trial], CenterPort)
         RightValveTime = GetValveTimes(
-            data.Custom.RewardMagnitude[i_trial][1], RightPort)
+            data.Custom.Trials.RewardMagnitude[i_trial][1], RightPort)
 
         RewardedPort = iff(IsLeftRewarded, LeftPort, RightPort)
         RewardedPortPWM = iff(IsLeftRewarded, LeftPWM, RightPWM)
@@ -282,16 +281,22 @@ class StateMatrix(StateMachine):
             'SoftCode', 11)], [])
 
         # CatchTrial
-        FeedbackDelayCorrect = iff(data.Custom.CatchTrial[
-            i_trial], Const.FEEDBACK_CATCH_CORRECT_SEC,
-            task_parameters.FeedbackDelay)
+        FeedbackDelayCorrect = iff(data.Custom.Trials.CatchTrial[
+            i_trial], Const.FEEDBACK_CATCH_MAX_SEC,
+            max(task_parameters.FeedbackDelay,0.01))
 
         # GUI option CatchError
-        FeedbackDelayError = iff(task_parameters.CatchError,
-                                 Const.FEEDBACK_CATCH_INCORRECT_SEC,
-                                 task_parameters.FeedbackDelay)
+        FeedbackDelayPunish = iff(task_parameters.CatchError,
+                                  Const.FEEDBACK_CATCH_MAX_SEC,
+                                  max(task_parameters.FeedbackDelay,0.01))
         SkippedFeedbackSignal = iff(
             task_parameters.CatchError, [], ErrorFeedback)
+        
+        #Incorrect Timeout
+        IncorrectTimeout = iff(not task_parameters.PCTimeout,
+                               task_parameters.TimeOutIncorrectChoice
+                               + task_parameters.ITI,
+                               .01)
 
         # Incorrect Choice signal
         if task_parameters.IncorrectChoiceSignalType == \
@@ -338,14 +343,14 @@ class StateMatrix(StateMachine):
         Wire1OutError = iff(task_parameters.Wire1VideoTrigger, [(
                             'Wire2', 2)], [])
         Wire1OutCorrectCondition = task_parameters.Wire1VideoTrigger and \
-            data.Custom.CatchTrial[i_trial]
+            data.Custom.Trials.CatchTrial[i_trial]
         Wire1OutCorrect = iff(Wire1OutCorrectCondition,
                               [('Wire2', 2)], [])
 
         # LED on the side lateral port to cue the rewarded side at the
         # beginning of the training. On auditory discrimination task, both
         # lateral ports are illuminated after end of stimulus delivery.
-        if data.Custom.ForcedLEDTrial[i_trial]:
+        if data.Custom.Trials.ForcedLEDTrial[i_trial]:
             ExtendedStimulus = [(pwm_str(RewardedPort), RewardedPortPWM)]
         elif task_parameters.ExperimentType == ExperimentType.Auditory:
             ExtendedStimulus = [
@@ -357,13 +362,10 @@ class StateMatrix(StateMachine):
 
         PCTimeout = task_parameters.PCTimeout
         # Build state matrix
-        self.set_global_timer(1, FeedbackDelayCorrect)
-        self.set_global_timer(2, FeedbackDelayError)
-        self.set_global_timer(3, iff(
-            task_parameters.TimeOutEarlyWithdrawal,
-            task_parameters.TimeOutEarlyWithdrawal,
-            0.01))
-        self.set_global_timer(4, task_parameters.ChoiceDeadLine)
+        self.set_global_timer(1, task_parameters.ChoiceDeadline)
+        self.set_global_timer(2, FeedbackDelayCorrect)
+        self.set_global_timer(3, FeedbackDelayPunish)
+        self.set_global_timer(4, IncorrectTimeout)
         self.add_state(state_name=str(MatrixState.ITI_Signal),
                        state_timer=ITI_Signal_Duration,
                        state_change_conditions={
@@ -375,12 +377,12 @@ class StateMatrix(StateMachine):
                            CenterPortIn: str(MatrixState.PreStimReward)},
                        output_actions=[(pwm_str(CenterPort), CenterPWM)])
         self.add_state(state_name=str(MatrixState.PreStimReward),
-                       state_timer=iff(task_parameters.PreStimuDelayCntrReward,
-                                       GetValveTimes(task_parameters.PreStimuDelayCntrReward,
+                       state_timer=iff(task_parameters.PreStimDelayCntrReward,
+                                       GetValveTimes(task_parameters.PreStimDelayCntrReward,
                                        CenterPort), 0.01),
                        state_change_conditions={
                            Bpod.Events.Tup:str(MatrixState.TriggerWaitForStimulus)},
-                       output_actions=iff(task_parameters.PreStimuDelayCntrReward,
+                       output_actions=iff(task_parameters.PreStimDelayCntrReward,
                                           [('Valve', CenterValve)], []))
         # The next method is useful to close the 2 - photon shutter. It is
         # enabled by setting Optogenetics StartState to this state and end
@@ -596,7 +598,7 @@ class StateMatrix(StateMachine):
         # part of your data file. Don't forget to activate that input in the
         # Bpod main config.
 
-        if data.Custom.OptoEnabled[i_trial]:
+        if data.Custom.Trials.OptoEnabled[i_trial]:
             # Convert seconds to millis as we will send ints to Arduino
             OptoDelay = np.array(
                 [task_parameters.OptoStartDelay * 1000], dtype=np.uint32)
