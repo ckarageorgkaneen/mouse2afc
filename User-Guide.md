@@ -132,7 +132,7 @@ and this should pop open:
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/5e342cfb-a4fa-4bab-8282-5acb75497535)
 
 9. Once more it `Save`
-10. Click `Run` 
+10. Click `Run` and hit the check box to poke in and out as a mouse
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b3d15233-307a-4d39-b265-526eb7508ab7)
 
 
