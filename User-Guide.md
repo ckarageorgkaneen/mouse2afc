@@ -2,7 +2,7 @@
 #### The goal of this document is to provide intructions on how to install and set up pybpod to run the Mouse2AFC protocol.
 #### It will be a copy of the instructions provide by [Pybpod](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html) but with more detail as well as some modification for this use case.
 
-## Prerequisits for Installation
+## Prerequisites for Installation
 1. python 3.6
 2. Anaconda or Miniconda
 
