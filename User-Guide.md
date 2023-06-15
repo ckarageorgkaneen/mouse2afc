@@ -1,4 +1,4 @@
-# User Guide running Mouse2AFC on PyBpod
+# User Guide for Running Mouse2AFC on PyBpod
 #### The goal of this document is to provide intructions on how to install and set up pybpod to run the Mouse2AFC protocol.
 #### It will be a copy of the instructions provide by [Pybpod](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html) but with more detail as well as some modification for this use case.
 
