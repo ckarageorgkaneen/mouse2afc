@@ -4,7 +4,7 @@
 
 ## Prerequisites for Installation
 1. python 3.6
-2. Anaconda or Miniconda
+2. [Anaconda or Miniconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html)
 
 ## Installation
 ### 1. Setup and Activate the Virtual Environment
