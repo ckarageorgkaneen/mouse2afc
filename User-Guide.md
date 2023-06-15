@@ -52,7 +52,7 @@ libGL error: failed to load driver: swrast
 
 For detailed intructions how everything works at the [PyBpod Website](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/basic-usage.html). There are many features PyBpod has but we will not be using them. This doc will have the basics on how to get the protocol up and running.
 
-2. In the top left corner, select `New`                                    
+2. In the upper left corner, select `New`                                    
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b9db7442-3b70-4379-811c-b6fbd115b53c)
 
 You will see in the `Projects` tab, it has been populated with this:                              
@@ -63,9 +63,9 @@ You will see in the `Projects` tab, it has been populated with this:
 
 4. Add each of these and in the newly created experiment right click once more to add a setup then select it. You should have something that looks like this:
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/42b70fd9-c1ad-4cf2-9a0b-0898317c4275)
-On the right you can see the `Details` tab 
+You can go through and name each of the experiments and set ups as well as this whole project. 
 
-5. In the top left corner, Select `Save`                     
+5. In the upper left corner, Select `Save`                     
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/30171cc8-2b02-4a99-8a0a-3651f7266e9e)                        
 This will prompt you to choose a location to save. It is suggested to save it outside of the repository, `YOUR_FOLDER`. 
 
@@ -107,8 +107,35 @@ BPOD_WIRED_PORTS_ENABLED = [True, True, True, True]
 BPOD_BEHAVIOR_PORTS_ENABLED = [True, True, True, False, False, False, False, False]
 ```
 
-### Running the Protocol
-1. 
+### 4. Running the Protocol
+1. Navitgate to `YOUR_FOLDER' in terminal, excute `start-pybpod`
+2. In the upper left corner, select `Open` and selected the project you created in the previous step
+3. In the projects tab, go to boards, select the board you created and check `Emulator mode`:
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7809599d-46c5-4739-a510-5864528de451)
+
+4. Still there, click `Console`. You should see something like this:
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/f45ca25c-d40c-445d-95c0-a035906b040f)
+You can achive the same result my double clicking your board in the projects tab
+
+5. In the project tab, go to subjects and select the subject you created. Click `Setup` and select the setup you would like this mouse to use.
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/84446c72-5937-4bf5-8560-7803e965e5f6)
+
+6. Similarly, go to your setup, and click `Board` and `Procotol` in the deatils tab to choose your board and Protocol for that experiment
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/3d1c80de-2167-493e-9109-680f7dbce6d7)
+
+7. Continuing in the details tab, click `Add Subject` to select the subject(s) for this experiment
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/06ecbe8c-5bf7-43ac-a276-2811031674c6)
+
+8. Select `Test Protocol IO`                                             
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/73be05f0-3e50-4502-a6b0-262d61112716)
+and this should pop open:                       
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/5e342cfb-a4fa-4bab-8282-5acb75497535)
+
+9. Once more it `Save`
+10. Click `Run` 
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b3d15233-307a-4d39-b265-526eb7508ab7)
+
+
 
 
 
