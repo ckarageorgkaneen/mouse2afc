@@ -34,7 +34,11 @@
 7. Navigate into `base/pybpod` with `cd base/pybpod` and type `pip install -e .`
 
 ## Using PyBpod
-### 1. Setting Up the Protocol in PyBpod
+### 1. Downloading the Protocol
+1. Navigate to your prefered directory
+2. 'git clone https://github.com/HenryJFlynn/mouse2afc.git mouse2afc`
+
+### 2. Setting Up the Protocol in PyBpod
 1. Navigate to `YOUR_FOLDER` in terminal, do: `start-pybpod`. This should pop up
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/520fb3cd-6d37-4749-9103-3b93f2294cc7)
 
@@ -90,7 +94,7 @@ from mouse2afc import Mouse2AFC
 bpod = Bpod(emulator_mode=True)
 Mouse2AFC(bpod).run()
 ```
-8. Change `YOUR_PATH` to your systems path to the Mouse2AFC python protocol. **SHOULD I PUT MY REPO HERE??**
+8. Change `YOUR_PATH` to your systems path to the folder we created in step 1.
 9. In the top left corner, select `Options` and then click `edit user settings`      
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/1f972368-d0bc-47d6-8718-40f27c3ab29b)     
 
@@ -111,7 +115,7 @@ BPOD_BEHAVIOR_PORTS_ENABLED = [True, True, True, False, False, False, False, Fal
 ```
 Hit save. Now close the program and restart it. 
 
-### 2. Running the Protocol
+### 3. Running the Protocol
 1. Navitgate to `YOUR_FOLDER' in terminal, excute `start-pybpod`
 2. In the upper left corner, select `Open` and selected the project you created in the previous step
 3. In the projects tab, go to boards, select the board you created then on the details tab check `Emulator mode`:
