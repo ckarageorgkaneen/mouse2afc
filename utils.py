@@ -25,6 +25,7 @@ ceil = np.ceil
 zeros = np.zeros
 randsample = np.random.choice
 shuffle = np.random.shuffle
+isnan = np.isnan
 
 
 def iff(condition, value1, value2):

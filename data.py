@@ -41,6 +41,7 @@ from utils import iff
 from utils import betarnd
 from utils import rand
 from utils import randsample
+from utils import isnan
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +71,7 @@ class RawData:
 
     def StatesVisitedNames(self, trial_num):
         return [state.state_name for state in self._session.trials[
-            trial_num].states_occurrences]
+            trial_num].states_occurrences if not isnan(state.host_timestamp) ]
 
     def StatesVisitedTimes(self, trial_num):
         res_dict = OrderedDict()
