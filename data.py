@@ -584,7 +584,7 @@ class CustomData:
         if i_trial+1 >= self.DVsAlreadyGenerated:
             # Do bias correction only if we have enough trials
             # sum(ndxRewd) > Const.BIAS_CORRECT_MIN_RWD_TRIALS
-            if self.task_parameters.CorrectBias and i_trial > 7:
+            if self.task_parameters.CorrectBias and i_trial+1 > 7:
                 LeftBias = self.task_parameters.CalcLeftBias
                 # if LeftBias < 0.2 || LeftBias > 0.8 # Bias is too much,
                 # swing it all the way to the other side
