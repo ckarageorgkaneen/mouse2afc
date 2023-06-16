@@ -251,7 +251,7 @@ class CustomData:
                 start_time for start_time, end_time in WaitForChoiceStateTimes]
             # We might have more than multiple WaitForChoice if
             # HabituateIgnoreIncorrect is enabeld
-            self.MT[-1] = diff(WaitForChoiceStateStartTimes[:2])
+            self.Trials.MT[-1] = diff(WaitForChoiceStateStartTimes[:2])
 
         # Extract trial outcome. Check first if it's a wrong choice or a
         # HabituateIgnoreIncorrect but first choice was wrong choice
