@@ -515,8 +515,8 @@ class CustomData:
         # else
         #   indicesRwd = 1;
         # end
-        LAST_TRIALS = 20
-        indicesRwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 1)
+        LAST_TRIALS = 10
+        indicesRwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 0)
         # ndxRewd = self.Rewarded(indicesRwd:i_trial);
         choice_correct_slice = self.Trials.ChoiceCorrect[
             indicesRwd: i_trial + 1]
@@ -538,19 +538,21 @@ class CustomData:
             # the animals was performing on the other side. If it did bad on
             # the side then then consider this side performance to be good so
             # it'd still get more trials on the other side.
-            PerfL = 1 - (sum(ndxRightRewd) / (LAST_TRIALS * 2))
+            denominator = iff(sum(filter(None,ndxRightRewDone)),sum(filter(None,ndxRightRewDone)) * 2, 1)
+            PerfL = 1 - (sum(filter(None,ndxRightRewd)) / (denominator * 2))
         else:
-            PerfL = sum(ndxLeftRewd) / sum(ndxLeftRewDone)
+            PerfL = sum(filter(None,ndxLeftRewd)) / sum(filter(None,ndxLeftRewDone))
         if not any(ndxRightRewDone):
-            PerfR = 1 - (sum(ndxLeftRewd) / (LAST_TRIALS * 2))
+            denominator = iff(sum(filter(None,ndxLeftRewDone)),sum(filter(None,ndxLeftRewDone)) * 2, 1)
+            PerfR = 1 - (sum(filter(None,ndxLeftRewd)) / (denominator* 2))
         else:
-            PerfR = sum(ndxRightRewd) / sum(ndxRightRewDone)
+            PerfR = sum(filter(None,ndxRightRewd)) / sum(filter(None,ndxRightRewDone))
         self.task_parameters.CalcLeftBias = (PerfL - PerfR) / 2 + 0.5
 
         choiceMadeTrials = [
             choice_c is not None for choice_c in self.Trials.ChoiceCorrect]
         rewardedTrialsCount = sum([r is True for r in self.Trials.Rewarded])
-        lengthChoiceMadeTrials = len(choiceMadeTrials)
+        lengthChoiceMadeTrials = sum([x for x in choiceMadeTrials if True])
         if lengthChoiceMadeTrials >= 1:
             performance = rewardedTrialsCount / lengthChoiceMadeTrials
             self.task_parameters.Performance = [
