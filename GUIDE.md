@@ -45,7 +45,7 @@ git clone https://github.com/ckarageorgkaneen/pybpod <REPONAME>
 git submodule update --init --recursive
 ```
 
-7. Install pybpod
+6. Install pybpod
 
 ```bash
 cd <REPONAME>
@@ -124,7 +124,7 @@ BPOD_BEHAVIOR_PORTS_ENABLED = [True, True, True, False, False, False, False, Fal
 
 replace `PYBPOD_SESSION_PATH` with the path of the folder you want the session to be saved into (e.g. /home/chris/Documents/mouse2afc_sessions)
 
-10. Click `Save` and close the program.
+9. Click `Save` and close the program.
 
 # Running the protocol in PyBpod
 
@@ -162,9 +162,8 @@ and the following GUI window should pop up:
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/5e342cfb-a4fa-4bab-8282-5acb75497535)
 
-9. Click `Save`
-10. Click `Run` and then hit the `Poke` check boxes of your choice to poke in and out like a mouse would:
+9. Click `Save`, click `Run`, select the appropriate parameters in the protocol parameter GUI, click `Ok` and the protocol should run. Then any of the `Poke` check boxes of your choice to poke in and out like a mouse would:
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b3d15233-307a-4d39-b265-526eb7508ab7)
 
-11. When done using, click `Kill`, and `Save`
+10. When done using, click `Kill`, and `Save`.
