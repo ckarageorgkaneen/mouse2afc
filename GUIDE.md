@@ -23,7 +23,7 @@ which pip
 yields
 
 ```
-/home/chris/anaconda3/envs/pybpod-environment/bin/pip
+/home/USER/anaconda3/envs/pybpod-environment/bin/pip
 ```
 
 4. Upgrade pip
@@ -114,7 +114,7 @@ GENERIC_EDITOR_PLUGINS_LIST = ['pybpodgui_plugin', 'pybpod_gui_plugin_emulator']
 
 PYBPOD_SESSION_PATH = 'PYBPOD_SESSION_PATH' 
 
-TARGET_BPOD_FIRMWARE_VERSION = "8"
+TARGET_BPOD_FIRMWARE_VERSION = "22"
 EMULATOR_BPOD_MACHINE_TYPE = 1
 
 BPOD_BNC_PORTS_ENABLED = [True,True]
