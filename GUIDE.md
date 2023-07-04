@@ -50,16 +50,14 @@ git submodule update --init --recursive
 ```bash
 cd <REPONAME>
 python utils/install.py  # may take a few minutes
-cd base/pybpod
-pip install -e .
 ```
 
 # Setting up the protocol in PyBpod
 
-1. Open the PyBpod GUI
+1. Start the PyBpod GUI
 
 ```bash
-start-pybpod
+python -c 'import pybpodgui_plugin.__main__ as Main; Main.start()'
 ```
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/520fb3cd-6d37-4749-9103-3b93f2294cc7)
 
