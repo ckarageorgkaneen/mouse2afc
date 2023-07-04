@@ -61,48 +61,7 @@ python -c 'import pybpodgui_plugin.__main__ as Main; Main.start()'
 ```
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/520fb3cd-6d37-4749-9103-3b93f2294cc7)
 
-
-2. Click `New`
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b9db7442-3b70-4379-811c-b6fbd115b53c)
-
-after which you will see the `Projects` tab populated as such:
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/e5ecd9dd-013b-47a6-90eb-b1bd28520024)
-
-3. Right click on `Experiments`, `Subjects`, `Bpod Boards` and `Users` and add one of each, naming the items as you wish (e.g. `mouse2afc_...`)
-
-4. Right click on the newly created experiment and add a setup:
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/42b70fd9-c1ad-4cf2-9a0b-0898317c4275)
-
-5. Click `Save` to save your project to a `PROJECT_FOLDER` of your choice:
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/30171cc8-2b02-4a99-8a0a-3651f7266e9e)
-
-6. In the `Projects` tab, select the protocol you created. It should look like this:
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/ec14ca8d-28da-4dc0-a2c5-68ffd833429f)
-
-7. Paste the following code:
-
-```python
-#!/usr/bin/env python3
-import os
-import sys
-sys.path.append('MOUSE2AFC_PATH')
-from pybpodapi.protocol import Bpod
-from mouse2afc import Mouse2AFC
-bpod = Bpod(emulator_mode=True)
-Mouse2AFC(bpod).run()
-```
-
-replace `MOUSE2AFC_PATH` with the path of your `mouse2afc` repository (e.g. `/home/chris/Software/mouse2afc`)
-
-8. Click `Save`, then click `Options` and then `Edit user settings`:
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/1f972368-d0bc-47d6-8718-40f27c3ab29b)
-
+2. Click `Options` then `Edit user settings`
 Paste the following settings:
 
 ```python
@@ -126,42 +85,43 @@ replace `PYBPOD_SESSION_PATH` with the path of the folder you want the session t
 
 # Running the protocol in PyBpod
 
-1. Run `start-pybpod`
-2. In the GUI window click `Open` and navigate to your `PROJECT_FOLDER`
-3. In the `Projects` tab, go to `Boards`, select the board you created and on the `Details` tab check `Emulator mode`:
+1. Run
+```bash
+python -c 'import pybpodgui_plugin.__main__ as Main; Main.start()'
+```
+2. In the GUI window click`Open` and select `pybpod-project-folder` located in the `mouse2afc` repository folder downloaded previously. Should have something like this:
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/a29e3bbf-4e27-4f80-83af-b46898532293)
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7809599d-46c5-4739-a510-5864528de451)
+3. In the `Projects` tab, go to `Boards`, select `Default-Box_Name` then in the `Details` tab check `Emulator mode`:
+
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7191f691-f01a-455a-95c1-cb9fe6ebe303)
+
+and click `Console`:
+
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/853ace74-3f2d-4a55-bfaf-dec4212acd9b)
+
+You can achieve the same result my double clicking the board in the projects tab.
 
 If the details tab does not load this information, save the project, close the project by right clicking on the project name and selecting `Close` and reopen the project with the `Open` button. If this doesn't work, quit the program and restart. 
 
-4. Click `Console`:
+4. In the `Projects` tab, go to `Subjects` and select `Default-Subject-Name`. Click `Setup` and select the setup you would like this mouse to use:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/f45ca25c-d40c-445d-95c0-a035906b040f)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/6ca9fd5b-d7c4-442b-8962-1b971c432ff2)
 
-You can achieve the same result my double clicking your board in the projects tab.
+5. Similarly, go to your setup, and click `Board` and `Procotol` in the details tab to choose your board and protocol for that experiment:
 
-5. In the `Project` tab, go to `Subjects` and select the subject you created. Click `Setup` and select the setup you would like this mouse to use:
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/45452bea-99c6-4719-aebb-9109eb637cfb)
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/84446c72-5937-4bf5-8560-7803e965e5f6)
+6. In the `Details` tab, click `Add Subject` to select the subject(s) for this experiment
 
-6. Similarly, go to your setup, and click `Board` and `Procotol` in the details tab to choose your board and protocol for that experiment:
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/eeb7f079-f789-4ec2-bad3-f95b47f78855)
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/3d1c80de-2167-493e-9109-680f7dbce6d7)
+7. Click `Test Protocol IO` and the following GUI window should pop up:
 
-7. In the `Details` tab, click `Add Subject` to select the subject(s) for this experiment
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/556fd20e-d697-4404-8071-3fde4f46a7d4)
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/06ecbe8c-5bf7-43ac-a276-2811031674c6)
+8. Click `Save`, click `Run Protocol`, select the appropriate parameters in the task parameter GUI, click `Ok` and the protocol should run. Now check the boxes of your choice in the `Poke` row to emulate a mouse poking in (checked) and out (unchecked):
 
-8. Click `Test Protocol IO`:
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/86ea2444-5f34-4277-92e1-62e170f58fd4)
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/73be05f0-3e50-4502-a6b0-262d61112716)
-
-and the following GUI window should pop up:
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/5e342cfb-a4fa-4bab-8282-5acb75497535)
-
-9. Click `Save`, click `Run`, select the appropriate parameters in the protocol parameter GUI, click `Ok` and the protocol should run. Then any of the `Poke` check boxes of your choice to poke in and out like a mouse would:
-
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/b3d15233-307a-4d39-b265-526eb7508ab7)
-
-10. When done using, click `Kill`, and `Save`.
+9. When done using, click `Kill`, and `Save`.
