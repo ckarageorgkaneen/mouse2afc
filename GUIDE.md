@@ -95,34 +95,34 @@ python -c 'import pybpodgui_plugin.__main__ as Main; Main.start()'
 2. Under `Users`, double-click on `Default-User` to select it
 3. Click `Open` and select `pybpod-project` located in the `mouse2afc` repository folder downloaded previously. Should have something like this:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/a29e3bbf-4e27-4f80-83af-b46898532293)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/51a90a6b-64f2-4e51-84c6-63fb1c500427)
 
 4. In the `Projects` tab, go to `Boards`, select `Default-Box` then in the `Details` tab check `Emulator mode`:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7191f691-f01a-455a-95c1-cb9fe6ebe303)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/2c3dd1ee-4dab-4863-9885-eb8219d20c83)
 
 and click `Console`:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/853ace74-3f2d-4a55-bfaf-dec4212acd9b)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/8c11c7ce-87c3-46e5-baa5-c338a86ae989)
 
 4. Under `Subjects`, click on `Default-Subject`. If not already selected, click on the dropdown widget next to `Setup` and select the setup you would like this mouse to use:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/6ca9fd5b-d7c4-442b-8962-1b971c432ff2)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/70a85f8f-8348-418d-98b2-f607a3040c9a)
 
 5. Similarly, under `Default Experiment`, click on `Default-Setup` and, if not already selected, select a `Board` and `Procotol` for the experiment:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/45452bea-99c6-4719-aebb-9109eb637cfb)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7a90ca3f-5f96-44c5-a845-3f9e8907e121)
 
 6. In the `Subjects` tab, if not already selected, click `Add Subject` to select the subject(s) for the experiment:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/eeb7f079-f789-4ec2-bad3-f95b47f78855)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/42400e4e-8340-413d-8e92-098f3c65d926)
 
 7. Click `Test Protocol IO` and the following GUI window should pop up:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/556fd20e-d697-4404-8071-3fde4f46a7d4)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/4a78ee03-a3da-4ac0-9539-2801fa4a6b65)
 
 8. Click `Save`, click `Run Protocol`, select the appropriate parameters in the task parameter GUI, click `Ok` and the protocol should run. Now check the boxes of your choice in the `Poke` row to emulate a mouse poking in (checked) and out (unchecked):
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/86ea2444-5f34-4277-92e1-62e170f58fd4)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7e0afd02-d21d-4096-a843-90ff0fd3249b)
 
 9. When done using, click `Stop` or `Kill`, and then `Save`.
