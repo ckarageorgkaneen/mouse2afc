@@ -7,12 +7,12 @@
         "9b94349d-0ccd-45cd-a35c-2697fce737e6"
     ],
     "__SOFTWARE__": "PyBpod GUI API v1.8.2",
-    "__UPDATED-ON__": "2023-07-04 16:11:45.482840",
+    "__UPDATED-ON__": "2023-07-05 11:03:23.721427",
     "__UUID4__": "5cde6671-1146-43ce-a31e-39d91677fce8",
-    "board": "Default-Box-Name",
+    "board": "Default-Box",
     "detached": false,
     "subjects": [
-        "Default-Subject-Name"
+        "Default-Subject"
     ],
     "task": "Mouse2AFC",
     "update-variables": false,
