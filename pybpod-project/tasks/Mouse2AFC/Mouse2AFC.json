@@ -1,0 +1,11 @@
+{
+    "__CREATED-ON__": "2023-06-16 10:53:00.025555",
+    "__DEF-TEXT__": "This file contains information about a PyBpod protocol.",
+    "__DEF-URL__": "http://pybpod.readthedocs.org",
+    "__SOFTWARE__": "PyBpod GUI API v1.8.2",
+    "__UPDATED-ON__": "2023-07-04 15:53:44.851941",
+    "__UUID4__": "e8189c70-ecd7-4bb3-88b2-4e9952422aa0",
+    "commands": [],
+    "name": "Mouse2AFC",
+    "trigger-softcodes": false
+}
