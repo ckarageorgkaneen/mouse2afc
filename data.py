@@ -41,6 +41,7 @@ from utils import iff
 from utils import betarnd
 from utils import rand
 from utils import randsample
+from utils import isnan
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +71,7 @@ class RawData:
 
     def StatesVisitedNames(self, trial_num):
         return [state.state_name for state in self._session.trials[
-            trial_num].states_occurrences]
+            trial_num].states_occurrences if not isnan(state.host_timestamp) ]
 
     def StatesVisitedTimes(self, trial_num):
         res_dict = OrderedDict()
@@ -250,7 +251,7 @@ class CustomData:
                 start_time for start_time, end_time in WaitForChoiceStateTimes]
             # We might have more than multiple WaitForChoice if
             # HabituateIgnoreIncorrect is enabeld
-            self.MT[-1] = diff(WaitForChoiceStateStartTimes[:2])
+            self.Trials.MT[-1] = diff(WaitForChoiceStateStartTimes[:2])
 
         # Extract trial outcome. Check first if it's a wrong choice or a
         # HabituateIgnoreIncorrect but first choice was wrong choice
@@ -514,8 +515,8 @@ class CustomData:
         # else
         #   indicesRwd = 1;
         # end
-        LAST_TRIALS = 20
-        indicesRwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 1)
+        LAST_TRIALS = 10
+        indicesRwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 0)
         # ndxRewd = self.Rewarded(indicesRwd:i_trial);
         choice_correct_slice = self.Trials.ChoiceCorrect[
             indicesRwd: i_trial + 1]
@@ -537,19 +538,21 @@ class CustomData:
             # the animals was performing on the other side. If it did bad on
             # the side then then consider this side performance to be good so
             # it'd still get more trials on the other side.
-            PerfL = 1 - (sum(ndxRightRewd) / (LAST_TRIALS * 2))
+            denominator = iff(sum(filter(None,ndxRightRewDone)),sum(filter(None,ndxRightRewDone)) * 2, 1)
+            PerfL = 1 - (sum(filter(None,ndxRightRewd)) / (denominator * 2))
         else:
-            PerfL = sum(ndxLeftRewd) / sum(ndxLeftRewDone)
+            PerfL = sum(filter(None,ndxLeftRewd)) / sum(filter(None,ndxLeftRewDone))
         if not any(ndxRightRewDone):
-            PerfR = 1 - (sum(ndxLeftRewd) / (LAST_TRIALS * 2))
+            denominator = iff(sum(filter(None,ndxLeftRewDone)),sum(filter(None,ndxLeftRewDone)) * 2, 1)
+            PerfR = 1 - (sum(filter(None,ndxLeftRewd)) / (denominator* 2))
         else:
-            PerfR = sum(ndxRightRewd) / sum(ndxRightRewDone)
+            PerfR = sum(filter(None,ndxRightRewd)) / sum(filter(None,ndxRightRewDone))
         self.task_parameters.CalcLeftBias = (PerfL - PerfR) / 2 + 0.5
 
         choiceMadeTrials = [
             choice_c is not None for choice_c in self.Trials.ChoiceCorrect]
         rewardedTrialsCount = sum([r is True for r in self.Trials.Rewarded])
-        lengthChoiceMadeTrials = len(choiceMadeTrials)
+        lengthChoiceMadeTrials = sum([x for x in choiceMadeTrials if True])
         if lengthChoiceMadeTrials >= 1:
             performance = rewardedTrialsCount / lengthChoiceMadeTrials
             self.task_parameters.Performance = [
@@ -583,7 +586,7 @@ class CustomData:
         if i_trial+1 >= self.DVsAlreadyGenerated:
             # Do bias correction only if we have enough trials
             # sum(ndxRewd) > Const.BIAS_CORRECT_MIN_RWD_TRIALS
-            if self.task_parameters.CorrectBias and i_trial > 7:
+            if self.task_parameters.CorrectBias and i_trial+1 > 7:
                 LeftBias = self.task_parameters.CalcLeftBias
                 # if LeftBias < 0.2 || LeftBias > 0.8 # Bias is too much,
                 # swing it all the way to the other side
