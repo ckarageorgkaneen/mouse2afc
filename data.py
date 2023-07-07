@@ -386,79 +386,78 @@ class CustomData:
         self.Timer.customStimDelay[i_trial] = time.time()
 
         # min sampling time
-        if i_trial > self.task_parameters.StartEasyTrials:
-            if self.task_parameters.MinSampleType == MinSampleType.FixMin:
-                self.task_parameters.MinSample = \
-                    self.task_parameters.MinSampleMin
-            elif self.task_parameters.MinSampleType == \
-                    MinSampleType.AutoIncr:
-                # Check if animal completed pre-stimulus delay successfully
-                if not self.Trials.FixBroke[i_trial]:
-                    if self.Trials.Rewarded[i_trial]:
-                        min_sample_incremented = self.Trials.MinSample[
-                            i_trial] + self.task_parameters.MinSampleIncr
-                        self.task_parameters.MinSample = min(
-                            self.task_parameters.MinSampleMax,
-                            max(self.task_parameters.MinSampleMin,
-                                min_sample_incremented))
-                    elif self.Trials.EarlyWithdrawal[i_trial]:
-                        min_sample_decremented = self.MinSample[
-                            i_trial] - self.task_parameters.MinSampleDecr
-                        self.task_parameters.MinSample = max(
-                            self.task_parameters.MinSampleMin,
-                            min(self.task_parameters.MinSampleMax,
-                                min_sample_decremented))
-                else:
-                    # Read new updated GUI values
+        if self.task_parameters.MinSampleType == MinSampleType.FixMin:
+            self.task_parameters.MinSample = \
+                self.task_parameters.MinSampleMin
+        elif self.task_parameters.MinSampleType == \
+                MinSampleType.AutoIncr:
+            # Check if animal completed pre-stimulus delay successfully
+            if not self.Trials.FixBroke[i_trial] and i_trial > self.task_parameters.StartEasyTrials:
+                if self.Trials.Rewarded[i_trial]:
+                    min_sample_incremented = self.Trials.MinSample[
+                        i_trial] + self.task_parameters.MinSampleIncr
+                    self.task_parameters.MinSample = min(
+                        self.task_parameters.MinSampleMax,
+                        max(self.task_parameters.MinSampleMin,
+                            min_sample_incremented))
+                elif self.Trials.EarlyWithdrawal[i_trial]:
+                    min_sample_decremented = self.MinSample[
+                        i_trial] - self.task_parameters.MinSampleDecr
                     self.task_parameters.MinSample = max(
                         self.task_parameters.MinSampleMin,
                         min(self.task_parameters.MinSampleMax,
-                            self.MinSample[i_trial]))
-            elif self.task_parameters.MinSampleType == \
-                    MinSampleType.RandBetMinMax_DefIsMax:
-                use_rand = rand(
-                    1, 1) < self.task_parameters.MinSampleRandProb
-                if not use_rand:
+                            min_sample_decremented))
+            else:
+                # Read new updated GUI values
+                self.task_parameters.MinSample = max(
+                    self.task_parameters.MinSampleMin,
+                    min(self.task_parameters.MinSampleMax,
+                        self.Trials.MinSample[i_trial]))
+        elif self.task_parameters.MinSampleType == \
+                MinSampleType.RandBetMinMax_DefIsMax:
+            use_rand = rand(
+                1, 1) < self.task_parameters.MinSampleRandProb
+            if not use_rand or i_trial <= self.task_parameters.StartEasyTrials:
+                self.task_parameters.MinSample = \
+                    self.task_parameters.MinSampleMax
+            else:
+                min_sample_difference = \
+                    self.task_parameters.MinSampleMax - \
+                    self.task_parameters.MinSampleMin
+                self.task_parameters.MinSample = \
+                    min_sample_difference * \
+                    rand(1, 1) + self.task_parameters.MinSampleMin
+        elif MinSampleType.RandNumIntervalsMinMax_DefIsMax:
+            use_rand = rand(
+                1, 1) < self.task_parameters.MinSampleRandProb
+            if not use_rand or i_trial <= self.task_parameters.StartEasyTrials:
+                self.task_parameters.MinSample = \
+                    self.task_parameters.MinSampleMax
+            else:
+                self.task_parameters.MinSampleNumInterval = round(
+                    self.task_parameters.MinSampleNumInterval)
+                if self.task_parameters.MinSampleNumInterval == 0 or \
+                    self.task_parameters.MinSampleNumInterval == 1:
                     self.task_parameters.MinSample = \
-                        self.task_parameters.MinSampleMax
+                        self.task_parameters.MinSampleMin
                 else:
                     min_sample_difference = \
                         self.task_parameters.MinSampleMax - \
                         self.task_parameters.MinSampleMin
-                    self.task_parameters.MinSample = \
-                        min_sample_difference * \
-                        rand(1, 1) + self.task_parameters.MinSampleMin
-            elif MinSampleType.RandNumIntervalsMinMax_DefIsMax:
-                use_rand = rand(
-                    1, 1) < self.task_parameters.MinSampleRandProb
-                if not use_rand:
-                    self.task_parameters.MinSample = \
-                        self.task_parameters.MinSampleMax
-                else:
-                    self.task_parameters.MinSampleNumInterval = round(
-                        self.task_parameters.MinSampleNumInterval)
-                    if self.task_parameters.MinSampleNumInterval == 0 or \
-                       self.task_parameters.MinSampleNumInterval == 1:
-                        self.task_parameters.MinSample = \
-                            self.task_parameters.MinSampleMin
-                    else:
-                        min_sample_difference = \
-                            self.task_parameters.MinSampleMax - \
-                            self.task_parameters.MinSampleMin
-                        step = min_sample_difference / (
-                            self.task_parameters.MinSampleNumInterval - 1)
-                        intervals = list(range(
-                            self.task_parameters.MinSampleMin,
-                            self.task_parameters.MinSampleMax + 1,
-                            step))
-                        intervals_idx = randi(
-                            1, self.task_parameters.MinSampleNumInterval)
-                        print("Intervals:")  # disp("Intervals:");
-                        print(intervals)  # disp(intervals)
-                        self.task_parameters.MinSample = intervals[
-                            intervals_idx]
-            else:
-                error('Unexpected MinSampleType value')
+                    step = min_sample_difference / (
+                        self.task_parameters.MinSampleNumInterval - 1)
+                    intervals = list(range(
+                        self.task_parameters.MinSampleMin,
+                        self.task_parameters.MinSampleMax + 1,
+                        step))
+                    intervals_idx = randi(
+                        1, self.task_parameters.MinSampleNumInterval)
+                    print("Intervals:")  # disp("Intervals:");
+                    print(intervals)  # disp(intervals)
+                    self.task_parameters.MinSample = intervals[
+                        intervals_idx]
+        else:
+            error('Unexpected MinSampleType value')
         self.Timer.customMinSampling[i_trial] = time.time()
 
         # feedback delay
