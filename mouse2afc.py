@@ -1,5 +1,7 @@
 import logging
 
+import time
+
 from data import Data
 from state_matrix import StateMatrix
 from task_parameters import TaskParameters
@@ -31,10 +33,19 @@ class Mouse2AFC:
         self._task_parameters.CurrentStim = (self._data.Custom.Trials.DV[0] + (
             int(self._data.Custom.Trials.DV[0] > 0) or -1)) / 0.02
 
+    def my_softcode_handler(self,_softcode):
+        if _softcode == 1:
+            self._data.Custom.Trials.EarlyWithdrawalTimerStart = time.time()
+        elif _softcode == 2:
+            if time.time() - self._data.Custom.Trials.EarlyWithdrawalTimerStart > self._task_parameters.TimeOutEarlyWithdrawal:
+                self._bpod.trigger_event_by_name(event_name = 'SoftCode1',
+                                                 event_data = None)
+
     def run(self):
         self._data.Custom.assign_future_trials(StartFrom,NumTrialsToGenerate)
         self._set_current_stimulus()
         i_trial = 0
+        self._bpod.softcode_handler_function = self.my_softcode_handler
         while True:
             logger.error('Before StateMatrix()')
             sma = StateMatrix(

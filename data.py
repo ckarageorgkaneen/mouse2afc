@@ -808,6 +808,7 @@ class trials:
         self.DV = datalist()
         self.TrialStartSysTime = datalist(None)
         self.DotsCoherence = datalist(None)
+        self.EarlyWithdrawalTimerStart = None
 
 class Data:
     def __init__(self, session, task_parameters):
