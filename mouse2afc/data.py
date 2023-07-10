@@ -4,44 +4,44 @@ import time
 
 from collections import OrderedDict
 
-from definitions.constant import Constant as Const
-from definitions.experiment import ExperimentType
-from definitions.matrix_state import MatrixState
-from definitions.feedback_delay_selection import FeedbackDelaySelection
-from definitions.min_sample_type import MinSampleType
-from definitions.stimulus_selection_criteria \
+from mouse2afc.definitions.constant import Constant as Const
+from mouse2afc.definitions.experiment import ExperimentType
+from mouse2afc.definitions.matrix_state import MatrixState
+from mouse2afc.definitions.feedback_delay_selection import FeedbackDelaySelection
+from mouse2afc.definitions.min_sample_type import MinSampleType
+from mouse2afc.definitions.stimulus_selection_criteria \
     import StimulusSelectionCriteria
-from utils import betarnd
-from utils import iff
-from utils import rand
-from utils import randi
-from utils import randsample
-from utils import round
-from utils import floor
-from utils import random_unif
-from utils import diff
-from utils import GetCatchStimIdx
-from utils import TruncatedExponential
-from utils import CalcAudClickTrain
-from utils import CalcLightIntensity
-from utils import CalcGratingOrientation
-from utils import CalcDotsCoherence
+from  mouse2afc.utils import betarnd
+from  mouse2afc.utils import iff
+from  mouse2afc.utils import rand
+from  mouse2afc.utils import randi
+from  mouse2afc.utils import randsample
+from  mouse2afc.utils import round
+from  mouse2afc.utils import floor
+from  mouse2afc.utils import random_unif
+from  mouse2afc.utils import diff
+from  mouse2afc.utils import GetCatchStimIdx
+from  mouse2afc.utils import TruncatedExponential
+from  mouse2afc.utils import CalcAudClickTrain
+from  mouse2afc.utils import CalcLightIntensity
+from  mouse2afc.utils import CalcGratingOrientation
+from  mouse2afc.utils import CalcDotsCoherence
 
-from definitions.constant import Constant as Const
-from definitions.stimulus_selection_criteria \
+from mouse2afc.definitions.constant import Constant as Const
+from mouse2afc.definitions.stimulus_selection_criteria \
     import StimulusSelectionCriteria
-from definitions.experiment import ExperimentType
+from mouse2afc.definitions.experiment import ExperimentType
 
-from utils import CalcAudClickTrain
-from utils import CalcDotsCoherence
-from utils import CalcGratingOrientation
-from utils import CalcLightIntensity
-from utils import ControlledRandom
-from utils import iff
-from utils import betarnd
-from utils import rand
-from utils import randsample
-from utils import isnan
+from  mouse2afc.utils import CalcAudClickTrain
+from  mouse2afc.utils import CalcDotsCoherence
+from  mouse2afc.utils import CalcGratingOrientation
+from  mouse2afc.utils import CalcLightIntensity
+from  mouse2afc.utils import ControlledRandom
+from  mouse2afc.utils import iff
+from  mouse2afc.utils import betarnd
+from  mouse2afc.utils import rand
+from  mouse2afc.utils import randsample
+from  mouse2afc.utils import isnan
 
 logger = logging.getLogger(__name__)
 

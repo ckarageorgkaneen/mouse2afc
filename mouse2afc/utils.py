@@ -3,7 +3,7 @@ import math
 import numpy as np
 import random
 
-import settings
+from mouse2afc import settings
 
 logger = logging.getLogger(__name__)
 

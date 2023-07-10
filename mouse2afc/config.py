@@ -1,21 +1,21 @@
 import math
 
-from definitions.brain_region import BrainRegion
-from definitions.experiment import ExperimentType
-from definitions.feedback_delay_selection import FeedbackDelaySelection
-from definitions.incorrect_choice_signal_type import IncorrectChoiceSignalType
-from definitions.iti_signal_type import ITISignalType
-from definitions.matrix_state import MatrixState
-from definitions.min_sample_type import MinSampleType
-from definitions.mouse_state import MouseState
-from definitions.stimulus_selection_criteria import StimulusSelectionCriteria
-from definitions.ttl_wire_usage import TTLWireUsage
-from definitions.visual_stim_angle import VisualStimAngle
-from definitions.stim_after_poke_out import StimAfterPokeOut
+from  mouse2afc.definitions.brain_region import BrainRegion
+from  mouse2afc.definitions.experiment import ExperimentType
+from  mouse2afc.definitions.feedback_delay_selection import FeedbackDelaySelection
+from  mouse2afc.definitions.incorrect_choice_signal_type import IncorrectChoiceSignalType
+from  mouse2afc.definitions.iti_signal_type import ITISignalType
+from  mouse2afc.definitions.matrix_state import MatrixState
+from  mouse2afc.definitions.min_sample_type import MinSampleType
+from  mouse2afc.definitions.mouse_state import MouseState
+from  mouse2afc.definitions.stimulus_selection_criteria import StimulusSelectionCriteria
+from  mouse2afc.definitions.ttl_wire_usage import TTLWireUsage
+from  mouse2afc.definitions.visual_stim_angle import VisualStimAngle
+from  mouse2afc.definitions.stim_after_poke_out import StimAfterPokeOut
 
-from task_parameters import TaskParametersGUITable
+from mouse2afc.task_parameters import TaskParametersGUITable
 
-from utils import round
+from mouse2afc.utils import round
 
 AllPerformance = '(Calc. after 1st trial)'
 BeepAfterMinSampling = False

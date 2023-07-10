@@ -51,10 +51,16 @@ git submodule update --init --recursive
 cd <REPONAME>
 python utils/install.py  # may take a few minutes
 ```
-7. Clone Mouse2AFC. Clone outside of `<REPONAME>`
+7. Clone mouse2afc. Clone outside of `<REPONAME>`
 ```bash
 git clone https://github.com/HenryJFlynn/mouse2afc.git 
 ```
+
+8. Install mouse2afc
+```bash
+cd mouse2afc
+pip install -e .
+``` 
 
 # Setting up the protocol in PyBpod
 
