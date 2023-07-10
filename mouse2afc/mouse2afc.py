@@ -2,9 +2,9 @@ import logging
 
 import time
 
-from data import Data
-from state_matrix import StateMatrix
-from task_parameters import TaskParameters
+from mouse2afc.data import Data
+from mouse2afc.state_matrix import StateMatrix
+from mouse2afc.task_parameters import TaskParameters
 
 
 logger = logging.getLogger(__name__)

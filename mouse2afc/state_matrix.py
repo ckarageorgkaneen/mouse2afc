@@ -6,21 +6,21 @@ from pybpodapi.protocol import Bpod
 from pybpodapi.protocol import StateMachine
 from pybpodapi.state_machine.state_machine_base import SMAError
 
-from definitions.constant import Constant as Const
-from definitions.draw_stim_type import DrawStimType
-from definitions.experiment import ExperimentType
-from definitions.incorrect_choice_signal_type import IncorrectChoiceSignalType
-from definitions.iti_signal_type import ITISignalType
-from definitions.matrix_state import MatrixState
-from definitions.visual_stim_angle import VisualStimAngle
-from definitions.stim_after_poke_out import StimAfterPokeOut
+from  mouse2afc.definitions.constant import Constant as Const
+from  mouse2afc.definitions.draw_stim_type import DrawStimType
+from  mouse2afc.definitions.experiment import ExperimentType
+from  mouse2afc.definitions.incorrect_choice_signal_type import IncorrectChoiceSignalType
+from  mouse2afc.definitions.iti_signal_type import ITISignalType
+from  mouse2afc.definitions.matrix_state import MatrixState
+from  mouse2afc.definitions.visual_stim_angle import VisualStimAngle
+from  mouse2afc.definitions.stim_after_poke_out import StimAfterPokeOut
 
-from utils import EncTrig
-from utils import GetValveTimes
-from utils import floor
-from utils import iff
-from utils import mod
-from utils import round
+from  mouse2afc.utils import EncTrig
+from  mouse2afc.utils import GetValveTimes
+from  mouse2afc.utils import floor
+from  mouse2afc.utils import iff
+from  mouse2afc.utils import mod
+from  mouse2afc.utils import round
 
 logger = logging.getLogger(__name__)
 
