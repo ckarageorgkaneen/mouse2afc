@@ -1,0 +1,7 @@
+LICENSE
+README.md
+setup.py
+Mouse2AFC.egg-info/PKG-INFO
+Mouse2AFC.egg-info/SOURCES.txt
+Mouse2AFC.egg-info/dependency_links.txt
+Mouse2AFC.egg-info/top_level.txt
