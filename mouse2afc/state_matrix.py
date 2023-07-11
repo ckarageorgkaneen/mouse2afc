@@ -68,7 +68,6 @@ class StateMatrix(StateMachine):
         LeftPort = floor(mod(task_parameters.Ports_LMRAir / 100000, 10))
         CenterPort = floor(mod(task_parameters.Ports_LMRAir / 10000, 10))
         RightPort = floor(mod(task_parameters.Ports_LMRAir / 1000, 10))
-        AirSolenoid = mod(task_parameters.Ports_LMRAir, 10)
         LeftPortOut = port_str(LeftPort, out=True)
         CenterPortOut = port_str(CenterPort, out=True)
         RightPortOut = port_str(RightPort, out=True)
@@ -225,11 +224,9 @@ class StateMatrix(StateMachine):
         # LeftValve = 2 ** (LeftPort - 1)
         # CenterValve = 2 ** (CenterPort - 1)
         # RightValve = 2 ** (RightPort - 1)
-        # AirSolenoidOn = 2 ** (AirSolenoid - 1)
         LeftValve = LeftPort
         CenterValve = CenterPort
         RightValve = RightPort
-        AirSolenoidOn = AirSolenoid
 
         LeftValveTime = GetValveTimes(
             data.Custom.Trials.RewardMagnitude[i_trial][0], LeftPort)
@@ -254,12 +251,6 @@ class StateMatrix(StateMachine):
         PunishOut = iff(IsLeftRewarded, RightPortOut, LeftPortOut)
         ValveTime = iff(IsLeftRewarded, LeftValveTime, RightValveTime)
         ValveCode = iff(IsLeftRewarded, LeftValve, RightValve)
-
-        if task_parameters.CutAirReward:
-            AirFlowRewardOff = [('Valve', AirSolenoidOn)]
-        else:
-            AirFlowRewardOff = []
-        AirFlowRewardOn = []
 
         # Check if to play beep at end of minimum sampling
         MinSampleBeep = iff(task_parameters.BeepAfterMinSampling, [
