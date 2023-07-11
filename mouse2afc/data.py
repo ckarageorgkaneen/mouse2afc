@@ -1,5 +1,4 @@
 import logging
-import random
 import time
 
 from collections import OrderedDict
@@ -26,21 +25,7 @@ from  mouse2afc.utils import CalcAudClickTrain
 from  mouse2afc.utils import CalcLightIntensity
 from  mouse2afc.utils import CalcGratingOrientation
 from  mouse2afc.utils import CalcDotsCoherence
-
-from mouse2afc.definitions.constant import Constant as Const
-from mouse2afc.definitions.stimulus_selection_criteria \
-    import StimulusSelectionCriteria
-from mouse2afc.definitions.experiment import ExperimentType
-
-from  mouse2afc.utils import CalcAudClickTrain
-from  mouse2afc.utils import CalcDotsCoherence
-from  mouse2afc.utils import CalcGratingOrientation
-from  mouse2afc.utils import CalcLightIntensity
 from  mouse2afc.utils import ControlledRandom
-from  mouse2afc.utils import iff
-from  mouse2afc.utils import betarnd
-from  mouse2afc.utils import rand
-from  mouse2afc.utils import randsample
 from  mouse2afc.utils import isnan
 
 logger = logging.getLogger(__name__)
