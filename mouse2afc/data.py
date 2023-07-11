@@ -54,11 +54,11 @@ class RawData:
         self._session = session
         self.StateMachineErrorCodes = {}
 
-    def StatesVisitedNames(self, trial_num):
+    def states_visited_names(self, trial_num):
         return [state.state_name for state in self._session.trials[
             trial_num].states_occurrences if not isnan(state.host_timestamp) ]
 
-    def StatesVisitedTimes(self, trial_num):
+    def states_visited_times(self, trial_num):
         res_dict = OrderedDict()
         for state in self._session.trials[trial_num].states_occurrences:
             state_name = state.state_name
@@ -67,20 +67,20 @@ class RawData:
                 (state.start_timestamp, state.end_timestamp))
         return res_dict
 
-    def OriginalStateNamesByNumber(self, trial_num):
+    def original_state_names_by_number(self, trial_num):
         return self._session.trials[trial_num].sma.state_names
 
-    def OriginalStateData(self, trial_num):
+    def original_state_data(self, trial_num):
         return self._session.trials[trial_num].states
 
     def OriginalEventData(self, trial_num):
         return self._session.trials[trial_num].events_occurrences
 
-    def OriginalStateTimestamps(self, trial_num):
+    def original_state_timestamps(self, trial_num):
         return self._session.trials[trial_num].state_timestamps
 
-    def OriginalEventTimestamps(self, trial_num):
-        return self._sessions.trials[trial_num].event_timestamps
+    def original_event_timestamps(self, trial_num):
+        return self._session.trials[trial_num].event_timestamps
 
 
 class CustomData:
@@ -191,8 +191,8 @@ class CustomData:
         # Checking states and rewriting standard
 
         # Extract the states that were used in the last trial
-        statesVisitedThisTrialNames = self.RawData.StatesVisitedNames(i_trial)
-        statesVisitedThisTrialTimes = self.RawData.StatesVisitedTimes(i_trial)
+        statesVisitedThisTrialNames = self.RawData.states_visited_names(i_trial)
+        statesVisitedThisTrialTimes = self.RawData.states_visited_times(i_trial)
         if str(MatrixState.WaitForStimulus) in statesVisitedThisTrialNames:
             lastWaitForStimulusStateTimes = statesVisitedThisTrialTimes[
                 str(MatrixState.WaitForStimulus)][-1]
