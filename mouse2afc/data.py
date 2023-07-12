@@ -98,26 +98,27 @@ class CustomData:
         self.DVs_already_generated = 0
 
     def assign_future_trials(self,start_from,num_trials_to_generate):
+        "Assigns left_rewarded as true or false for future trials "
         is_left_rewarded = controlled_random((1 -self.task_parameters.LeftBias),
                                               num_trials_to_generate)
-        lastidx = start_from
+        last_idx = start_from
         for a in range(num_trials_to_generate):
             #If it's a fifty-fifty trial, then place stimulus in the middle
             if (rand(1,1) < self.task_parameters.Percent50Fifty and
-                (lastidx+a) > self.task_parameters.StartEasyTrials):
+                (last_idx+a) > self.task_parameters.StartEasyTrials):
                 stimulus_omega = .5
             else:
                 gui_ssc = self.task_parameters.StimulusSelectionCriteria
                 beta_dist = self.task_parameters.BetaDistAlphaNBeta
                 if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
                     # Divide beta by 4 if we are in an easy trial
-                    beta_div = iff((lastidx+a) <= self.task_parameters.StartEasyTrials,4,1)
+                    beta_div = iff((last_idx+a) <= self.task_parameters.StartEasyTrials,4,1)
                     stimulus_omega = betarnd(beta_dist/beta_div,beta_dist/beta_div,1)
                     stimulus_omega = iff(stimulus_omega < 0.1, 0.1, stimulus_omega)
                     stimulus_omega = iff(stimulus_omega > 0.9,0.9,stimulus_omega)
                 elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
                     omega_prob = self.task_parameters.OmegaTable.columns.OmegaProb
-                    if (lastidx+a) <= self.task_parameters.StartEasyTrials:
+                    if (last_idx+a) <= self.task_parameters.StartEasyTrials:
                         index = next(omega_prob.index(prob)
                                     for prob in omega_prob if prob > 0)
                         stimulus_omega = self.task_parameters.OmegaTable.columns.Omega[
@@ -138,15 +139,16 @@ class CustomData:
                      (not is_left_rewarded[a] and stimulus_omega >= 0.5)):
                     stimulus_omega = -stimulus_omega + 1
 
-            self.trials.stimulus_omega[lastidx+a] = stimulus_omega
+            self.trials.stimulus_omega[last_idx+a] = stimulus_omega
             if stimulus_omega != 0.5:
-                self.trials.left_rewarded[lastidx+a] = stimulus_omega > 0.5
+                self.trials.left_rewarded[last_idx+a] = stimulus_omega > 0.5
             else:
-                self.trials.left_rewarded[lastidx+a] = rand() < .5
+                self.trials.left_rewarded[last_idx+a] = rand() < .5
 
         self.DVs_already_generated = start_from + num_trials_to_generate
 
     def update(self, i_trial):
+        "Update variables according to data from pervious trials. Called after every trial"
         # Standard values
 
         # Stores which lateral port the animal poked into (if any)
@@ -718,6 +720,7 @@ class CustomData:
 
 
 class TimerData:
+    "Initialize class variables"
     def __init__(self):
         self.start_new_iter = datalist()
         self.sync_gui = datalist()
@@ -744,6 +747,7 @@ class TimerData:
 
 
 class DrawParams:
+    "Initialize class variables"
     def __init__(self):
         self.stim_type = None
         self.grating_orientation = None
@@ -766,6 +770,7 @@ class DrawParams:
         self.dot_size_in_degs = None
 
 class Trials:
+    "Initialize class variables"
 
     _DEFAULT_CATCH_COUNT_LEN = 21
     def __init__(self,task_parameters):
@@ -812,6 +817,7 @@ class Trials:
         self.early_withdrawal_timer_start = None
 
 class Data:
+    "Initialize class variables"
     def __init__(self, session, task_parameters):
         self.task_parameters = task_parameters
         self.raw_data = RawData(session)
