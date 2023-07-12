@@ -89,11 +89,11 @@ class CustomData:
 
     _DEFAULT_CATCH_COUNT_LEN = 21
 
-    def __init__(self, task_parameters, Timer, RawData):
+    def __init__(self, task_parameters, Timer, raw_data):
         self.task_parameters = task_parameters
         self.drawParams = drawParams()
         self.Timer = Timer
-        self.RawData = RawData
+        self.raw_data = raw_data
         self.trials = Trials(task_parameters)
         self.DVsAlreadyGenerated = 0
 
@@ -193,8 +193,8 @@ class CustomData:
         # Checking states and rewriting standard
 
         # Extract the states that were used in the last trial
-        statesVisitedThisTrialNames = self.RawData.states_visited_names(i_trial)
-        statesVisitedThisTrialTimes = self.RawData.states_visited_times(i_trial)
+        statesVisitedThisTrialNames = self.raw_data.states_visited_names(i_trial)
+        statesVisitedThisTrialTimes = self.raw_data.states_visited_times(i_trial)
         if str(MatrixState.WaitForStimulus) in statesVisitedThisTrialNames:
             lastWaitForStimulusStateTimes = statesVisitedThisTrialTimes[
                 str(MatrixState.WaitForStimulus)][-1]
@@ -799,9 +799,9 @@ class Trials:
 class Data:
     def __init__(self, session, task_parameters):
         self.task_parameters = task_parameters
-        self.RawData = RawData(session)
+        self.raw_data = RawData(session)
         self.Timer = TimerData()
-        self.Custom = CustomData(task_parameters, self.Timer, self.RawData)
+        self.Custom = CustomData(task_parameters, self.Timer, self.raw_data)
         self.TrialStartTimestamp = datalist()
         self.TrialEndTimestamp = datalist()
         self.SettingsFile = None
