@@ -30,14 +30,14 @@ class Mouse2AFC:
 
     def _set_current_stimulus(self):
         # Set current stimulus for next trial - set between -100 to +100
-        self._task_parameters.CurrentStim = (self._data.Custom.Trials.DV[0] + (
-            int(self._data.Custom.Trials.DV[0] > 0) or -1)) / 0.02
+        self._task_parameters.CurrentStim = (self._data.Custom.trials.DV[0] + (
+            int(self._data.Custom.trials.DV[0] > 0) or -1)) / 0.02
 
     def my_softcode_handler(self,_softcode):
         if _softcode == 1:
-            self._data.Custom.Trials.EarlyWithdrawalTimerStart = time.time()
+            self._data.Custom.trials.EarlyWithdrawalTimerStart = time.time()
         elif _softcode == 2:
-            if time.time() - self._data.Custom.Trials.EarlyWithdrawalTimerStart > self._task_parameters.TimeOutEarlyWithdrawal:
+            if time.time() - self._data.Custom.trials.EarlyWithdrawalTimerStart > self._task_parameters.TimeOutEarlyWithdrawal:
                 self._bpod.trigger_event_by_name(event_name = 'SoftCode1',
                                                  event_data = None)
 
