@@ -810,8 +810,8 @@ class Data:
         self.task_parameters = task_parameters
         self.raw_data = RawData(session)
         self.timer = TimerData()
-        self.Custom = CustomData(task_parameters, self.timer, self.raw_data)
-        self.TrialStartTimestamp = datalist()
-        self.TrialEndTimestamp = datalist()
-        self.SettingsFile = None
+        self.custom = CustomData(task_parameters, self.timer, self.raw_data)
+        self.trail_start_timestamp = datalist()
+        self.trail_start_timestamp = datalist()
+        self.settings_file = None
         self.dots_mapped_file = None

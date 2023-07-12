@@ -87,7 +87,7 @@ class StateMatrix(StateMachine):
 
         LED_error_rate = DEFAULT_LED_ERROR_RATE
 
-        is_left_rewarded = data.Custom.trials.left_rewarded[i_trial]
+        is_left_rewarded = data.custom.trials.left_rewarded[i_trial]
 
         if task_parameters.ExperimentType == ExperimentType.Auditory:
             # In MATLAB: 'BNCState' instead of 'BNC1'
@@ -98,9 +98,9 @@ class StateMatrix(StateMachine):
                 ExperimentType.LightIntensity:
             # Divide Intensity by 100 to get fraction value
             left_pwm_stim = round(
-                data.Custom.trials.light_intensity_left[i_trial] * left_pwm / 100)
+                data.custom.trials.light_intensity_left[i_trial] * left_pwm / 100)
             right_pwm_stim = round(
-                data.Custom.trials.light_intensity_right[
+                data.custom.trials.light_intensity_right[
                     i_trial] * right_pwm / 100)
             delivery_stimulus = [
                 (pwm_str(left_port), left_pwm_stim),
@@ -121,13 +121,13 @@ class StateMatrix(StateMachine):
             ccw = iff(mod(right_port_angle - left_port_angle, 360) < mod(
                 left_port_angle - right_port_angle, 360), True, False)
             if ccw:
-                final_DV = data.Custom.trials.DV[i_trial]
+                final_DV = data.custom.trials.DV[i_trial]
                 if right_port_angle < left_port_angle:
                     right_port_angle += 360
                 angle_diff = right_port_angle - left_port_angle
                 min_angle = left_port_angle
             else:
-                final_DV = -data.Custom.trials.DV[i_trial]
+                final_DV = -data.custom.trials.DV[i_trial]
                 if left_port_angle < right_port_angle:
                     left_port_angle += 360
                 angle_diff = left_port_angle - right_port_angle
@@ -136,19 +136,19 @@ class StateMatrix(StateMachine):
             #   MaxAngle - MinANgle)) + MinAngle
             grating_orientation = ((1 - final_DV) * angle_diff / 2) + min_angle
             grating_orientation = mod(grating_orientation, 360)
-            data.Custom.draw_params.stim_type = DrawStimType.StaticGratings
-            data.Custom.draw_params.grating_orientation = grating_orientation
-            data.Custom.draw_params.num_cycles = task_parameters.NumCycles
-            data.Custom.draw_params.cycles_per_second_drift = \
+            data.custom.draw_params.stim_type = DrawStimType.StaticGratings
+            data.custom.draw_params.grating_orientation = grating_orientation
+            data.custom.draw_params.num_cycles = task_parameters.NumCycles
+            data.custom.draw_params.cycles_per_second_drift = \
                 task_parameters.CyclesPerSecondDrift
-            data.Custom.draw_params.phase = task_parameters.Phase
-            data.Custom.draw_params.gabor_size_factor = \
+            data.custom.draw_params.phase = task_parameters.Phase
+            data.custom.draw_params.gabor_size_factor = \
                 task_parameters.GaborSizeFactor
-            data.Custom.draw_params.gaussian_filter_ratio = \
+            data.custom.draw_params.gaussian_filter_ratio = \
                 task_parameters.GaussianFilterRatio
             # Start from the 5th byte
             # serializeAndWrite(data.dotsMapped_file, 5,
-            #                   data.Custom.draw_params)
+            #                   data.custom.draw_params)
             # data.dotsMapped_file.data(1: 4) = typecast(uint32(1), 'uint8');
 
             delivery_stimulus = [('SoftCode', 5)]
@@ -162,35 +162,35 @@ class StateMatrix(StateMachine):
             task_parameters.nDots = round(
                 task_parameters.CircleArea * task_parameters.DrawRatio)
 
-            data.Custom.draw_params.stimType = DrawStimType.RDK
-            data.Custom.draw_params.center_x = task_parameters.CenterX
-            data.Custom.draw_params.center_y = task_parameters.CenterY
-            data.Custom.draw_params.aperture_size_width = \
+            data.custom.draw_params.stimType = DrawStimType.RDK
+            data.custom.draw_params.center_x = task_parameters.CenterX
+            data.custom.draw_params.center_y = task_parameters.CenterY
+            data.custom.draw_params.aperture_size_width = \
                 task_parameters.ApertureSizeWidth
-            data.Custom.draw_params.aperture_size_height = \
+            data.custom.draw_params.aperture_size_height = \
                 task_parameters.ApertureSizeHeight
-            data.Custom.draw_params.draw_ratio = task_parameters.DrawRatio
-            data.Custom.draw_params.main_direction = floor(
+            data.custom.draw_params.draw_ratio = task_parameters.DrawRatio
+            data.custom.draw_params.main_direction = floor(
                 VisualStimAngle.get_degrees(
                     iff(is_left_rewarded,
                         task_parameters.VisualStimAnglePortLeft.value,
                         task_parameters.VisualStimAnglePortRight.value)))
-            data.Custom.draw_params.dot_speed = \
+            data.custom.draw_params.dot_speed = \
                 task_parameters.DotSpeedDegsPerSec
-            data.Custom.draw_params.dot_lifetime_secs = \
+            data.custom.draw_params.dot_lifetime_secs = \
                 task_parameters.DotLifetimeSecs
-            data.Custom.draw_params.coherence = data.Custom.trials.dots_coherence[
+            data.custom.draw_params.coherence = data.custom.trials.dots_coherence[
                 i_trial]
-            data.Custom.draw_params.screen_width_cm = \
+            data.custom.draw_params.screen_width_cm = \
                 task_parameters.ScreenWidthCm
-            data.Custom.draw_params.screen_dist_cm = \
+            data.custom.draw_params.screen_dist_cm = \
                 task_parameters.ScreenDistCm
-            data.Custom.draw_params.dot_size_in_degs = \
+            data.custom.draw_params.dot_size_in_degs = \
                 task_parameters.DotSizeInDegs
 
             # Start from the 5th byte
             # serializeAndWrite(data.dotsMapped_file, 5,
-            #                   data.Custom.draw_params)
+            #                   data.custom.draw_params)
             # data.dotsMapped_file.data(1: 4) = \
             #   typecast(uint32(1), 'uint8');
 
@@ -229,11 +229,11 @@ class StateMatrix(StateMachine):
         right_valve = right_port
 
         right_valve_time = get_valve_times(
-            data.Custom.trials.reward_magnitude[i_trial][0], left_port)
+            data.custom.trials.reward_magnitude[i_trial][0], left_port)
         center_valve_time = get_valve_times(
-            data.Custom.trials.center_port_rew_amount[i_trial], center_port)
+            data.custom.trials.center_port_rew_amount[i_trial], center_port)
         right_valve_time = get_valve_times(
-            data.Custom.trials.reward_magnitude[i_trial][1], right_port)
+            data.custom.trials.reward_magnitude[i_trial][1], right_port)
 
         rewarded_port = iff(is_left_rewarded, left_port, right_port)
         rewarded_port_pwm = iff(is_left_rewarded, left_pwm, right_pwm)
@@ -272,7 +272,7 @@ class StateMatrix(StateMachine):
             'SoftCode', 11)], [])
 
         # CatchTrial
-        feedback_delay_correct = iff(data.Custom.trials.catch_trial[
+        feedback_delay_correct = iff(data.custom.trials.catch_trial[
             i_trial], Const.FEEDBACK_CATCH_MAX_SEC,
             max(task_parameters.FeedbackDelay,0.01))
 
@@ -334,14 +334,14 @@ class StateMatrix(StateMachine):
         wire1_out_error = iff(task_parameters.Wire1VideoTrigger, [(
                             'Wire2', 2)], [])
         wire1_out_correct_condition = task_parameters.Wire1VideoTrigger and \
-            data.Custom.trials.catch_trial[i_trial]
+            data.custom.trials.catch_trial[i_trial]
         wire1_out_correct = iff(wire1_out_correct_condition,
                               [('Wire2', 2)], [])
 
         # LED on the side lateral port to cue the rewarded side at the
         # beginning of the training. On auditory discrimination task, both
         # lateral ports are illuminated after end of stimulus delivery.
-        if data.Custom.trials.forced_led_trial[i_trial]:
+        if data.custom.trials.forced_led_trial[i_trial]:
             extended_stimulus = [(pwm_str(rewarded_port), rewarded_port_pwm)]
         elif task_parameters.ExperimentType == ExperimentType.Auditory:
             extended_stimulus = [
@@ -590,7 +590,7 @@ class StateMatrix(StateMachine):
         # part of your data file. Don't forget to activate that input in the
         # Bpod main config.
 
-        if data.Custom.trials.opto_enabled[i_trial]:
+        if data.custom.trials.opto_enabled[i_trial]:
             # Convert seconds to millis as we will send ints to Arduino
             opto_delay = np.array(
                 [task_parameters.OptoStartDelay * 1000], dtype=np.uint32)
