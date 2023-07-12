@@ -197,7 +197,7 @@ class CustomData:
 
         self.trials.TrialNumber[i_trial] = i_trial
 
-        self.timer.customInitialize[i_trial] = time.time()
+        self.timer.custom_initialize[i_trial] = time.time()
 
         # Checking states and rewriting standard
 
@@ -348,7 +348,7 @@ class CustomData:
             i_trial + 1] = self.task_parameters.CenterPortRewAmount
         self.trials.PreStimCntrReward[
             i_trial + 1] = self.task_parameters.PreStimDelayCntrReward
-        self.timer.customExtractData[i_trial] = time.time()
+        self.timer.custom_extract_data[i_trial] = time.time()
 
         # IF we are running grating experiments,
         # add the grating orientation that was used
@@ -379,7 +379,7 @@ class CustomData:
                     self.task_parameters.StimDelayMax)
             else:
                 self.task_parameters.StimDelay = self.trials.StimDelay[i_trial]
-        self.timer.customStimDelay[i_trial] = time.time()
+        self.timer.custom_stim_delay[i_trial] = time.time()
 
         # min sampling time
         if self.task_parameters.MinSampleType == MinSampleType.FixMin:
@@ -454,7 +454,7 @@ class CustomData:
                         intervals_idx]
         else:
             error('Unexpected MinSampleType value')
-        self.timer.customMinSampling[i_trial] = time.time()
+        self.timer.custom_min_sampling[i_trial] = time.time()
 
         # feedback delay
         if self.task_parameters.FeedbackDelaySelection == \
@@ -498,7 +498,7 @@ class CustomData:
                 self.task_parameters.FeedbackDelayMax
         else:
             error('Unexpected FeedbackDelaySelection value')
-        self.timer.customFeedbackDelay[i_trial] = time.time()
+        self.timer.custom_feedback_delay[i_trial] = time.time()
 
         # Drawing future trials
 
@@ -574,7 +574,7 @@ class CustomData:
                     self.task_parameters.AllPerformance, ' - ',
                     f'{performance * 100:.2f}', '#/', str(NUM_LAST_TRIALS),
                     'T']
-        self.timer.customCalcBias[i_trial] = time.time()
+        self.timer.custom_calc_bias[i_trial] = time.time()
 
         # Create future trials
         # Check if its time to generate more future trials
@@ -594,7 +594,7 @@ class CustomData:
                     left_bias = 0.5
             else:
                 left_bias = self.task_parameters.LeftBias
-            self.timer.customAdjustBias[i_trial] = time.time()
+            self.timer.custom_adjust_bias[i_trial] = time.time()
 
             # Adjustment of P(Omega) to make sure that sum(P(Omega))=1
             if self.task_parameters.StimulusSelectionCriteria != \
@@ -610,15 +610,15 @@ class CustomData:
                     for omega_prob
                     in self.task_parameters.OmegaTable.columns.OmegaProb
                 ]
-            self.timer.customCalcOmega[i_trial] = time.time()
+            self.timer.custom_calc_omega[i_trial] = time.time()
             self.assign_future_trials(i_trial+1,Const.PRE_GENERATE_TRIAL_COUNT)
 
-            self.timer.customGenNewTrials[i_trial] = time.time()
+            self.timer.custom_gen_new_trials[i_trial] = time.time()
         else:
-            self.timer.customAdjustBias[i_trial] = 0
-            self.timer.customCalcOmega[i_trial] = 0
-            self.timer.customPrepNewTrials[i_trial] = 0
-            self.timer.customGenNewTrials[i_trial] = 0
+            self.timer.custom_adjust_bias[i_trial] = 0
+            self.timer.custom_calc_omega[i_trial] = 0
+            self.timer.custom_prep_new_trials[i_trial] = 0
+            self.timer.custom_gen_new_trials[i_trial] = 0
 
         if self.task_parameters.ExperimentType == \
                     ExperimentType.Auditory:
@@ -653,7 +653,7 @@ class CustomData:
             self.task_parameters.CurrentStim = \
                 f"{stim_intensity}{iff(DV < 0, '# R', '# L')}"
 
-        self.timer.customFinalizeUpdate[i_trial] = time.time()
+        self.timer.custom_finalize_update[i_trial] = time.time()
 
         # determine if optogentics trial
         opto_enabled = rand(1, 1) < self.task_parameters.OptoProb
@@ -708,33 +708,33 @@ class CustomData:
                 self.task_parameters.PercentForcedLEDTrial
         else:
             self.trials.ForcedLEDTrial[i_trial + 1] = False
-        self.timer.customCatchNForceLed[i_trial] = time.time()
+        self.timer.custom_catch_n_force_led[i_trial] = time.time()
 
 
 class TimerData:
     def __init__(self):
-        self.StartNewIter = datalist()
-        self.SyncGUI = datalist()
-        self.BuildStateMatrix = datalist()
-        self.SendStateMatrix = datalist()
-        self.AppendData = datalist()
-        self.HandlePause = datalist()
-        self.UpdateCustomDataFields = datalist()
-        self.SendPlotData = datalist()
-        self.SaveData = datalist()
-        self.CalculateTimeout = datalist()
-        self.customExtractData = datalist()
-        self.customAdjustBias = datalist()
-        self.customCalcOmega = datalist()
-        self.customInitialize = datalist()
-        self.customFinalizeUpdate = datalist()
-        self.customCatchNForceLed = datalist()
-        self.customStimDelay = datalist()
-        self.customMinSampling = datalist()
-        self.customFeedbackDelay = datalist()
-        self.customCalcBias = datalist()
-        self.customPrepNewTrials = datalist()
-        self.customGenNewTrials = datalist()
+        self.start_new_iter = datalist()
+        self.sync_gui = datalist()
+        self.build_state_matrix = datalist()
+        self.send_state_matrix = datalist()
+        self.append_data = datalist()
+        self.handle_pause = datalist()
+        self.update_custom_data_fields = datalist()
+        self.send_plot_data = datalist()
+        self.save_data = datalist()
+        self.calcilate_timeout = datalist()
+        self.custom_extract_data = datalist()
+        self.custom_adjust_bias = datalist()
+        self.custom_calc_omega = datalist()
+        self.custom_initialize = datalist()
+        self.custom_finalize_update = datalist()
+        self.custom_catch_n_force_led = datalist()
+        self.custom_stim_delay = datalist()
+        self.custom_min_sampling = datalist()
+        self.custom_feedback_delay = datalist()
+        self.custom_calc_bias = datalist()
+        self.custom_prep_new_trials = datalist()
+        self.custom_gen_new_trials = datalist()
 
 
 class drawParams:
