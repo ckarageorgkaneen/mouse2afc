@@ -95,47 +95,49 @@ class CustomData:
         self.timer = timer
         self.raw_data = raw_data
         self.trials = Trials(task_parameters)
-        self.DVsAlreadyGenerated = 0
+        self.DVs_already_generated = 0
 
-    def assign_future_trials(self,StartFrom,NumTrialsToGenerate):
-        is_left_rewarded = ControlledRandom((1 - self.task_parameters.LeftBias),NumTrialsToGenerate)
-        lastidx = StartFrom
-        for a in range(NumTrialsToGenerate):
+    def assign_future_trials(self,start_from,num_trials_to_generate):
+        is_left_rewarded = ControlledRandom((1 -self.task_parameters.LeftBias),
+                                              num_trials_to_generate)
+        lastidx = start_from
+        for a in range(num_trials_to_generate):
             #If it's a fifty-fifty trial, then place stimulus in the middle
-            if rand(1,1) < self.task_parameters.Percent50Fifty and (lastidx+a) > self.task_parameters.StartEasyTrials:
-                StimulusOmega = .5
+            if (rand(1,1) < self.task_parameters.Percent50Fifty and
+                (lastidx+a) > self.task_parameters.StartEasyTrials):
+                stimulus_omega = .5
             else:
                 gui_ssc = self.task_parameters.StimulusSelectionCriteria
                 beta_dist = self.task_parameters.BetaDistAlphaNBeta
                 if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
                     # Divide beta by 4 if we are in an easy trial
-                    BetaDiv = iff((lastidx+a) <= self.task_parameters.StartEasyTrials,4,1)
-                    StimulusOmega = betarnd(beta_dist/BetaDiv,beta_dist/BetaDiv,1)
-                    StimulusOmega = iff(StimulusOmega < 0.1, 0.1, StimulusOmega)
-                    StimulusOmega = iff(StimulusOmega > 0.9,0.9,StimulusOmega)
+                    beta_div = iff((lastidx+a) <= self.task_parameters.StartEasyTrials,4,1)
+                    stimulus_omega = betarnd(beta_dist/beta_div,beta_dist/beta_div,1)
+                    stimulus_omega = iff(stimulus_omega < 0.1, 0.1, stimulus_omega)
+                    stimulus_omega = iff(stimulus_omega > 0.9,0.9,stimulus_omega)
                 elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
                     omega_prob = self.task_parameters.OmegaTable.columns.OmegaProb
                     if (lastidx+a) <= self.task_parameters.StartEasyTrials:
                         index = next(omega_prob.index(prob)
                                     for prob in omega_prob if prob > 0)
-                        StimulusOmega = self.task_parameters.OmegaTable.columns.Omega[
+                        stimulus_omega = self.task_parameters.OmegaTable.columns.Omega[
                             index] / 100
                     else:
                         #Choose a value randomly given the each value probability
-                        StimulusOmega = ((randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob)/100).tolist())[0]
+                        stimulus_omega = ((randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob)/100).tolist())[0]
                 else:
                     error('Unexpected StimulusSelectionCriteria')
 
-                if (is_left_rewarded[a] and StimulusOmega < 0.5) or (not is_left_rewarded[a] and StimulusOmega >= 0.5):
-                    StimulusOmega = -StimulusOmega + 1
+                if (is_left_rewarded[a] and stimulus_omega < 0.5) or (not is_left_rewarded[a] and stimulus_omega >= 0.5):
+                    stimulus_omega = -stimulus_omega + 1
 
-            self.trials.StimulusOmega[lastidx+a] = StimulusOmega
-            if StimulusOmega != 0.5:
-                self.trials.LeftRewarded[lastidx+a] = StimulusOmega > 0.5
+            self.trials.StimulusOmega[lastidx+a] = stimulus_omega
+            if stimulus_omega != 0.5:
+                self.trials.LeftRewarded[lastidx+a] = stimulus_omega > 0.5
             else:
                 self.trials.LeftRewarded[lastidx+a] = rand() < .5
 
-        self.DVsAlreadyGenerated = StartFrom + NumTrialsToGenerate
+        self.DVs_already_generated = start_from + num_trials_to_generate
 
     def update(self, i_trial):
         # Standard values
@@ -193,19 +195,19 @@ class CustomData:
         # Checking states and rewriting standard
 
         # Extract the states that were used in the last trial
-        statesVisitedThisTrialNames = self.raw_data.states_visited_names(i_trial)
-        statesVisitedThisTrialTimes = self.raw_data.states_visited_times(i_trial)
-        if str(MatrixState.WaitForStimulus) in statesVisitedThisTrialNames:
-            lastWaitForStimulusStateTimes = statesVisitedThisTrialTimes[
+        states_visited_this_trial_names = self.raw_data.states_visited_names(i_trial)
+        states_visited_this_trial_times = self.raw_data.states_visited_times(i_trial)
+        if str(MatrixState.WaitForStimulus) in states_visited_this_trial_names:
+            last_wait_for_stimulus_states_times = states_visited_this_trial_times[
                 str(MatrixState.WaitForStimulus)][-1]
-            lastTriggerWaitForStimulusStateTimes = statesVisitedThisTrialTimes[
+            last_trigger_wait_for_stimulus_state_times = states_visited_this_trial_times[
                 str(MatrixState.TriggerWaitForStimulus)][-1]
-            self.trials.FixDur[i_trial] = lastWaitForStimulusStateTimes[1] - \
-                lastWaitForStimulusStateTimes[0] + \
-                lastTriggerWaitForStimulusStateTimes[1] - \
-                lastTriggerWaitForStimulusStateTimes[0]
-        if str(MatrixState.stimulus_delivery) in statesVisitedThisTrialNames:
-            stimulus_deliveryStateTimes = statesVisitedThisTrialTimes[
+            self.trials.FixDur[i_trial] = last_wait_for_stimulus_states_times[1] - \
+                last_wait_for_stimulus_states_times[0] + \
+                last_trigger_wait_for_stimulus_state_times[1] - \
+                last_trigger_wait_for_stimulus_state_times[0]
+        if str(MatrixState.stimulus_delivery) in states_visited_this_trial_names:
+            stimulus_deliveryStateTimes = states_visited_this_trial_times[
                 str(MatrixState.stimulus_delivery)]
             if self.task_parameters.RewardAfterMinSampling:
                 self.trials.ST[i_trial] = diff(stimulus_deliveryStateTimes)
@@ -215,27 +217,27 @@ class CustomData:
                 # that min sampling is done and we are in the optional
                 # sampling stage.
                 if str(MatrixState.CenterPortRewardDelivery) in \
-                        statesVisitedThisTrialNames and \
+                        states_visited_this_trial_names and \
                         self.task_parameters.StimulusTime > \
                         self.task_parameters.MinSample:
-                    CenterPortRewardDeliveryStateTimes = \
-                        statesVisitedThisTrialTimes[
+                    center_port_reward_delivery_state_times = \
+                        states_visited_this_trial_times[
                             str(MatrixState.CenterPortRewardDelivery)]
                     self.trials.ST[i_trial] = [
-                        CenterPortRewardDeliveryStateTimes[0][
+                        center_port_reward_delivery_state_times[0][
                             1] - stimulus_deliveryStateTimes[0][0]
                     ]
                 else:
                     # This covers early_withdrawal
                     self.trials.ST[i_trial] = diff(stimulus_deliveryStateTimes)
 
-        if str(MatrixState.WaitForChoice) in statesVisitedThisTrialNames and \
+        if str(MatrixState.WaitForChoice) in states_visited_this_trial_names and \
             str(MatrixState.timeOut_missed_choice) not in \
-                statesVisitedThisTrialNames:
-            WaitForChoiceStateTimes = statesVisitedThisTrialTimes[
+                states_visited_this_trial_names:
+            wait_for_choice_state_times = states_visited_this_trial_times[
                 str(MatrixState.WaitForChoice)]
             WaitForChoiceStateStartTimes = [
-                start_time for start_time, end_time in WaitForChoiceStateTimes]
+                start_time for start_time, end_time in wait_for_choice_state_times]
             # We might have more than multiple WaitForChoice if
             # HabituateIgnoreIncorrect is enabeld
             self.trials.MT[-1] = diff(WaitForChoiceStateStartTimes[:2])
@@ -243,9 +245,9 @@ class CustomData:
         # Extract trial outcome. Check first if it's a wrong choice or a
         # HabituateIgnoreIncorrect but first choice was wrong choice
         if str(MatrixState.WaitForPunishStart) in \
-            statesVisitedThisTrialNames or \
+            states_visited_this_trial_names or \
            str(MatrixState.RegisterWrongWaitCorrect) in \
-                statesVisitedThisTrialNames:
+                states_visited_this_trial_names:
             self.trials.ChoiceCorrect[i_trial] = False
             # Correct choice = left
             if self.trials.LeftRewarded[i_trial]:
@@ -253,18 +255,18 @@ class CustomData:
             else:
                 self.trials.ChoiceLeft[i_trial] = True
             # Feedback waiting time
-            if str(MatrixState.WaitForPunish) in statesVisitedThisTrialNames:
-                WaitForPunishStateTimes = statesVisitedThisTrialTimes[
+            if str(MatrixState.WaitForPunish) in states_visited_this_trial_names:
+                wait_for_punish_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForPunish)]
-                WaitForPunishStartStateTimes = statesVisitedThisTrialTimes[
+                wait_for_punish_start_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForPunishStart)]
-                self.trials.FeedbackTime[i_trial] = WaitForPunishStateTimes[
-                    -1][1] - WaitForPunishStartStateTimes[0][0]
+                self.trials.FeedbackTime[i_trial] = wait_for_punish_state_times[
+                    -1][1] - wait_for_punish_start_state_times[0][0]
             else:  # It was a  RegisterWrongWaitCorrect state
                 self.trials.FeedbackTime[i_trial] = None
         # CorrectChoice
         elif str(MatrixState.WaitForRewardStart) in \
-                statesVisitedThisTrialNames:
+                states_visited_this_trial_names:
             self.trials.ChoiceCorrect[i_trial] = True
             if self.trials.CatchTrial[i_trial]:
                 catch_stim_idx = GetCatchStimIdx(
@@ -283,13 +285,13 @@ class CustomData:
                 self.trials.CatchCount[catch_stim_idx] += stim_prob
                 self.trials.LastSuccessCatchTial = i_trial
             # Feedback waiting time
-            if str(MatrixState.WaitForReward) in statesVisitedThisTrialNames:
-                WaitForRewardStateTimes = statesVisitedThisTrialTimes[
+            if str(MatrixState.WaitForReward) in states_visited_this_trial_names:
+                wait_for_reward_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForReward)]
-                WaitForRewardStartStateTimes = statesVisitedThisTrialTimes[
+                wait_for_reward_start_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForRewardStart)]
-                self.trials.FeedbackTime[i_trial] = WaitForRewardStateTimes[
-                    -1][1] - WaitForRewardStartStateTimes[0][0]
+                self.trials.FeedbackTime[i_trial] = wait_for_reward_state_times[
+                    -1][1] - wait_for_reward_start_state_times[0][0]
                 # Correct choice = left
                 if self.trials.LeftRewarded[i_trial]:
                     self.trials.ChoiceLeft[i_trial] = True  # Left chosen
@@ -298,32 +300,32 @@ class CustomData:
             else:
                 warning("'WaitForReward' state should always appear"
                         " if 'WaitForRewardStart' was initiated")
-        elif str(MatrixState.broke_fixation) in statesVisitedThisTrialNames:
+        elif str(MatrixState.broke_fixation) in states_visited_this_trial_names:
             self.trials.FixBroke[i_trial] = True
-        elif str(MatrixState.early_withdrawal) in statesVisitedThisTrialNames:
+        elif str(MatrixState.early_withdrawal) in states_visited_this_trial_names:
             self.trials.EarlyWithdrawal[i_trial] = True
         elif str(MatrixState.timeOut_missed_choice) in \
-                statesVisitedThisTrialNames:
+                states_visited_this_trial_names:
             self.trials.Feedback[i_trial] = False
             self.trials.MissedChoice[i_trial] = True
         if str(MatrixState.timeOut_SkippedFeedback) in \
-                statesVisitedThisTrialNames:
+                states_visited_this_trial_names:
             self.trials.Feedback[i_trial] = False
-        if str(MatrixState.Reward) in statesVisitedThisTrialNames:
+        if str(MatrixState.Reward) in states_visited_this_trial_names:
             self.trials.Rewarded[i_trial] = True
             self.trials.RewardReceivedTotal[i_trial] += \
                 self.task_parameters.RewardAmount
         if str(MatrixState.CenterPortRewardDelivery) in \
-                statesVisitedThisTrialNames and \
+                states_visited_this_trial_names and \
            self.task_parameters.RewardAfterMinSampling:
             self.trials.RewardAfterMinSampling[i_trial] = True
             self.trials.RewardReceivedTotal[i_trial] += \
                 self.task_parameters.CenterPortRewAmount
-        if str(MatrixState.WaitCenterPortOut) in statesVisitedThisTrialNames:
-            WaitCenterPortOutStateTimes = statesVisitedThisTrialTimes[
+        if str(MatrixState.WaitCenterPortOut) in states_visited_this_trial_names:
+            wait_center_port_out_state_times = states_visited_this_trial_times[
                 str(MatrixState.WaitCenterPortOut)]
             self.trials.ReactionTime[i_trial] = diff(
-                WaitCenterPortOutStateTimes)
+                wait_center_port_out_state_times)
         else:
             # Assign with -1 so we can differentiate it from None trials
             # where the state potentially existed but we didn't calculate it
@@ -569,7 +571,7 @@ class CustomData:
 
         # Create future trials
         # Check if its time to generate more future trials
-        if i_trial+1 >= self.DVsAlreadyGenerated:
+        if i_trial+1 >= self.DVs_already_generated:
             # Do bias correction only if we have enough trials
             # sum(ndxRewd) > Const.BIAS_CORRECT_MIN_RWD_TRIALS
             if self.task_parameters.CorrectBias and i_trial+1 > 7:

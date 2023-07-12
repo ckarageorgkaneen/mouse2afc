@@ -18,8 +18,8 @@ def error(message):
     logger.error(message)
     raise Mouse2AFCError(message)
 
-NumTrialsToGenerate = 1
-StartFrom = 0
+NUM_TRIALS_TO_GENERATE = 1
+START_FROM = 0
 
 class Mouse2AFC:
     def __init__(self, bpod, config_file=None):
@@ -42,7 +42,7 @@ class Mouse2AFC:
                                                  event_data = None)
 
     def run(self):
-        self._data.Custom.assign_future_trials(StartFrom,NumTrialsToGenerate)
+        self._data.Custom.assign_future_trials(START_FROM,NUM_TRIALS_TO_GENERATE)
         self._set_current_stimulus()
         i_trial = 0
         self._bpod.softcode_handler_function = self.my_softcode_handler
