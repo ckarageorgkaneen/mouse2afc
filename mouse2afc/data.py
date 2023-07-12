@@ -91,7 +91,7 @@ class CustomData:
 
     def __init__(self, task_parameters, timer, raw_data):
         self.task_parameters = task_parameters
-        self.drawParams = drawParams()
+        self.draw_params = DrawParams()
         self.timer = timer
         self.raw_data = raw_data
         self.trials = Trials(task_parameters)
@@ -355,7 +355,7 @@ class CustomData:
         if self.task_parameters.ExperimentType == \
                 ExperimentType.GratingOrientation:
             self.trials.GratingOrientation[
-                i_trial] = self.drawParams.GratingOrientation
+                i_trial] = self.draw_params.grating_orientation
 
         # Updating Delays
         # stimulus delay
@@ -737,27 +737,27 @@ class TimerData:
         self.custom_gen_new_trials = datalist()
 
 
-class drawParams:
+class DrawParams:
     def __init__(self):
-        self.StimType = None
-        self.GratingOrientation = None
-        self.NumCycles = None
-        self.CyclesPerSecondDrift = None
-        self.Phase = None
-        self.GaborSizeFactor = None
-        self.GaussianFilterRatio = None
-        self.CenterX = None
-        self.CenterY = None
-        self.ApertureSizeWidth = None
-        self.ApertureSizeHeight = None
-        self.DrawRatio = None
-        self.MainDirection = None
-        self.DotSpeed = None
-        self.DotLifetimeSecs = None
-        self.Coherence = None
-        self.ScreenWidthCm = None
-        self.ScreenDistCm = None
-        self.DotSizeInDegs = None
+        self.stim_type = None
+        self.grating_orientation = None
+        self.num_cycles = None
+        self.cycles_per_second_drift = None
+        self.phase = None
+        self.gabor_size_factor = None
+        self.gaussian_filter_ratio = None
+        self.center_x = None
+        self.center_y = None
+        self.aperture_size_width = None
+        self.aperture_size_height = None
+        self.draw_ratio = None
+        self.main_direction = None
+        self.dot_speed = None
+        self.dot_lifetime_secs = None
+        self.coherence = None
+        self.screen_width_cm = None
+        self.screen_dist_cm = None
+        self.dot_size_in_degs = None
 
 class Trials:
 

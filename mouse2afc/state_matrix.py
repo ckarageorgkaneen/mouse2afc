@@ -136,19 +136,19 @@ class StateMatrix(StateMachine):
             #   MaxAngle - MinANgle)) + MinAngle
             grating_orientation = ((1 - final_DV) * angle_diff / 2) + min_angle
             grating_orientation = mod(grating_orientation, 360)
-            data.Custom.drawParams.stimType = DrawStimType.StaticGratings
-            data.Custom.drawParams.gratingOrientation = grating_orientation
-            data.Custom.drawParams.numCycles = task_parameters.NumCycles
-            data.Custom.drawParams.cyclesPerSecondDrift = \
+            data.Custom.draw_params.stim_type = DrawStimType.StaticGratings
+            data.Custom.draw_params.grating_orientation = grating_orientation
+            data.Custom.draw_params.num_cycles = task_parameters.NumCycles
+            data.Custom.draw_params.cycles_per_second_drift = \
                 task_parameters.CyclesPerSecondDrift
-            data.Custom.drawParams.phase = task_parameters.Phase
-            data.Custom.drawParams.gaborSizeFactor = \
+            data.Custom.draw_params.phase = task_parameters.Phase
+            data.Custom.draw_params.gabor_size_factor = \
                 task_parameters.GaborSizeFactor
-            data.Custom.drawParams.gaussianFilterRatio = \
+            data.Custom.draw_params.gaussian_filter_ratio = \
                 task_parameters.GaussianFilterRatio
             # Start from the 5th byte
             # serializeAndWrite(data.dotsMapped_file, 5,
-            #                   data.Custom.drawParams)
+            #                   data.Custom.draw_params)
             # data.dotsMapped_file.data(1: 4) = typecast(uint32(1), 'uint8');
 
             delivery_stimulus = [('SoftCode', 5)]
@@ -162,35 +162,35 @@ class StateMatrix(StateMachine):
             task_parameters.nDots = round(
                 task_parameters.CircleArea * task_parameters.DrawRatio)
 
-            data.Custom.drawParams.stimType = DrawStimType.RDK
-            data.Custom.drawParams.centerX = task_parameters.CenterX
-            data.Custom.drawParams.centerY = task_parameters.CenterY
-            data.Custom.drawParams.apertureSizeWidth = \
+            data.Custom.draw_params.stimType = DrawStimType.RDK
+            data.Custom.draw_params.center_x = task_parameters.CenterX
+            data.Custom.draw_params.center_y = task_parameters.CenterY
+            data.Custom.draw_params.aperture_size_width = \
                 task_parameters.ApertureSizeWidth
-            data.Custom.drawParams.apertureSizeHeight = \
+            data.Custom.draw_params.aperture_size_height = \
                 task_parameters.ApertureSizeHeight
-            data.Custom.drawParams.drawRatio = task_parameters.DrawRatio
-            data.Custom.drawParams.mainDirection = floor(
+            data.Custom.draw_params.draw_ratio = task_parameters.DrawRatio
+            data.Custom.draw_params.main_direction = floor(
                 VisualStimAngle.get_degrees(
                     iff(is_left_rewarded,
                         task_parameters.VisualStimAnglePortLeft.value,
                         task_parameters.VisualStimAnglePortRight.value)))
-            data.Custom.drawParams.dotSpeed = \
+            data.Custom.draw_params.dot_speed = \
                 task_parameters.DotSpeedDegsPerSec
-            data.Custom.drawParams.dotLifetimeSecs = \
+            data.Custom.draw_params.dot_lifetime_secs = \
                 task_parameters.DotLifetimeSecs
-            data.Custom.drawParams.coherence = data.Custom.trials.DotsCoherence[
+            data.Custom.draw_params.coherence = data.Custom.trials.DotsCoherence[
                 i_trial]
-            data.Custom.drawParams.screenWidthCm = \
+            data.Custom.draw_params.screen_width_cm = \
                 task_parameters.ScreenWidthCm
-            data.Custom.drawParams.screenDistCm = \
+            data.Custom.draw_params.screen_dist_cm = \
                 task_parameters.ScreenDistCm
-            data.Custom.drawParams.dotSizeInDegs = \
+            data.Custom.draw_params.dot_size_in_degs = \
                 task_parameters.DotSizeInDegs
 
             # Start from the 5th byte
             # serializeAndWrite(data.dotsMapped_file, 5,
-            #                   data.Custom.drawParams)
+            #                   data.Custom.draw_params)
             # data.dotsMapped_file.data(1: 4) = \
             #   typecast(uint32(1), 'uint8');
 
