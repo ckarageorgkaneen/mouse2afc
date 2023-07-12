@@ -29,19 +29,24 @@ class Mouse2AFC:
         self._data = Data(self._bpod.session, self._task_parameters)
 
     def _set_current_stimulus(self):
-        # Set current stimulus for next trial - set between -100 to +100
+        "Set current stimulus for next trial - set between -100 to +100"
         self._task_parameters.CurrentStim = (self._data.Custom.trials.DV[0] + (
             int(self._data.Custom.trials.DV[0] > 0) or -1)) / 0.02
 
     def my_softcode_handler(self,_softcode):
+        "Defines what each SoftCode output does"
         if _softcode == 1:
             self._data.Custom.trials.EarlyWithdrawalTimerStart = time.time()
         elif _softcode == 2:
-            if time.time() - self._data.Custom.trials.EarlyWithdrawalTimerStart > self._task_parameters.TimeOutEarlyWithdrawal:
+            if (time.time() -
+                self._data.Custom.trials.EarlyWithdrawalTimerStart >
+                self._task_parameters.TimeOutEarlyWithdrawal):
+
                 self._bpod.trigger_event_by_name(event_name = 'SoftCode1',
                                                  event_data = None)
 
     def run(self):
+        "Runs the protocol"
         self._data.Custom.assign_future_trials(START_FROM,NUM_TRIALS_TO_GENERATE)
         self._set_current_stimulus()
         i_trial = 0
