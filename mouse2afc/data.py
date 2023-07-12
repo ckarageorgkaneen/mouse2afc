@@ -54,7 +54,7 @@ class DataError(Exception):
 class RawData:
     def __init__(self, session):
         self._session = session
-        self.StateMachineErrorCodes = {}
+        self.state_machine_error_codes = {}
 
     def states_visited_names(self, trial_num):
         return [state.state_name for state in self._session.trials[
@@ -388,7 +388,8 @@ class CustomData:
         elif self.task_parameters.MinSampleType == \
                 MinSampleType.AutoIncr:
             # Check if animal completed pre-stimulus delay successfully
-            if not self.trials.fix_broke[i_trial] and i_trial > self.task_parameters.StartEasyTrials:
+            if not (self.trials.fix_broke[i_trial] and i_trial >
+                    self.task_parameters.StartEasyTrials):
                 if self.trials.rewarded[i_trial]:
                     min_sample_incremented = self.trials.min_sample[
                         i_trial] + self.task_parameters.MinSampleIncr
@@ -546,8 +547,8 @@ class CustomData:
 
         choice_made_trials = [
             choice_c is not None for choice_c in self.trials.choice_correct]
-        rewarded_trials_count = sum([r is True for r in self.trials.rewarded])
-        length_choice_made_trials = sum([x for x in choice_made_trials if True])
+        rewarded_trials_count = sum(r is True for r in self.trials.rewarded)
+        length_choice_made_trials = sum(x for x in choice_made_trials if True)
         if length_choice_made_trials >= 1:
             performance = rewarded_trials_count / length_choice_made_trials
             self.task_parameters.Performance = [
