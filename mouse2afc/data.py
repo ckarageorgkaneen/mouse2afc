@@ -507,43 +507,48 @@ class CustomData:
         # Consider bias only on the last 8 trials/
         # indicesRwdLi = find(self.trials.rewarded,8,'last');
         # if length(indicesRwdLi) ~= 0
-        #   indicesRwd = indicesRwdLi(1);
+        #   indices_rwd = indicesRwdLi(1);
         # else
-        #   indicesRwd = 1;
+        #   indices_rwd = 1;
         # end
         LAST_TRIALS = 10
-        indicesRwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 0)
-        # ndxRewd = self.trials.rewarded(indicesRwd:i_trial);
+        indices_rwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 0)
+        # ndxRewd = self.trials.rewarded(indices_rwd:i_trial);
         choice_correct_slice = self.trials.choice_correct[
-            indicesRwd: i_trial + 1]
-        choice_left_slice = self.trials.choice_left[indicesRwd: i_trial + 1]
-        left_rewarded_slice = self.trials.left_rewarded[indicesRwd: i_trial + 1]
-        ndxLeftRewd = [choice_c and choice_l for choice_c, choice_l in zip(
+            indices_rwd: i_trial + 1]
+        choice_left_slice = self.trials.choice_left[indices_rwd: i_trial + 1]
+        left_rewarded_slice = self.trials.left_rewarded[indices_rwd: i_trial + 1]
+        ndx_left_rewd = [choice_c and choice_l for choice_c, choice_l in zip(
             choice_correct_slice, choice_left_slice)]
-        ndxLeftRewDone = [l_rewarded and choice_l is not None
+        ndx_left_rew_done = [l_rewarded and choice_l is not None
                           for l_rewarded, choice_l in zip(
                               left_rewarded_slice, choice_left_slice)]
-        ndxRightRewd = [choice_c and not choice_l
+        ndx_right_rewd = [choice_c and not choice_l
                         for choice_c, choice_l in zip(
                             choice_correct_slice, choice_left_slice)]
-        ndxRightRewDone = [not l_rewarded and choice_l is not None
+        ndx_right_rew_done = [not l_rewarded and choice_l is not None
                            for l_rewarded, choice_l in zip(
                                left_rewarded_slice, choice_left_slice)]
-        if not any(ndxLeftRewDone):
+        if not any(ndx_left_rew_done):
             # Since we don't have trials on this side, then measure by how good
             # the animals was performing on the other side. If it did bad on
             # the side then then consider this side performance to be good so
             # it'd still get more trials on the other side.
-            denominator = iff(sum(filter(None,ndxRightRewDone)),sum(filter(None,ndxRightRewDone)) * 2, 1)
-            PerfL = 1 - (sum(filter(None,ndxRightRewd)) / (denominator * 2))
+            denominator = iff(sum(filter(None,ndx_right_rew_done)),
+                              sum(filter(None,ndx_right_rew_done)) * 2,
+                              1)
+            perf_left = 1 - (sum(filter(None,ndx_right_rewd)) / (denominator * 2))
         else:
-            PerfL = sum(filter(None,ndxLeftRewd)) / sum(filter(None,ndxLeftRewDone))
-        if not any(ndxRightRewDone):
-            denominator = iff(sum(filter(None,ndxLeftRewDone)),sum(filter(None,ndxLeftRewDone)) * 2, 1)
-            PerfR = 1 - (sum(filter(None,ndxLeftRewd)) / (denominator* 2))
+            perf_left = (sum(filter(None,ndx_left_rewd)) /
+                         sum(filter(None,ndx_left_rew_done)))
+        if not any(ndx_right_rew_done):
+            denominator = iff(sum(filter(None,ndx_left_rew_done)),
+                              sum(filter(None,ndx_left_rew_done)) * 2,
+                              1)
+            perf_right = 1 - (sum(filter(None,ndx_left_rewd)) / (denominator* 2))
         else:
-            PerfR = sum(filter(None,ndxRightRewd)) / sum(filter(None,ndxRightRewDone))
-        self.task_parameters.CalcLeftBias = (PerfL - PerfR) / 2 + 0.5
+            perf_right = sum(filter(None,ndx_right_rewd)) / sum(filter(None,ndx_right_rew_done))
+        self.task_parameters.CalcLeftBias = (perf_left - perf_right) / 2 + 0.5
 
         choice_made_trials = [
             choice_c is not None for choice_c in self.trials.choice_correct]
