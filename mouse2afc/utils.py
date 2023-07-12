@@ -71,11 +71,11 @@ def calc_aud_click_train(data, trial_num):
 
 
 def calc_light_intensity(data, trial_num):
-    data.trials.LightIntensityLeft[trial_num] = \
-        round(data.trials.StimulusOmega[trial_num] * 100)
-    data.trials.LightIntensityRight[trial_num] = \
-        round((1 - data.trials.StimulusOmega[trial_num]) * 100)
-    dv = (data.trials.StimulusOmega[trial_num] * 2) - 1
+    data.trials.light_intensity_left[trial_num] = \
+        round(data.trials.stimulus_omega[trial_num] * 100)
+    data.trials.light_intensity_right[trial_num] = \
+        round((1 - data.trials.stimulus_omega[trial_num]) * 100)
+    dv = (data.trials.stimulus_omega[trial_num] * 2) - 1
     return dv
 
 

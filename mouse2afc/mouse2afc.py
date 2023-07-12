@@ -36,10 +36,10 @@ class Mouse2AFC:
     def my_softcode_handler(self,_softcode):
         "Defines what each SoftCode output does"
         if _softcode == 1:
-            self._data.Custom.trials.EarlyWithdrawalTimerStart = time.time()
+            self._data.Custom.trials.early_withdrawal_timer_start = time.time()
         elif _softcode == 2:
             if (time.time() -
-                self._data.Custom.trials.EarlyWithdrawalTimerStart >
+                self._data.Custom.trials.early_withdrawal_timer_start >
                 self._task_parameters.TimeOutEarlyWithdrawal):
 
                 self._bpod.trigger_event_by_name(event_name = 'SoftCode1',
