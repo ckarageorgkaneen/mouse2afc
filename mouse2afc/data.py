@@ -3,6 +3,8 @@ import time
 
 from collections import OrderedDict
 
+from numpy import arange
+
 from mouse2afc.definitions.constant import Constant as Const
 from mouse2afc.definitions.experiment import ExperimentType
 from mouse2afc.definitions.matrix_state import MatrixState
@@ -344,7 +346,7 @@ class CustomData:
         if self.task_parameters.ExperimentType == \
                 ExperimentType.GratingOrientation:
             self.trials.GratingOrientation[
-                i_trial] = self.drawParams.gratingOrientation
+                i_trial] = self.drawParams.GratingOrientation
 
         # Updating Delays
         # stimulus delay
@@ -431,7 +433,7 @@ class CustomData:
                         self.task_parameters.MinSampleMin
                     step = min_sample_difference / (
                         self.task_parameters.MinSampleNumInterval - 1)
-                    intervals = list(range(
+                    intervals = list(arange(
                         self.task_parameters.MinSampleMin,
                         self.task_parameters.MinSampleMax + 1,
                         step))
