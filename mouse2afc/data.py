@@ -21,13 +21,13 @@ from  mouse2afc.utils import round
 from  mouse2afc.utils import floor
 from  mouse2afc.utils import random_unif
 from  mouse2afc.utils import diff
-from  mouse2afc.utils import GetCatchStimIdx
-from  mouse2afc.utils import TruncatedExponential
-from  mouse2afc.utils import CalcAudClickTrain
-from  mouse2afc.utils import CalcLightIntensity
-from  mouse2afc.utils import CalcGratingOrientation
-from  mouse2afc.utils import CalcDotsCoherence
-from  mouse2afc.utils import ControlledRandom
+from  mouse2afc.utils import get_catch_stim_idx
+from  mouse2afc.utils import truncated_exponential
+from  mouse2afc.utils import calc_aud_click_train
+from  mouse2afc.utils import calc_light_intensity
+from  mouse2afc.utils import calc_grating_orientation
+from  mouse2afc.utils import calc_dots_coherence
+from  mouse2afc.utils import controlled_random
 from  mouse2afc.utils import isnan
 
 logger = logging.getLogger(__name__)
@@ -98,7 +98,7 @@ class CustomData:
         self.DVs_already_generated = 0
 
     def assign_future_trials(self,start_from,num_trials_to_generate):
-        is_left_rewarded = ControlledRandom((1 -self.task_parameters.LeftBias),
+        is_left_rewarded = controlled_random((1 -self.task_parameters.LeftBias),
                                               num_trials_to_generate)
         lastidx = start_from
         for a in range(num_trials_to_generate):
@@ -276,7 +276,7 @@ class CustomData:
                 states_visited_this_trial_names:
             self.trials.ChoiceCorrect[i_trial] = True
             if self.trials.CatchTrial[i_trial]:
-                catch_stim_idx = GetCatchStimIdx(
+                catch_stim_idx = get_catch_stim_idx(
                     self.trials.StimulusOmega[i_trial])
                 # Lookup the stimulus probability and increase by its
                 # 1/frequency.
@@ -486,7 +486,7 @@ class CustomData:
                     max(self.task_parameters.FeedbackDelayMin,
                         feedback_delay_incremented))
         elif FeedbackDelaySelection.TruncExp:
-            self.task_parameters.FeedbackDelay = TruncatedExponential(
+            self.task_parameters.FeedbackDelay = truncated_exponential(
                 self.task_parameters.FeedbackDelayMin,
                 self.task_parameters.FeedbackDelayMax,
                 self.task_parameters.FeedbackDelayTau)
@@ -622,16 +622,16 @@ class CustomData:
 
         if self.task_parameters.ExperimentType == \
                     ExperimentType.Auditory:
-            DV = CalcAudClickTrain(self,i_trial+1)
+            DV = calc_aud_click_train(self,i_trial+1)
         elif self.task_parameters.ExperimentType == \
                 ExperimentType.LightIntensity:
-            DV = CalcLightIntensity(self, i_trial+1)
+            DV = calc_light_intensity(self, i_trial+1)
         elif self.task_parameters.ExperimentType == \
                 ExperimentType.GratingOrientation:
-            DV = CalcGratingOrientation(self,i_trial+1)
+            DV = calc_grating_orientation(self,i_trial+1)
         elif self.task_parameters.ExperimentType == \
                 ExperimentType.RandomDots:
-            DV = CalcDotsCoherence(self, i_trial+1)
+            DV = calc_dots_coherence(self, i_trial+1)
         else:
             error('Unexpected ExperimentType')
         self.trials.DV[i_trial+1] = DV
@@ -684,9 +684,9 @@ class CustomData:
                     if prob > 0]
                 complement_non_zero_prob = [1 - prob for prob in non_zero_prob]
                 inverse_non_zero_prob = non_zero_prob[::-1]
-                active_stim_idxs = GetCatchStimIdx(
+                active_stim_idxs = get_catch_stim_idx(
                     complement_non_zero_prob + inverse_non_zero_prob)
-                cur_stim_idx = GetCatchStimIdx(
+                cur_stim_idx = get_catch_stim_idx(
                     self.trials.StimulusOmega[i_trial + 1])
                 min_catch_counts = min(
                     self.trials.CatchCount[i] for i in active_stim_idxs)
