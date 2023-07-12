@@ -89,10 +89,10 @@ class CustomData:
 
     _DEFAULT_CATCH_COUNT_LEN = 21
 
-    def __init__(self, task_parameters, Timer, raw_data):
+    def __init__(self, task_parameters, timer, raw_data):
         self.task_parameters = task_parameters
         self.drawParams = drawParams()
-        self.Timer = Timer
+        self.timer = timer
         self.raw_data = raw_data
         self.trials = Trials(task_parameters)
         self.DVsAlreadyGenerated = 0
@@ -188,7 +188,7 @@ class CustomData:
 
         self.trials.TrialNumber[i_trial] = i_trial
 
-        self.Timer.customInitialize[i_trial] = time.time()
+        self.timer.customInitialize[i_trial] = time.time()
 
         # Checking states and rewriting standard
 
@@ -339,7 +339,7 @@ class CustomData:
             i_trial + 1] = self.task_parameters.CenterPortRewAmount
         self.trials.PreStimCntrReward[
             i_trial + 1] = self.task_parameters.PreStimDelayCntrReward
-        self.Timer.customExtractData[i_trial] = time.time()
+        self.timer.customExtractData[i_trial] = time.time()
 
         # IF we are running grating experiments,
         # add the grating orientation that was used
@@ -370,7 +370,7 @@ class CustomData:
                     self.task_parameters.StimDelayMax)
             else:
                 self.task_parameters.StimDelay = self.trials.StimDelay[i_trial]
-        self.Timer.customStimDelay[i_trial] = time.time()
+        self.timer.customStimDelay[i_trial] = time.time()
 
         # min sampling time
         if self.task_parameters.MinSampleType == MinSampleType.FixMin:
@@ -445,7 +445,7 @@ class CustomData:
                         intervals_idx]
         else:
             error('Unexpected MinSampleType value')
-        self.Timer.customMinSampling[i_trial] = time.time()
+        self.timer.customMinSampling[i_trial] = time.time()
 
         # feedback delay
         if self.task_parameters.FeedbackDelaySelection == \
@@ -489,7 +489,7 @@ class CustomData:
                 self.task_parameters.FeedbackDelayMax
         else:
             error('Unexpected FeedbackDelaySelection value')
-        self.Timer.customFeedbackDelay[i_trial] = time.time()
+        self.timer.customFeedbackDelay[i_trial] = time.time()
 
         # Drawing future trials
 
@@ -565,7 +565,7 @@ class CustomData:
                     self.task_parameters.AllPerformance, ' - ',
                     f'{performance * 100:.2f}', '#/', str(NUM_LAST_TRIALS),
                     'T']
-        self.Timer.customCalcBias[i_trial] = time.time()
+        self.timer.customCalcBias[i_trial] = time.time()
 
         # Create future trials
         # Check if its time to generate more future trials
@@ -585,7 +585,7 @@ class CustomData:
                     LeftBias = 0.5
             else:
                 LeftBias = self.task_parameters.LeftBias
-            self.Timer.customAdjustBias[i_trial] = time.time()
+            self.timer.customAdjustBias[i_trial] = time.time()
 
             # Adjustment of P(Omega) to make sure that sum(P(Omega))=1
             if self.task_parameters.StimulusSelectionCriteria != \
@@ -601,15 +601,15 @@ class CustomData:
                     for omega_prob
                     in self.task_parameters.OmegaTable.columns.OmegaProb
                 ]
-            self.Timer.customCalcOmega[i_trial] = time.time()
+            self.timer.customCalcOmega[i_trial] = time.time()
             self.assign_future_trials(i_trial+1,Const.PRE_GENERATE_TRIAL_COUNT)
 
-            self.Timer.customGenNewTrials[i_trial] = time.time()
+            self.timer.customGenNewTrials[i_trial] = time.time()
         else:
-            self.Timer.customAdjustBias[i_trial] = 0
-            self.Timer.customCalcOmega[i_trial] = 0
-            self.Timer.customPrepNewTrials[i_trial] = 0
-            self.Timer.customGenNewTrials[i_trial] = 0
+            self.timer.customAdjustBias[i_trial] = 0
+            self.timer.customCalcOmega[i_trial] = 0
+            self.timer.customPrepNewTrials[i_trial] = 0
+            self.timer.customGenNewTrials[i_trial] = 0
 
         if self.task_parameters.ExperimentType == \
                     ExperimentType.Auditory:
@@ -644,7 +644,7 @@ class CustomData:
             self.task_parameters.CurrentStim = \
                 f"{StimIntensity}{iff(DV < 0, '# R', '# L')}"
 
-        self.Timer.customFinalizeUpdate[i_trial] = time.time()
+        self.timer.customFinalizeUpdate[i_trial] = time.time()
 
         # determine if optogentics trial
         OptoEnabled = rand(1, 1) < self.task_parameters.OptoProb
@@ -699,7 +699,7 @@ class CustomData:
                 self.task_parameters.PercentForcedLEDTrial
         else:
             self.trials.ForcedLEDTrial[i_trial + 1] = False
-        self.Timer.customCatchNForceLed[i_trial] = time.time()
+        self.timer.customCatchNForceLed[i_trial] = time.time()
 
 
 class TimerData:
@@ -800,8 +800,8 @@ class Data:
     def __init__(self, session, task_parameters):
         self.task_parameters = task_parameters
         self.raw_data = RawData(session)
-        self.Timer = TimerData()
-        self.Custom = CustomData(task_parameters, self.Timer, self.raw_data)
+        self.timer = TimerData()
+        self.Custom = CustomData(task_parameters, self.timer, self.raw_data)
         self.TrialStartTimestamp = datalist()
         self.TrialEndTimestamp = datalist()
         self.SettingsFile = None
