@@ -124,11 +124,18 @@ class CustomData:
                             index] / 100
                     else:
                         #Choose a value randomly given the each value probability
-                        stimulus_omega = ((randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob)/100).tolist())[0]
+                        stimulus_omega = (
+                            (randsample
+                             (self.task_parameters.OmegaTable.columns.Omega,
+                              1,
+                              1,
+                              omega_prob)
+                              / 100).tolist())[0]
                 else:
                     error('Unexpected StimulusSelectionCriteria')
 
-                if (is_left_rewarded[a] and stimulus_omega < 0.5) or (not is_left_rewarded[a] and stimulus_omega >= 0.5):
+                if ((is_left_rewarded[a] and stimulus_omega < 0.5) or
+                     (not is_left_rewarded[a] and stimulus_omega >= 0.5)):
                     stimulus_omega = -stimulus_omega + 1
 
             self.trials.StimulusOmega[lastidx+a] = stimulus_omega
@@ -207,10 +214,10 @@ class CustomData:
                 last_trigger_wait_for_stimulus_state_times[1] - \
                 last_trigger_wait_for_stimulus_state_times[0]
         if str(MatrixState.stimulus_delivery) in states_visited_this_trial_names:
-            stimulus_deliveryStateTimes = states_visited_this_trial_times[
+            stimulus_delivery_state_times = states_visited_this_trial_times[
                 str(MatrixState.stimulus_delivery)]
             if self.task_parameters.RewardAfterMinSampling:
-                self.trials.ST[i_trial] = diff(stimulus_deliveryStateTimes)
+                self.trials.ST[i_trial] = diff(stimulus_delivery_state_times)
             else:
                 # 'CenterPortRewardDelivery' state would exist even if no
                 # 'RewardAfterMinSampling' is active, in such case it means
@@ -225,22 +232,22 @@ class CustomData:
                             str(MatrixState.CenterPortRewardDelivery)]
                     self.trials.ST[i_trial] = [
                         center_port_reward_delivery_state_times[0][
-                            1] - stimulus_deliveryStateTimes[0][0]
+                            1] - stimulus_delivery_state_times[0][0]
                     ]
                 else:
                     # This covers early_withdrawal
-                    self.trials.ST[i_trial] = diff(stimulus_deliveryStateTimes)
+                    self.trials.ST[i_trial] = diff(stimulus_delivery_state_times)
 
         if str(MatrixState.WaitForChoice) in states_visited_this_trial_names and \
             str(MatrixState.timeOut_missed_choice) not in \
                 states_visited_this_trial_names:
             wait_for_choice_state_times = states_visited_this_trial_times[
                 str(MatrixState.WaitForChoice)]
-            WaitForChoiceStateStartTimes = [
+            wait_for_choice_state_start_times = [
                 start_time for start_time, end_time in wait_for_choice_state_times]
             # We might have more than multiple WaitForChoice if
             # HabituateIgnoreIncorrect is enabeld
-            self.trials.MT[-1] = diff(WaitForChoiceStateStartTimes[:2])
+            self.trials.MT[-1] = diff(wait_for_choice_state_start_times[:2])
 
         # Extract trial outcome. Check first if it's a wrong choice or a
         # HabituateIgnoreIncorrect but first choice was wrong choice
@@ -283,7 +290,7 @@ class CustomData:
                     self.task_parameters.OmegaTable.columns.OmegaProb)
                 stim_prob = (1 + sum_all_prob - stim_prob) / sum_all_prob
                 self.trials.CatchCount[catch_stim_idx] += stim_prob
-                self.trials.LastSuccessCatchTial = i_trial
+                self.trials.LastSuccessCatchTrial = i_trial
             # Feedback waiting time
             if str(MatrixState.WaitForReward) in states_visited_this_trial_names:
                 wait_for_reward_state_times = states_visited_this_trial_times[
@@ -537,32 +544,32 @@ class CustomData:
             PerfR = sum(filter(None,ndxRightRewd)) / sum(filter(None,ndxRightRewDone))
         self.task_parameters.CalcLeftBias = (PerfL - PerfR) / 2 + 0.5
 
-        choiceMadeTrials = [
+        choice_made_trials = [
             choice_c is not None for choice_c in self.trials.ChoiceCorrect]
-        rewardedTrialsCount = sum([r is True for r in self.trials.Rewarded])
-        lengthChoiceMadeTrials = sum([x for x in choiceMadeTrials if True])
-        if lengthChoiceMadeTrials >= 1:
-            performance = rewardedTrialsCount / lengthChoiceMadeTrials
+        rewarded_trials_count = sum([r is True for r in self.trials.Rewarded])
+        length_choice_made_trials = sum([x for x in choice_made_trials if True])
+        if length_choice_made_trials >= 1:
+            performance = rewarded_trials_count / length_choice_made_trials
             self.task_parameters.Performance = [
                 f'{performance * 100:.2f}', '#/',
-                str(lengthChoiceMadeTrials), 'T']
-            performance = rewardedTrialsCount / (i_trial + 1)
+                str(length_choice_made_trials), 'T']
+            performance = rewarded_trials_count / (i_trial + 1)
             self.task_parameters.AllPerformance = [
                 f'{performance * 100:.2f}', '#/', str(i_trial + 1), 'T']
             NUM_LAST_TRIALS = 20
             if i_trial > NUM_LAST_TRIALS:
-                if lengthChoiceMadeTrials > NUM_LAST_TRIALS:
-                    rewardedTrials_ = choiceMadeTrials[
-                        lengthChoiceMadeTrials - NUM_LAST_TRIALS + 1:
-                        lengthChoiceMadeTrials + 1]
-                    performance = sum(rewardedTrials_) / NUM_LAST_TRIALS
+                if length_choice_made_trials > NUM_LAST_TRIALS:
+                    rewarded_trials_ = choice_made_trials[
+                        length_choice_made_trials - NUM_LAST_TRIALS + 1:
+                        length_choice_made_trials + 1]
+                    performance = sum(rewarded_trials_) / NUM_LAST_TRIALS
                     self.task_parameters.Performance = [
                         self.task_parameters.Performance, ' - ',
                         f'{performance * 100:.2f}', '#/',
                         str(NUM_LAST_TRIALS), 'T']
-                rewardedTrialsCount = sum(self.trials.Rewarded[
+                rewarded_trials_count = sum(self.trials.Rewarded[
                     i_trial - NUM_LAST_TRIALS + 1: i_trial + 1])
-                performance = rewardedTrialsCount / NUM_LAST_TRIALS
+                performance = rewarded_trials_count / NUM_LAST_TRIALS
                 self.task_parameters.AllPerformance = [
                     self.task_parameters.AllPerformance, ' - ',
                     f'{performance * 100:.2f}', '#/', str(NUM_LAST_TRIALS),
@@ -575,18 +582,18 @@ class CustomData:
             # Do bias correction only if we have enough trials
             # sum(ndxRewd) > Const.BIAS_CORRECT_MIN_RWD_TRIALS
             if self.task_parameters.CorrectBias and i_trial+1 > 7:
-                LeftBias = self.task_parameters.CalcLeftBias
-                # if LeftBias < 0.2 || LeftBias > 0.8 # Bias is too much,
+                left_bias = self.task_parameters.CalcLeftBias
+                # if left_bias < 0.2 || left_bias > 0.8 # Bias is too much,
                 # swing it all the way to the other side
-                # LeftBias = round(LeftBias);
+                # left_bias = round(left_bias);
                 # else
-                if 0.45 <= LeftBias and LeftBias <= 0.55:
-                    LeftBias = 0.5
-                if LeftBias is None:
-                    print(f'Left bias is None.')
-                    LeftBias = 0.5
+                if 0.45 <= left_bias <= 0.55:
+                    left_bias = 0.5
+                if left_bias is None:
+                    print('Left bias is None.')
+                    left_bias = 0.5
             else:
-                LeftBias = self.task_parameters.LeftBias
+                left_bias = self.task_parameters.LeftBias
             self.timer.customAdjustBias[i_trial] = time.time()
 
             # Adjustment of P(Omega) to make sure that sum(P(Omega))=1
@@ -615,7 +622,7 @@ class CustomData:
 
         if self.task_parameters.ExperimentType == \
                     ExperimentType.Auditory:
-                DV = CalcAudClickTrain(self,i_trial+1)
+            DV = CalcAudClickTrain(self,i_trial+1)
         elif self.task_parameters.ExperimentType == \
                 ExperimentType.LightIntensity:
             DV = CalcLightIntensity(self, i_trial+1)
@@ -642,19 +649,19 @@ class CustomData:
                 f"{abs(DV / 0.01)}{iff(DV < 0, '# R cohr.', '# L cohr.')}"
         else:
             # Set between -100 to +100
-            StimIntensity = f'{iff(DV > 0, (DV + 1) / 0.02, (DV - 1) / -0.02)}'
+            stim_intensity = f'{iff(DV > 0, (DV + 1) / 0.02, (DV - 1) / -0.02)}'
             self.task_parameters.CurrentStim = \
-                f"{StimIntensity}{iff(DV < 0, '# R', '# L')}"
+                f"{stim_intensity}{iff(DV < 0, '# R', '# L')}"
 
         self.timer.customFinalizeUpdate[i_trial] = time.time()
 
         # determine if optogentics trial
-        OptoEnabled = rand(1, 1) < self.task_parameters.OptoProb
+        opto_enabled = rand(1, 1) < self.task_parameters.OptoProb
         if i_trial < self.task_parameters.StartEasyTrials:
-            OptoEnabled = False
-        self.trials.OptoEnabled[i_trial + 1] = OptoEnabled
+            opto_enabled = False
+        self.trials.OptoEnabled[i_trial + 1] = opto_enabled
         self.task_parameters.IsOptoTrial = iff(
-            OptoEnabled, 'true', 'false')
+            opto_enabled, 'true', 'false')
 
         # determine if catch trial
         if i_trial < self.task_parameters.StartEasyTrials or \
@@ -666,9 +673,9 @@ class CustomData:
             lower_limit = every_n_trials - limit
             upper_limit = every_n_trials + limit
             if not self.trials.Rewarded[i_trial] or i_trial + 1 < \
-                    self.trials.LastSuccessCatchTial + lower_limit:
+                    self.trials.LastSuccessCatchTrial + lower_limit:
                 self.trials.CatchTrial[i_trial + 1] = False
-            elif i_trial + 1 < self.trials.LastSuccessCatchTial + upper_limit:
+            elif i_trial + 1 < self.trials.LastSuccessCatchTrial + upper_limit:
                 # TODO: If OmegaProb changed since last time, then redo it
                 non_zero_prob = [
                     self.task_parameters.OmegaTable.Omega[i] / 100
