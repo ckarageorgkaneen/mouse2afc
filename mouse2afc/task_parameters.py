@@ -53,8 +53,8 @@ class TaskParametersGUIConfirmDialog(QDialog):
     def __init__(self, parent, label):
         super().__init__(parent)
         self.setWindowTitle('Confirmation')
-        QBtn = QDialogButtonBox.Yes | QDialogButtonBox.No
-        self.buttonBox = QDialogButtonBox(QBtn)
+        q_button = QDialogButtonBox.Yes | QDialogButtonBox.No
+        self.buttonBox = QDialogButtonBox(q_button)
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
         self.layout = QVBoxLayout()
@@ -130,8 +130,8 @@ class TaskParametersGUI(QMainWindow):
             return
         if isinstance(ui_field, QComboBox):
             assert isinstance(value, enum.Enum)
-            enumClass = value.__class__
-            enum_ = enumClass[ui_field.currentText()]
+            enum_class = value.__class__
+            enum_ = enum_class[ui_field.currentText()]
             self._task_parameters[parameter] = enum_
         elif isinstance(ui_field, QCheckBox):
             self._task_parameters[parameter] = ui_field.isChecked()

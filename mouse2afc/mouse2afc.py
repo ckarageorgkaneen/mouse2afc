@@ -18,8 +18,8 @@ def error(message):
     logger.error(message)
     raise Mouse2AFCError(message)
 
-NumTrialsToGenerate = 1
-StartFrom = 0
+NUM_TRIALS_TO_GENERATE = 1
+START_FROM = 0
 
 class Mouse2AFC:
     def __init__(self, bpod, config_file=None):
@@ -29,20 +29,25 @@ class Mouse2AFC:
         self._data = Data(self._bpod.session, self._task_parameters)
 
     def _set_current_stimulus(self):
-        # Set current stimulus for next trial - set between -100 to +100
-        self._task_parameters.CurrentStim = (self._data.Custom.Trials.DV[0] + (
-            int(self._data.Custom.Trials.DV[0] > 0) or -1)) / 0.02
+        "Set current stimulus for next trial - set between -100 to +100"
+        self._task_parameters.current_stim = (self._data.custom.trials.DV[0] + (
+            int(self._data.custom.trials.DV[0] > 0) or -1)) / 0.02
 
     def my_softcode_handler(self,_softcode):
+        "Defines what each SoftCode output does"
         if _softcode == 1:
-            self._data.Custom.Trials.EarlyWithdrawalTimerStart = time.time()
+            self._data.custom.trials.early_withdrawal_timer_start = time.time()
         elif _softcode == 2:
-            if time.time() - self._data.Custom.Trials.EarlyWithdrawalTimerStart > self._task_parameters.TimeOutEarlyWithdrawal:
+            if (time.time() -
+                self._data.custom.trials.early_withdrawal_timer_start >
+                self._task_parameters.timeout_early_withdrawal):
+
                 self._bpod.trigger_event_by_name(event_name = 'SoftCode1',
                                                  event_data = None)
 
     def run(self):
-        self._data.Custom.assign_future_trials(StartFrom,NumTrialsToGenerate)
+        "Runs the protocol"
+        self._data.custom.assign_future_trials(START_FROM,NUM_TRIALS_TO_GENERATE)
         self._set_current_stimulus()
         i_trial = 0
         self._bpod.softcode_handler_function = self.my_softcode_handler
@@ -55,5 +60,5 @@ class Mouse2AFC:
             logger.error('Before run_state_machine()')
             if not self._bpod.run_state_machine(sma):
                 break
-            self._data.Custom.update(i_trial)
+            self._data.custom.update(i_trial)
             i_trial += 1

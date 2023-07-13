@@ -1,7 +1,7 @@
 import logging
 import math
-import numpy as np
 import random
+import numpy as np
 
 from mouse2afc import settings
 
@@ -32,11 +32,11 @@ def iff(condition, value1, value2):
     return value1 if condition else value2
 
 
-def dec2bin(decimal):
+def dec_2_bin(decimal):
     return f'{160:3b}'.replace(' ', '0')
 
 
-def GetCatchStimIdx(stimulus_omega):
+def get_catch_stim_idx(stimulus_omega):
     # stimulus_omega is between 0 and 1, we break it down to bins of 20
     def calc_catch_stim_idx(omega):
         return round(omega * 20) + 1
@@ -48,7 +48,7 @@ def GetCatchStimIdx(stimulus_omega):
     return catch_stim_idx
 
 
-def TruncatedExponential(min_value, max_value, tau):
+def truncated_exponential(min_value, max_value, tau):
     if min_value == max_value == 0:
         raise ValueError('Invalid value 0 for min_value and max_value.')
     # Initialize to a large value
@@ -61,34 +61,30 @@ def TruncatedExponential(min_value, max_value, tau):
     return exp
 
 
-def EncTrig(trigger_id):
+def enc_trig(trigger_id):
     # Provides V1 & V2 compatibility
-    return iff(settings.IS_V2, dec2bin(trigger_id), trigger_id)
+    return iff(settings.IS_V2, dec_2_bin(trigger_id), trigger_id)
 
 
-def CalcAudClickTrain(data, trial_num):
+def calc_aud_click_train(data, trial_num):
     return 1
 
 
-def CalcLightIntensity(data, trial_num):
-    data.Trials.LightIntensityLeft[trial_num] = \
-        round(data.Trials.StimulusOmega[trial_num] * 100)
-    data.Trials.LightIntensityRight[trial_num] = \
-        round((1 - data.Trials.StimulusOmega[trial_num]) * 100)
-    dv = (data.Trials.StimulusOmega[trial_num] * 2) - 1
+def calc_light_intensity(data, trial_num):
+    data.trials.light_intensity_left[trial_num] = \
+        round(data.trials.stimulus_omega[trial_num] * 100)
+    data.trials.light_intensity_right[trial_num] = \
+        round((1 - data.trials.stimulus_omega[trial_num]) * 100)
+    dv = (data.trials.stimulus_omega[trial_num] * 2) - 1
     return dv
 
 
-def CalcGratingOrientation(data, trial_num):
+def calc_grating_orientation(data, trial_num):
     return 1
 
 
-def CalcDotsCoherence(data, trial_num):
+def calc_dots_coherence(data, trial_num):
     return 1
-
-
-class GetValveTimesError(Exception):
-    pass
 
 
 def error(message):
@@ -96,10 +92,14 @@ def error(message):
     raise GetValveTimesError(message)
 
 
+class GetValveTimesError(Exception):
+    pass
+
+
 class LiquidCalClass:
-    def __init__(self, Table, Coeffs):
-        self.Table = Table
-        self.Coeffs = Coeffs
+    def __init__(self, table, coeffs):
+        self.table = table
+        self.coeffs = coeffs
 
 
 class CalibrationTables:
@@ -147,44 +147,46 @@ class CalibrationTables:
                  for table, coeffs in zip(DEFAULT_TABLES, COEFFS)]
 
 
-def GetValveTimes(LiquidAmount, TargetValves):
-    if isinstance(TargetValves, int):
-        TargetValves = [TargetValves]
-    nValves = len(TargetValves)
-    ValveTimes = [0] * nValves
-    for x in range(nValves):
-        ValidTable = True
-        TargetValveIdx = TargetValves[x] - 1
-        CurrentTable = CalibrationTables.LiquidCal[
-            TargetValveIdx].Table
-        if CurrentTable:
-            ValveDurations = [row[0] for row in CurrentTable]
-            nMeasurements = len(ValveDurations)
-            if nMeasurements < 2:
-                ValidTable = False
+def get_valve_times(liquid_amount, target_valves):
+    if isinstance(target_valves, int):
+        target_valves = [target_valves]
+    n_valves = len(target_valves)
+    valve_times = [0] * n_valves
+    for x in range(n_valves):
+        valid_table = True
+        target_valve_idx = target_valves[x] - 1
+        current_table = CalibrationTables.LiquidCal[
+            target_valve_idx].table
+        if current_table:
+            valve_durations = [row[0] for row in current_table]
+            n_measurements = len(valve_durations)
+            if n_measurements < 2:
+                valid_table = False
                 error('Not enough liquid calibration measurements exist for'
-                      f'valve {TargetValves[x]}. Bpod needs at least 3'
+                      f'valve {target_valves[x]}. Bpod needs at least 3'
                       'measurements.')
         else:
-            ValidTable = False
+            valid_table = False
             error('Not enough liquid calibration measurements exist for valve '
-                  f'{TargetValves[x]}. Bpod needs at least 3 measurements.')
-        if ValidTable:
-            ValveTimes[x] = polyval(CalibrationTables.LiquidCal[
-                TargetValveIdx].Coeffs, LiquidAmount)
-            if ValveTimes[x] is None:
-                ValveTimes[x] = 0
-            if any([(valve_time < 0) for valve_time in ValveTimes]):
-                error(f'Wrong liquid calibration for valve {TargetValves[x]}.'
+                  f'{target_valves[x]}. Bpod needs at least 3 measurements.')
+        if valid_table:
+            valve_times[x] = polyval(CalibrationTables.LiquidCal[
+                target_valve_idx].coeffs, liquid_amount)
+            if valve_times[x] is None:
+                valve_times[x] = 0
+            if any([(valve_time < 0) for valve_time in valve_times]):
+                error(f'Wrong liquid calibration for valve {target_valves[x]}.'
                       'Negative open time.')
-        ValveTimes[x] /= 1000
-    result = ValveTimes[0] if nValves == 1 else ValveTimes
+        valve_times[x] /= 1000
+    result = valve_times[0] if n_valves == 1 else valve_times
     return result
 
-def ControlledRandom(probability,_NumTrialsToGenerate):
-        _NumPositiveTrials = _NumTrialsToGenerate * probability
-        OneZeroArr = concat((ones(int(ceil(_NumPositiveTrials))),
-                             zeros(int(ceil(_NumTrialsToGenerate-_NumPositiveTrials)))))
-        shuffle(OneZeroArr)
-        OneZeroArr = OneZeroArr[:_NumTrialsToGenerate].astype(int).tolist()
-        return OneZeroArr
+def controlled_random(probability,_num_trials_to_generate):
+    " Returns an array of 1's and 0's of length _num_trials_to_generate "
+    # The ratio of 1's:0's is = probability
+    num_positive_trials = _num_trials_to_generate * probability
+    one_zero_arr = concat((ones(int(ceil(num_positive_trials))),
+                            zeros(int(ceil(_num_trials_to_generate-num_positive_trials)))))
+    shuffle(one_zero_arr)
+    one_zero_arr = one_zero_arr[:_num_trials_to_generate].astype(int).tolist()
+    return one_zero_arr

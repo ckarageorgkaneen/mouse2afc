@@ -75,12 +75,12 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="experimentTypeLabel">
                    <property name="text">
-                    <string>ExperimentType</string>
+                    <string>Experiment Type</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QComboBox" name="ExperimentType">
+                  <widget class="QComboBox" name="experiment_type">
                    <property name="editable">
                     <bool>false</bool>
                    </property>
@@ -94,117 +94,117 @@
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QSpinBox" name="ITI"/>
+                  <widget class="QSpinBox" name="iti"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="rewardAmountLabel">
                    <property name="text">
-                    <string>RewardAmount</string>
+                    <string>Reward Amount</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QSpinBox" name="RewardAmount"/>
+                  <widget class="QSpinBox" name="reward_amount"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="choiceDeadlineLabel">
                    <property name="text">
-                    <string>ChoiceDeadline</string>
+                    <string>Choice Deadline</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QSpinBox" name="ChoiceDeadline"/>
+                  <widget class="QSpinBox" name="choice_deadline"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="timeOutIncorrectChoiceLabel">
                    <property name="text">
-                    <string>TimeOutIncorrectChoice</string>
+                    <string>Timeout Incorrect Choice</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QSpinBox" name="TimeOutIncorrectChoice"/>
+                  <widget class="QSpinBox" name="timeout_incorrect_choice"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="timeOutBrokeFixationLabel">
                    <property name="text">
-                    <string>TimeOutBrokeFixation</string>
+                    <string>Timeout Broke Fixation</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QSpinBox" name="TimeOutBrokeFixation"/>
+                  <widget class="QSpinBox" name="timeout_broke_fixation"/>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="timeOutEarlyWithdrawalLabel">
                    <property name="text">
-                    <string>TimeOutEarlyWithdrawal</string>
+                    <string>Timeout Early Withdrawal</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QSpinBox" name="TimeOutEarlyWithdrawal"/>
+                  <widget class="QSpinBox" name="timeout_early_withdrawal"/>
                  </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="timeOutMissedChoiceLabel">
                    <property name="text">
-                    <string>TimeOutMissedChoice</string>
+                    <string>Timeout Missed Choice</string>
                    </property>
                   </widget>
                  </item>
                  <item row="7" column="1">
-                  <widget class="QSpinBox" name="TimeOutMissedChoice"/>
+                  <widget class="QSpinBox" name="timeout_missed_choice"/>
                  </item>
                  <item row="8" column="0">
                   <widget class="QLabel" name="timeOutSkippedFeedbackLabel">
                    <property name="text">
-                    <string>TimeOutSkippedFeedback</string>
+                    <string>Timeout Skipped Feedback</string>
                    </property>
                   </widget>
                  </item>
                  <item row="8" column="1">
-                  <widget class="QSpinBox" name="TimeOutSkippedFeedback"/>
+                  <widget class="QSpinBox" name="timeout_skipped_feedback"/>
                  </item>
                  <item row="9" column="0">
                   <widget class="QLabel" name="startEasyTrialsLabel">
                    <property name="text">
-                    <string>StartEasyTrials</string>
+                    <string>Start Easy Trials</string>
                    </property>
                   </widget>
                  </item>
                  <item row="9" column="1">
-                  <widget class="QSpinBox" name="StartEasyTrials"/>
+                  <widget class="QSpinBox" name="start_easy_trials"/>
                  </item>
                  <item row="10" column="0">
                   <widget class="QLabel" name="percent50FiftyLabel">
                    <property name="text">
-                    <string>Percent50Fifty</string>
+                    <string>Percent 50 Fifty</string>
                    </property>
                   </widget>
                  </item>
                  <item row="10" column="1">
-                  <widget class="QSpinBox" name="Percent50Fifty"/>
+                  <widget class="QSpinBox" name="percent_50_fifty"/>
                  </item>
                  <item row="11" column="0">
                   <widget class="QLabel" name="percentCatchLabel">
                    <property name="text">
-                    <string>PercentCatch</string>
+                    <string>Percent Catch</string>
                    </property>
                   </widget>
                  </item>
                  <item row="11" column="1">
-                  <widget class="QSpinBox" name="PercentCatch"/>
+                  <widget class="QSpinBox" name="percent_catch"/>
                  </item>
                  <item row="12" column="0">
                   <widget class="QLabel" name="ports_LMRAirLabel">
                    <property name="text">
-                    <string>Ports_LMRAir</string>
+                    <string>Ports LMR Air</string>
                    </property>
                   </widget>
                  </item>
                  <item row="12" column="1">
-                  <widget class="QSpinBox" name="Ports_LMRAir">
+                  <widget class="QSpinBox" name="ports_lmr_air">
                    <property name="maximum">
                     <number>1000000</number>
                    </property>
@@ -213,12 +213,12 @@
                  <item row="13" column="0">
                   <widget class="QLabel" name="habituateIgnoreIncorrectLabel">
                    <property name="text">
-                    <string>HabituateIgnoreIncorrect</string>
+                    <string>Habituate Ignore Incorrect</string>
                    </property>
                   </widget>
                  </item>
                  <item row="13" column="1">
-                  <widget class="QCheckBox" name="HabituateIgnoreIncorrect"/>
+                  <widget class="QCheckBox" name="habituate_ignore_incorrect"/>
                  </item>
                  <item row="14" column="0">
                   <widget class="QLabel" name="playNoiseForErrorLabel">
@@ -238,98 +238,27 @@
                   </widget>
                  </item>
                  <item row="15" column="1">
-                  <widget class="QCheckBox" name="PCTimeout"/>
+                  <widget class="QCheckBox" name="pc_timeout"/>
                  </item>
                  <item row="16" column="0">
                   <widget class="QLabel" name="catchErrorLabel">
                    <property name="text">
-                    <string>CatchError</string>
+                    <string>Catch Error</string>
                    </property>
                   </widget>
                  </item>
                  <item row="16" column="1">
-                  <widget class="QCheckBox" name="CatchError"/>
+                  <widget class="QCheckBox" name="catch_error"/>
                  </item>
                  <item row="17" column="0">
                   <widget class="QLabel" name="wire1VideoTriggerLabel">
                    <property name="text">
-                    <string>Wire1VideoTrigger</string>
+                    <string>Wire1 Video Trigger</string>
                    </property>
                   </widget>
                  </item>
                  <item row="17" column="1">
-                  <widget class="QCheckBox" name="Wire1VideoTrigger"/>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QGroupBox" name="airControlBox">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="title">
-           <string>AirControl</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_8">
-           <item row="0" column="0">
-            <widget class="QScrollArea" name="airControlScrollArea">
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="airControlScrollAreaWidgetContents">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>287</width>
-                <height>181</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_13">
-               <item row="0" column="0">
-                <layout class="QFormLayout" name="airControlFormLayout">
-                 <property name="horizontalSpacing">
-                  <number>10</number>
-                 </property>
-                 <property name="verticalSpacing">
-                  <number>10</number>
-                 </property>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="cutAirStimDelayLabel">
-                   <property name="text">
-                    <string>CutAirStimDelay</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QCheckBox" name="CutAirStimDelay"/>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="cutAirRewardLabel">
-                   <property name="text">
-                    <string>CutAirReward</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QCheckBox" name="CutAirReward"/>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="cutAirSamplingLabel">
-                   <property name="text">
-                    <string>CutAirSampling</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QCheckBox" name="CutAirSampling"/>
+                  <widget class="QCheckBox" name="wire1_video_trigger"/>
                  </item>
                 </layout>
                </item>
@@ -346,7 +275,7 @@
            <bool>true</bool>
           </property>
           <property name="title">
-           <string>StimDelay</string>
+           <string>Stim Delay</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_10">
            <item row="0" column="0">
@@ -359,8 +288,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>287</width>
-                <height>253</height>
+                <width>286</width>
+                <height>480</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_16">
@@ -385,42 +314,42 @@
                  <item row="1" column="0">
                   <widget class="QLabel" name="stimDelayMinLabel">
                    <property name="text">
-                    <string>StimDelayMin</string>
+                    <string>Stim Delay Min</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="StimDelayMin"/>
+                  <widget class="QDoubleSpinBox" name="stim_delay_min"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="stimDelayMaxLabel">
                    <property name="text">
-                    <string>StimDelayMax</string>
+                    <string>Stim Delay Max</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="StimDelayMax"/>
+                  <widget class="QDoubleSpinBox" name="stim_delay_max"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="stimDelayIncrLabel">
                    <property name="text">
-                    <string>StimDelayIncr</string>
+                    <string>Stim Delay Incr</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="StimDelayIncr"/>
+                  <widget class="QDoubleSpinBox" name="stim_delay_incr"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="stimDelayDecrLabel">
                    <property name="text">
-                    <string>StimDelayDecr</string>
+                    <string>Stim Delay Decr</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QDoubleSpinBox" name="StimDelayDecr"/>
+                  <widget class="QDoubleSpinBox" name="stim_delay_decr"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="stimDelayGraceLabel">
@@ -430,17 +359,17 @@
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QDoubleSpinBox" name="StimDelayGrace"/>
+                  <widget class="QDoubleSpinBox" name="stim_delay_grace"/>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="preStimDelayCntrRewardLabel">
                    <property name="text">
-                    <string>PreStimDelayCntrReward</string>
+                    <string>Pre Stim Delay Cntr Reward</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QDoubleSpinBox" name="PreStimDelayCntrReward"/>
+                  <widget class="QDoubleSpinBox" name="pre_stim_delay_cntr_reward"/>
                  </item>
                 </layout>
                </item>
@@ -457,7 +386,7 @@
            <bool>true</bool>
           </property>
           <property name="title">
-           <string>FeedbackDelay</string>
+           <string>Feedback Delay</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_12">
            <item row="0" column="0">
@@ -486,92 +415,92 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="feedbackDelaySelectionLabel">
                    <property name="text">
-                    <string>FeedbackDelaySelection</string>
+                    <string>Feedback Delay Selection</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QComboBox" name="FeedbackDelaySelection"/>
+                  <widget class="QComboBox" name="feedback_delay_selection"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="feedbackDelayMinLabel">
                    <property name="text">
-                    <string>FeedbackDelayMin</string>
+                    <string>Feedback Delay Min</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="FeedbackDelayMin"/>
+                  <widget class="QDoubleSpinBox" name="feedback_delay_min"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="feedbackDelayMaxLabel">
                    <property name="text">
-                    <string>FeedbackDelayMax</string>
+                    <string>Feedback Delay Max</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="FeedbackDelayMax"/>
+                  <widget class="QDoubleSpinBox" name="feedback_delay_max"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="feedbackDelayIncrLabel">
                    <property name="text">
-                    <string>FeedbackDelayIncr</string>
+                    <string>Feedback Delay Incr</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="FeedbackDelayIncr"/>
+                  <widget class="QDoubleSpinBox" name="feedback_delay_incr"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="feedbackDelayDecrLabel">
                    <property name="text">
-                    <string>FeedbackDelayDecr</string>
+                    <string>Feedback Delay Decr</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QDoubleSpinBox" name="FeedbackDelayDecr"/>
+                  <widget class="QDoubleSpinBox" name="feedback_delay_decr"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="feedbackDelayTauLabel">
                    <property name="text">
-                    <string>FeedbackDelayTau</string>
+                    <string>Feedback Delay Tau</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QDoubleSpinBox" name="FeedbackDelayTau"/>
+                  <widget class="QDoubleSpinBox" name="feedback_delay_tau"/>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="feedbackDelayGraceLabel">
                    <property name="text">
-                    <string>FeedbackDelayGrace</string>
+                    <string>Feedback Delay Grace</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QDoubleSpinBox" name="FeedbackDelayGrace"/>
+                  <widget class="QDoubleSpinBox" name="feedback_delay_grace"/>
                  </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="incorrectChoiceSignalTypeLabel">
                    <property name="text">
-                    <string>IncorrectChoiceSignalType</string>
+                    <string>Incorrect Choice Signal Type</string>
                    </property>
                   </widget>
                  </item>
                  <item row="7" column="1">
-                  <widget class="QComboBox" name="IncorrectChoiceSignalType"/>
+                  <widget class="QComboBox" name="incorrect_choice_signal_type"/>
                  </item>
                  <item row="8" column="0">
                   <widget class="QLabel" name="iTISignalTypeLabel">
                    <property name="text">
-                    <string>ITISignalType</string>
+                    <string>ITI Signal Type</string>
                    </property>
                   </widget>
                  </item>
                  <item row="8" column="1">
-                  <widget class="QComboBox" name="ITISignalType"/>
+                  <widget class="QComboBox" name="iti_signal_type"/>
                  </item>
                 </layout>
                </item>
@@ -602,8 +531,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>218</width>
-                <height>360</height>
+                <width>944</width>
+                <height>512</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_29">
@@ -612,12 +541,12 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="mouseStateLabel">
                    <property name="text">
-                    <string>MouseState</string>
+                    <string>Mouse State</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QComboBox" name="MouseState">
+                  <widget class="QComboBox" name="mouse_state">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -626,19 +555,19 @@
                  <item row="1" column="0">
                   <widget class="QLabel" name="mouseWeightLabel">
                    <property name="text">
-                    <string>MouseWeight</string>
+                    <string>Mouse Weight</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="stimDelayLabel">
                    <property name="text">
-                    <string>StimDelay</string>
+                    <string>Stim Delay</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="StimDelay">
+                  <widget class="QDoubleSpinBox" name="stim_delay">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -647,12 +576,12 @@
                  <item row="3" column="0">
                   <widget class="QLabel" name="minSampleLabel">
                    <property name="text">
-                    <string>MinSample</string>
+                    <string>Min Sample</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="MinSample">
+                  <widget class="QDoubleSpinBox" name="min_sample">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -661,12 +590,12 @@
                  <item row="4" column="0">
                   <widget class="QLabel" name="currentStimLabel">
                    <property name="text">
-                    <string>CurrentStim</string>
+                    <string>Current Stim</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QSpinBox" name="CurrentStim">
+                  <widget class="QSpinBox" name="current_stim">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -675,12 +604,12 @@
                  <item row="5" column="0">
                   <widget class="QLabel" name="calcLeftBiasLabel">
                    <property name="text">
-                    <string>CalcLeftBias</string>
+                    <string>Calc Left Bias</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QDoubleSpinBox" name="CalcLeftBias">
+                  <widget class="QDoubleSpinBox" name="calc_left_bias">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -689,12 +618,12 @@
                  <item row="6" column="0">
                   <widget class="QLabel" name="feedbackDelayLabel">
                    <property name="text">
-                    <string>FeedbackDelay</string>
+                    <string>Feedback Delay</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QSpinBox" name="FeedbackDelay">
+                  <widget class="QSpinBox" name="feedback_delay">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -703,12 +632,12 @@
                  <item row="7" column="0">
                   <widget class="QLabel" name="isCatchLabel">
                    <property name="text">
-                    <string>IsCatch</string>
+                    <string>Is Catch</string>
                    </property>
                   </widget>
                  </item>
                  <item row="7" column="1">
-                  <widget class="QLineEdit" name="IsCatch">
+                  <widget class="QLineEdit" name="is_catch">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -717,7 +646,7 @@
                  <item row="8" column="0">
                   <widget class="QLabel" name="isOptoTrialLabel">
                    <property name="text">
-                    <string>IsOptoTrial</string>
+                    <string>Is Opto Trial</string>
                    </property>
                   </widget>
                  </item>
@@ -729,7 +658,7 @@
                   </widget>
                  </item>
                  <item row="9" column="1">
-                  <widget class="QLineEdit" name="Performance">
+                  <widget class="QLineEdit" name="performance">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -738,26 +667,26 @@
                  <item row="10" column="0">
                   <widget class="QLabel" name="allPerformanceLabel">
                    <property name="text">
-                    <string>AllPerformance</string>
+                    <string>All Performance</string>
                    </property>
                   </widget>
                  </item>
                  <item row="10" column="1">
-                  <widget class="QLineEdit" name="AllPerformance">
+                  <widget class="QLineEdit" name="all_preformance">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
                   </widget>
                  </item>
                  <item row="8" column="1">
-                  <widget class="QLineEdit" name="IsOptoTrial">
+                  <widget class="QLineEdit" name="is_opto_trial">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QLineEdit" name="MouseWeight">
+                  <widget class="QLineEdit" name="mouse_weight">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -795,8 +724,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>289</width>
-                <height>286</height>
+                <width>323</width>
+                <height>366</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_24">
@@ -818,12 +747,12 @@
                  <item row="2" column="0">
                   <widget class="QLabel" name="tableNoteLabel">
                    <property name="text">
-                    <string>TableNote</string>
+                    <string>Table Note</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QLineEdit" name="TableNote">
+                  <widget class="QLineEdit" name="table_note">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -832,45 +761,45 @@
                  <item row="3" column="0">
                   <widget class="QLabel" name="betaDistAlphaNBetaLabel">
                    <property name="text">
-                    <string>BetaDistAlphaNBeta</string>
+                    <string>Beta Dist Alpha N Beta</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="BetaDistAlphaNBeta"/>
+                  <widget class="QDoubleSpinBox" name="beta_dist_alpha_n_beta"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="stimulusSelectionCriteriaLabel">
                    <property name="text">
-                    <string>StimulusSelectionCriteria</string>
+                    <string>Stimulus Selection Criteria</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QComboBox" name="StimulusSelectionCriteria"/>
+                  <widget class="QComboBox" name="stimulus_selection_criteria"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="leftBiasLabel">
                    <property name="text">
-                    <string>LeftBias</string>
+                    <string>Left Bias</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QDoubleSpinBox" name="LeftBias"/>
+                  <widget class="QDoubleSpinBox" name="left_bias"/>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="correctBiasLabel">
                    <property name="text">
-                    <string>CorrectBias</string>
+                    <string>Correct Bias</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QCheckBox" name="CorrectBias"/>
+                  <widget class="QCheckBox" name="correct_bias"/>
                  </item>
                  <item row="1" column="0" colspan="2">
-                  <widget class="QTableWidget" name="OmegaTable">
+                  <widget class="QTableWidget" name="omega_table">
                    <property name="enabled">
                     <bool>true</bool>
                    </property>
@@ -901,8 +830,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>138</width>
-                <height>46</height>
+                <width>323</width>
+                <height>68</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_26">
@@ -911,12 +840,12 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="sumRatesLabel">
                    <property name="text">
-                    <string>SumRates</string>
+                    <string>Sum Rates</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QSpinBox" name="SumRates"/>
+                  <widget class="QSpinBox" name="sum_rates"/>
                  </item>
                 </layout>
                </item>
@@ -941,7 +870,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>292</width>
-                <height>423</height>
+                <height>498</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_18">
@@ -956,99 +885,99 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="rewardAfterMinSamplingLabel">
                    <property name="text">
-                    <string>RewardAfterMinSampling</string>
+                    <string>Reward After Min Sampling</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QCheckBox" name="RewardAfterMinSampling"/>
+                  <widget class="QCheckBox" name="reward_after_min_sampling"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="centerPortRewAmountLabel">
                    <property name="text">
-                    <string>CenterPortRewAmount</string>
+                    <string>Center Port Rew Amount</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="CenterPortRewAmount"/>
+                  <widget class="QDoubleSpinBox" name="center_port_rew_amount"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="minSampleMinLabel">
                    <property name="text">
-                    <string>MinSampleMin</string>
+                    <string>Min Sample Min</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="MinSampleMin"/>
+                  <widget class="QDoubleSpinBox" name="min_sample_min"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="minSampleMaxLabel">
                    <property name="text">
-                    <string>MinSampleMax</string>
+                    <string>Min Sample Max</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="MinSampleMax"/>
+                  <widget class="QDoubleSpinBox" name="min_sample_max"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="minSampleTypeLabel">
                    <property name="text">
-                    <string>MinSampleType</string>
+                    <string>Min Sample Type</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QComboBox" name="MinSampleType"/>
+                  <widget class="QComboBox" name="min_sample_type"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="minSampleIncrLabel">
                    <property name="text">
-                    <string>MinSampleIncr</string>
+                    <string>Min Sample Incr</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QDoubleSpinBox" name="MinSampleIncr"/>
+                  <widget class="QDoubleSpinBox" name="min_sample_incr"/>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="minSampleDecrLabel">
                    <property name="text">
-                    <string>MinSampleDecr</string>
+                    <string>Min Sample Decr</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QDoubleSpinBox" name="MinSampleDecr"/>
+                  <widget class="QDoubleSpinBox" name="min_sample_decr"/>
                  </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="minSampleNumIntervalLabel">
                    <property name="text">
-                    <string>MinSampleNumInterval</string>
+                    <string>Min Sample Num Interval</string>
                    </property>
                   </widget>
                  </item>
                  <item row="7" column="1">
-                  <widget class="QSpinBox" name="MinSampleNumInterval"/>
+                  <widget class="QSpinBox" name="min_sample_num_interval"/>
                  </item>
                  <item row="8" column="0">
                   <widget class="QLabel" name="minSampleRandProbLabel">
                    <property name="text">
-                    <string>MinSampleRandProb</string>
+                    <string>Min Sample Rand Prob</string>
                    </property>
                   </widget>
                  </item>
                  <item row="9" column="0">
                   <widget class="QLabel" name="stimulusTimeLabel">
                    <property name="text">
-                    <string>StimulusTime</string>
+                    <string>Stimulus Time</string>
                    </property>
                   </widget>
                  </item>
                  <item row="9" column="1">
-                  <widget class="QDoubleSpinBox" name="StimulusTime"/>
+                  <widget class="QDoubleSpinBox" name="stimulus_time"/>
                  </item>
                  <item row="10" column="0">
                   <widget class="QLabel" name="portLEDToCueRewardLabel">
@@ -1063,15 +992,15 @@
                  <item row="11" column="0">
                   <widget class="QLabel" name="percentForcedLEDTrialLabel">
                    <property name="text">
-                    <string>PercentForcedLEDTrial</string>
+                    <string>Percent Forced LED Trial</string>
                    </property>
                   </widget>
                  </item>
                  <item row="11" column="1">
-                  <widget class="QDoubleSpinBox" name="PercentForcedLEDTrial"/>
+                  <widget class="QDoubleSpinBox" name="percent_forced_led_trial"/>
                  </item>
                  <item row="8" column="1">
-                  <widget class="QDoubleSpinBox" name="MinSampleRandProb"/>
+                  <widget class="QDoubleSpinBox" name="min_sample_rand_prob"/>
                  </item>
                 </layout>
                </item>
@@ -1085,7 +1014,7 @@
         <item row="0" column="1" rowspan="3">
          <widget class="QGroupBox" name="lightIntensityBox">
           <property name="title">
-           <string>LightIntensity</string>
+           <string>Light Intensity</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_21">
            <item row="0" column="0">
@@ -1098,8 +1027,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>297</width>
-                <height>180</height>
+                <width>308</width>
+                <height>472</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_25">
@@ -1114,52 +1043,52 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="leftPokeAttenPrcntLabel">
                    <property name="text">
-                    <string>LeftPokeAttenPrcnt (%)</string>
+                    <string>Left Poke Atten Prcnt (%)</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="centerPokeAttenPrcntLabel">
                    <property name="text">
-                    <string>CenterPokeAttenPrcnt (%)</string>
+                    <string>Center Poke Atten Prcnt (%)</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="rightPokeAttenPrcntLabel">
                    <property name="text">
-                    <string>RightPokeAttenPrcnt (%)</string>
+                    <string>Right Poke Atten Prcnt (%)</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="stimAfterPokeOutLabel">
                    <property name="text">
-                    <string>StimAfterPokeOut</string>
+                    <string>Stim After Poke Out</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="beepAfterMinSamplingLabel">
                    <property name="text">
-                    <string>BeepAfterMinSampling</string>
+                    <string>Beep After Min Sampling</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QCheckBox" name="BeepAfterMinSampling"/>
+                  <widget class="QCheckBox" name="beep_after_min_sampling"/>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QSpinBox" name="RightPokeAttenPrcnt"/>
+                  <widget class="QSpinBox" name="right_poke_atten_prcnt"/>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QSpinBox" name="CenterPokeAttenPrcnt"/>
+                  <widget class="QSpinBox" name="center_poke_atten_prcnt"/>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QSpinBox" name="LeftPokeAttenPrcnt"/>
+                  <widget class="QSpinBox" name="left_poke_atten_prcnt"/>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QComboBox" name="StimAfterPokeOut"/>
+                  <widget class="QComboBox" name="stim_after_poke_out"/>
                  </item>
                 </layout>
                </item>
@@ -1193,8 +1122,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>242</width>
-                <height>190</height>
+                <width>453</width>
+                <height>208</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_33">
@@ -1209,12 +1138,12 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="gaborSizeFactorLabel">
                    <property name="text">
-                    <string>GaborSizeFactor</string>
+                    <string>Gabor Size Factor</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QDoubleSpinBox" name="GaborSizeFactor"/>
+                  <widget class="QDoubleSpinBox" name="gabor_size_factor"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="phaseLabel">
@@ -1224,37 +1153,37 @@
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="Phase"/>
+                  <widget class="QDoubleSpinBox" name="phase"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="numCyclesLabel">
                    <property name="text">
-                    <string>NumCycles</string>
+                    <string>Num Cycles</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QSpinBox" name="NumCycles"/>
+                  <widget class="QSpinBox" name="num_cycles"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="cyclesPerSecondDriftLabel">
                    <property name="text">
-                    <string>CyclesPerSecondDrift</string>
+                    <string>Cycles Per Second Drift</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QSpinBox" name="CyclesPerSecondDrift"/>
+                  <widget class="QSpinBox" name="cycles_per_second_drift"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="gaussianFilterRatioLabel">
                    <property name="text">
-                    <string>GaussianFilterRatio</string>
+                    <string>Gaussian Filter Ratio</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QDoubleSpinBox" name="GaussianFilterRatio"/>
+                  <widget class="QDoubleSpinBox" name="gaussian_filter_ratio"/>
                  </item>
                 </layout>
                </item>
@@ -1268,7 +1197,7 @@
         <item row="1" column="1">
          <widget class="QGroupBox" name="randomDotsBox">
           <property name="title">
-           <string>RandomDots</string>
+           <string>Random Dots</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_31">
            <item row="0" column="0">
@@ -1281,7 +1210,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>244</width>
+                <width>453</width>
                 <height>226</height>
                </rect>
               </property>
@@ -1297,22 +1226,22 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="drawRatioLabel">
                    <property name="text">
-                    <string>DrawRatio</string>
+                    <string>Draw Ratio</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QDoubleSpinBox" name="DrawRatio"/>
+                  <widget class="QDoubleSpinBox" name="draw_ratio"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="circleAreaLabel">
                    <property name="text">
-                    <string>CircleArea</string>
+                    <string>Circle Area</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="CircleArea">
+                  <widget class="QDoubleSpinBox" name="circle_area">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -1321,12 +1250,12 @@
                  <item row="2" column="0">
                   <widget class="QLabel" name="nDotsLabel">
                    <property name="text">
-                    <string>nDots</string>
+                    <string>n Dots</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QSpinBox" name="nDots">
+                  <widget class="QSpinBox" name="n_dots">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -1335,32 +1264,32 @@
                  <item row="3" column="0">
                   <widget class="QLabel" name="dotSizeInDegsLabel">
                    <property name="text">
-                    <string>DotSizeInDegs</string>
+                    <string>Dot Size In Degs</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QSpinBox" name="DotSizeInDegs"/>
+                  <widget class="QSpinBox" name="dot_size_in_degs"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="dotSpeedDegsPerSecLabel">
                    <property name="text">
-                    <string>DotSpeedDegsPerSec</string>
+                    <string>Dot Speed Degs Per Sec</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QSpinBox" name="DotSpeedDegsPerSec"/>
+                  <widget class="QSpinBox" name="dot_speed_degs_per_sec"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="dotLifetimeSecsLabel">
                    <property name="text">
-                    <string>DotLifetimeSecs</string>
+                    <string>Dot Lifetime Secs</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QSpinBox" name="DotLifetimeSecs"/>
+                  <widget class="QSpinBox" name="dot_lifetime_secs"/>
                  </item>
                 </layout>
                </item>
@@ -1384,8 +1313,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>294</width>
-                <height>296</height>
+                <width>459</width>
+                <height>512</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_28">
@@ -1400,22 +1329,22 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="visualStimAnglePortLeftLabel">
                    <property name="text">
-                    <string>VisualStimAnglePortLeft</string>
+                    <string>Visual Stim Angle Port Left</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QComboBox" name="VisualStimAnglePortLeft"/>
+                  <widget class="QComboBox" name="visual_stim_angle_port_left"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="visualStimAnglePortRightLabel">
                    <property name="text">
-                    <string>VisualStimAnglePortRight</string>
+                    <string>Visual Stim Angle Port Right</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QComboBox" name="VisualStimAnglePortRight"/>
+                  <widget class="QComboBox" name="visual_stim_angle_port_right"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="screenDistLabel">
@@ -1425,7 +1354,7 @@
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QSpinBox" name="ScreenDistCm"/>
+                  <widget class="QSpinBox" name="screen_dist_cm"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="screenWidthLabel">
@@ -1435,47 +1364,47 @@
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QSpinBox" name="ScreenWidthCm"/>
+                  <widget class="QSpinBox" name="screen_width_cm"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="apertureSizeHeightLabel">
                    <property name="text">
-                    <string>ApertureSizeHeight</string>
+                    <string>Aperture Size Height</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QSpinBox" name="ApertureSizeHeight"/>
+                  <widget class="QSpinBox" name="aperture_size_height"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="apertureSizeWidthLabel">
                    <property name="text">
-                    <string>ApertureSizeWidth</string>
+                    <string>Aperture Size Width</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QSpinBox" name="ApertureSizeWidth"/>
+                  <widget class="QSpinBox" name="aperture_size_width"/>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="centerXLabel">
                    <property name="text">
-                    <string>CenterX</string>
+                    <string>Center X</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QSpinBox" name="CenterX"/>
+                  <widget class="QSpinBox" name="center_x"/>
                  </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="centerYLabel">
                    <property name="text">
-                    <string>CenterY</string>
+                    <string>Center Y</string>
                    </property>
                   </widget>
                  </item>
                  <item row="7" column="1">
-                  <widget class="QSpinBox" name="CenterY"/>
+                  <widget class="QSpinBox" name="center_y"/>
                  </item>
                 </layout>
                </item>
@@ -1506,8 +1435,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>235</width>
-                <height>293</height>
+                <width>944</width>
+                <height>512</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_36">
@@ -1522,82 +1451,82 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="optoProbLabel">
                    <property name="text">
-                    <string>OptoProb</string>
+                    <string>Opto Prob</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QDoubleSpinBox" name="OptoProb"/>
+                  <widget class="QDoubleSpinBox" name="opto_prob"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="optoOr2PLabel">
                    <property name="text">
-                    <string>OptoOr2P</string>
+                    <string>Opto Or 2 Photon</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QComboBox" name="OptoOr2P"/>
+                  <widget class="QComboBox" name="opto_or_2_photon"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="optoStartState1Label">
                    <property name="text">
-                    <string>OptoStartState1</string>
+                    <string>Opto Start State 1</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QComboBox" name="OptoStartState1"/>
+                  <widget class="QComboBox" name="opto_start_state_1"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="optoStartDelayLabel">
                    <property name="text">
-                    <string>OptoStartDelay</string>
+                    <string>Opto Start Delay</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QSpinBox" name="OptoStartDelay"/>
+                  <widget class="QSpinBox" name="opto_start_delay"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="optoMaxTimeLabel">
                    <property name="text">
-                    <string>OptoMaxTime</string>
+                    <string>Opto Max Time</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QSpinBox" name="OptoMaxTime"/>
+                  <widget class="QSpinBox" name="opto_max_time"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="optoEndState1Label">
                    <property name="text">
-                    <string>OptoEndState1</string>
+                    <string>Opto End State 1</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QComboBox" name="OptoEndState1"/>
+                  <widget class="QComboBox" name="opto_end_state_1"/>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="optoEndState2Label">
                    <property name="text">
-                    <string>OptoEndState2</string>
+                    <string>Opto End State 2</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QComboBox" name="OptoEndState2"/>
+                  <widget class="QComboBox" name="opto_end_state_2"/>
                  </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="optoBrainRegionLabel">
                    <property name="text">
-                    <string>OptoBrainRegion</string>
+                    <string>Opto Brain Region</string>
                    </property>
                   </widget>
                  </item>
                  <item row="7" column="1">
-                  <widget class="QComboBox" name="OptoBrainRegion"/>
+                  <widget class="QComboBox" name="opto_brain_region"/>
                  </item>
                 </layout>
                </item>
@@ -1631,8 +1560,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>264</width>
-                <height>145</height>
+                <width>938</width>
+                <height>217</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_39">
@@ -1647,42 +1576,42 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="vevaiometricYLimLabel">
                    <property name="text">
-                    <string>VevaiometricYLim</string>
+                    <string>Vevaiometric Y Lim</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QSpinBox" name="VevaiometricYLim"/>
+                  <widget class="QSpinBox" name="vevaiometric_y_lim"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="vevaiometricMinWTLabel">
                    <property name="text">
-                    <string>VevaiometricMinWT</string>
+                    <string>Vevaiometric Min WT</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="VevaiometricMinWT"/>
+                  <widget class="QDoubleSpinBox" name="vevaiometric_min_wt"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="vevaiometricNBinLabel">
                    <property name="text">
-                    <string>VevaiometricNBin</string>
+                    <string>Vevaiometric N Bin</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QSpinBox" name="VevaiometricNBin"/>
+                  <widget class="QSpinBox" name="vevaiometric_n_bin"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="vevaiometricShowPointsLabel">
                    <property name="text">
-                    <string>VevaiometricShowPoints</string>
+                    <string>Vevaiometric Show Points</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QCheckBox" name="VevaiometricShowPoints"/>
+                  <widget class="QCheckBox" name="vevaiometric_show_points"/>
                  </item>
                 </layout>
                </item>
@@ -1709,8 +1638,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>171</width>
-                <height>172</height>
+                <width>938</width>
+                <height>217</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_40">
@@ -1725,62 +1654,62 @@
                  <item row="0" column="0">
                   <widget class="QLabel" name="showPsycStimLabel">
                    <property name="text">
-                    <string>ShowPsycStim</string>
+                    <string>Show Psyc Stim</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QCheckBox" name="ShowPsycStim"/>
+                  <widget class="QCheckBox" name="show_psyc_stim"/>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="showVevaiometricLabel">
                    <property name="text">
-                    <string>ShowVevaiometric</string>
+                    <string>Show Vevaiometric</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QCheckBox" name="ShowVevaiometric"/>
+                  <widget class="QCheckBox" name="show_vevaiometric"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="showTrialRateLabel">
                    <property name="text">
-                    <string>ShowTrialRate</string>
+                    <string>Show Trial Rate</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QCheckBox" name="ShowTrialRate"/>
+                  <widget class="QCheckBox" name="show_trial_rate"/>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="showFixLabel">
                    <property name="text">
-                    <string>ShowFix</string>
+                    <string>Show Fix</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QCheckBox" name="ShowFix"/>
+                  <widget class="QCheckBox" name="show_fix"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="showSTLabel">
                    <property name="text">
-                    <string>ShowST</string>
+                    <string>Show ST</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QCheckBox" name="ShowST"/>
+                  <widget class="QCheckBox" name="show_st"/>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="showFeedbackLabel">
                    <property name="text">
-                    <string>ShowFeedback</string>
+                    <string>Show Feedback</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="1">
-                  <widget class="QCheckBox" name="ShowFeedback"/>
+                  <widget class="QCheckBox" name="show_feedback"/>
                  </item>
                 </layout>
                </item>

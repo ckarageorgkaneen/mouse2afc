@@ -1,4 +1,4 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class MatrixState(SpecialEnum):
@@ -8,9 +8,9 @@ class MatrixState(SpecialEnum):
     TriggerWaitForStimulus = 4
     WaitForStimulus = 5
     StimDelayGrace = 6
-    broke_fixation = 7
-    stimulus_delivery = 8
-    early_withdrawal = 9
+    BrokeFixation = 7
+    StimulusDelivery = 8
+    EarlyWithdrawal = 9
     BeepMinSampling = 10
     CenterPortRewardDelivery = 11
     TriggerWaitChoiceTimer = 12
@@ -26,11 +26,11 @@ class MatrixState(SpecialEnum):
     WaitForPunish = 22
     PunishGrace = 23
     Punishment = 24
-    timeOut_EarlyWithdrawal = 25
-    timeOut_EarlyWithdrawalFlashOn = 26
-    timeOut_IncorrectChoice = 27
-    timeOut_SkippedFeedback = 28
-    timeOut_missed_choice = 29
+    TimeoutEarlyWithdrawal = 25
+    TimeoutEarlyWithdrawalFlashOn = 26
+    TimeoutIncorrectChoice = 27
+    TimeoutSkippedFeedback = 28
+    TimeoutMissedChoice = 29
     ITI = 30
     ext_ITI = 31
     WaitPunishOut = 32
@@ -38,3 +38,4 @@ class MatrixState(SpecialEnum):
     StimulusTime = 34
     #triggerTimoutIncorrectChoice = 35
     #TODO find out if 33 and 35 need to be here or if they can be deleted
+    

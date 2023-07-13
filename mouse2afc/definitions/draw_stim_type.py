@@ -1,7 +1,7 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class DrawStimType(SpecialEnum):
-    RDK = 1
-    StaticGratings = 2
-    MovingGratings = 3
+    rdk = 1
+    static_gratings = 2
+    moving_gratings = 3

@@ -1,6 +1,6 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class StimulusSelectionCriteria(SpecialEnum):
-    BetaDistribution = 1
-    DiscretePairs = 2
+    beta_distribution = 1
+    discrete_pairs = 2

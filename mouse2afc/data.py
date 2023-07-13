@@ -1,8 +1,9 @@
 import logging
-import random
 import time
 
 from collections import OrderedDict
+
+from numpy import arange
 
 from mouse2afc.definitions.constant import Constant as Const
 from mouse2afc.definitions.experiment import ExperimentType
@@ -20,27 +21,13 @@ from  mouse2afc.utils import round
 from  mouse2afc.utils import floor
 from  mouse2afc.utils import random_unif
 from  mouse2afc.utils import diff
-from  mouse2afc.utils import GetCatchStimIdx
-from  mouse2afc.utils import TruncatedExponential
-from  mouse2afc.utils import CalcAudClickTrain
-from  mouse2afc.utils import CalcLightIntensity
-from  mouse2afc.utils import CalcGratingOrientation
-from  mouse2afc.utils import CalcDotsCoherence
-
-from mouse2afc.definitions.constant import Constant as Const
-from mouse2afc.definitions.stimulus_selection_criteria \
-    import StimulusSelectionCriteria
-from mouse2afc.definitions.experiment import ExperimentType
-
-from  mouse2afc.utils import CalcAudClickTrain
-from  mouse2afc.utils import CalcDotsCoherence
-from  mouse2afc.utils import CalcGratingOrientation
-from  mouse2afc.utils import CalcLightIntensity
-from  mouse2afc.utils import ControlledRandom
-from  mouse2afc.utils import iff
-from  mouse2afc.utils import betarnd
-from  mouse2afc.utils import rand
-from  mouse2afc.utils import randsample
+from  mouse2afc.utils import get_catch_stim_idx
+from  mouse2afc.utils import truncated_exponential
+from  mouse2afc.utils import calc_aud_click_train
+from  mouse2afc.utils import calc_light_intensity
+from  mouse2afc.utils import calc_grating_orientation
+from  mouse2afc.utils import calc_dots_coherence
+from  mouse2afc.utils import controlled_random
 from  mouse2afc.utils import isnan
 
 logger = logging.getLogger(__name__)
@@ -67,13 +54,13 @@ class DataError(Exception):
 class RawData:
     def __init__(self, session):
         self._session = session
-        self.StateMachineErrorCodes = {}
+        self.state_machine_error_codes = {}
 
-    def StatesVisitedNames(self, trial_num):
+    def states_visited_names(self, trial_num):
         return [state.state_name for state in self._session.trials[
             trial_num].states_occurrences if not isnan(state.host_timestamp) ]
 
-    def StatesVisitedTimes(self, trial_num):
+    def states_visited_times(self, trial_num):
         res_dict = OrderedDict()
         for state in self._session.trials[trial_num].states_occurrences:
             state_name = state.state_name
@@ -82,740 +69,760 @@ class RawData:
                 (state.start_timestamp, state.end_timestamp))
         return res_dict
 
-    def OriginalStateNamesByNumber(self, trial_num):
+    def original_state_names_by_number(self, trial_num):
         return self._session.trials[trial_num].sma.state_names
 
-    def OriginalStateData(self, trial_num):
+    def original_state_data(self, trial_num):
         return self._session.trials[trial_num].states
 
-    def OriginalEventData(self, trial_num):
+    def orginal_event_data(self, trial_num):
         return self._session.trials[trial_num].events_occurrences
 
-    def OriginalStateTimestamps(self, trial_num):
+    def original_state_timestamps(self, trial_num):
         return self._session.trials[trial_num].state_timestamps
 
-    def OriginalEventTimestamps(self, trial_num):
-        return self._sessions.trials[trial_num].event_timestamps
+    def original_event_timestamps(self, trial_num):
+        return self._session.trials[trial_num].event_timestamps
 
 
 class CustomData:
 
     _DEFAULT_CATCH_COUNT_LEN = 21
 
-    def __init__(self, task_parameters, Timer, RawData):
+    def __init__(self, task_parameters, timer, raw_data):
         self.task_parameters = task_parameters
-        self.drawParams = drawParams()
-        self.Timer = Timer
-        self.RawData = RawData
-        self.Trials = trials(task_parameters)
-        self.DVsAlreadyGenerated = 0
+        self.draw_params = DrawParams()
+        self.timer = timer
+        self.raw_data = raw_data
+        self.trials = Trials(task_parameters)
+        self.DVs_already_generated = 0
 
-    def assign_future_trials(self,StartFrom,NumTrialsToGenerate):
-        is_left_rewarded = ControlledRandom((1 - self.task_parameters.LeftBias),NumTrialsToGenerate)
-        lastidx = StartFrom
-        for a in range(NumTrialsToGenerate):
+    def assign_future_trials(self,start_from,num_trials_to_generate):
+        "Assigns left_rewarded as true or false for future trials "
+        is_left_rewarded = controlled_random((1 -self.task_parameters.left_bias),
+                                              num_trials_to_generate)
+        last_idx = start_from
+        for a in range(num_trials_to_generate):
             #If it's a fifty-fifty trial, then place stimulus in the middle
-            if rand(1,1) < self.task_parameters.Percent50Fifty and (lastidx+a) > self.task_parameters.StartEasyTrials:
-                StimulusOmega = .5
+            if (rand(1,1) < self.task_parameters.percent_50_fifty and
+                (last_idx+a) > self.task_parameters.start_easy_trials):
+                stimulus_omega = .5
             else:
-                gui_ssc = self.task_parameters.StimulusSelectionCriteria
-                beta_dist = self.task_parameters.BetaDistAlphaNBeta
-                if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
+                gui_ssc = self.task_parameters.stimulus_selection_criteria
+                beta_dist = self.task_parameters.beta_dist_alpha_n_beta
+                if gui_ssc == StimulusSelectionCriteria.beta_distribution:
                     # Divide beta by 4 if we are in an easy trial
-                    BetaDiv = iff((lastidx+a) <= self.task_parameters.StartEasyTrials,4,1)
-                    StimulusOmega = betarnd(beta_dist/BetaDiv,beta_dist/BetaDiv,1)
-                    StimulusOmega = iff(StimulusOmega < 0.1, 0.1, StimulusOmega)
-                    StimulusOmega = iff(StimulusOmega > 0.9,0.9,StimulusOmega)
-                elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
-                    omega_prob = self.task_parameters.OmegaTable.columns.OmegaProb
-                    if (lastidx+a) <= self.task_parameters.StartEasyTrials:
+                    beta_div = iff((last_idx+a) <= self.task_parameters.start_easy_trials,4,1)
+                    stimulus_omega = betarnd(beta_dist/beta_div,beta_dist/beta_div,1)
+                    stimulus_omega = iff(stimulus_omega < 0.1, 0.1, stimulus_omega)
+                    stimulus_omega = iff(stimulus_omega > 0.9,0.9,stimulus_omega)
+                elif gui_ssc == StimulusSelectionCriteria.discrete_pairs:
+                    omega_prob = self.task_parameters.omega_table.columns.omega_prob
+                    if (last_idx+a) <= self.task_parameters.start_easy_trials:
                         index = next(omega_prob.index(prob)
                                     for prob in omega_prob if prob > 0)
-                        StimulusOmega = self.task_parameters.OmegaTable.columns.Omega[
+                        stimulus_omega = self.task_parameters.omega_table.columns.omega[
                             index] / 100
                     else:
                         #Choose a value randomly given the each value probability
-                        StimulusOmega = ((randsample(self.task_parameters.OmegaTable.columns.Omega,1,1,omega_prob)/100).tolist())[0]
+                        stimulus_omega = (
+                            (randsample
+                             (self.task_parameters.omega_table.columns.omega,
+                              1,
+                              1,
+                              omega_prob)
+                              / 100).tolist())[0]
                 else:
-                    error('Unexpected StimulusSelectionCriteria')
+                    error('Unexpected Stimulus Selection Criteria')
 
-                if (is_left_rewarded[a] and StimulusOmega < 0.5) or (not is_left_rewarded[a] and StimulusOmega >= 0.5):
-                    StimulusOmega = -StimulusOmega + 1
+                if ((is_left_rewarded[a] and stimulus_omega < 0.5) or
+                     (not is_left_rewarded[a] and stimulus_omega >= 0.5)):
+                    stimulus_omega = -stimulus_omega + 1
 
-            self.Trials.StimulusOmega[lastidx+a] = StimulusOmega
-            if StimulusOmega != 0.5:
-                self.Trials.LeftRewarded[lastidx+a] = StimulusOmega > 0.5
+            self.trials.stimulus_omega[last_idx+a] = stimulus_omega
+            if stimulus_omega != 0.5:
+                self.trials.left_rewarded[last_idx+a] = stimulus_omega > 0.5
             else:
-                self.Trials.LeftRewarded[lastidx+a] = rand() < .5
+                self.trials.left_rewarded[last_idx+a] = rand() < .5
 
-        self.DVsAlreadyGenerated = StartFrom + NumTrialsToGenerate
+        self.DVs_already_generated = start_from + num_trials_to_generate
 
     def update(self, i_trial):
+        "Update variables according to data from pervious trials. Called after every trial"
         # Standard values
 
         # Stores which lateral port the animal poked into (if any)
-        self.Trials.ChoiceLeft[i_trial] = None
+        self.trials.choice_left[i_trial] = None
         # Stores whether the animal poked into the correct port (if any)
-        self.Trials.ChoiceCorrect[i_trial] = None
+        self.trials.choice_correct[i_trial] = None
         # Signals whether confidence was used in this trial. Set to false if
-        # lateral ports choice timed-out (i.e, MissedChoice(i) is true), it
+        # lateral ports choice timed-out (i.e, missed_choice(i) is true), it
         # also should be set to false (but not due to a bug) if the animal
         # poked the a lateral port but didn't complete the feedback period
         # (even with using grace).
-        self.Trials.Feedback[i_trial] = True
+        self.trials.feedback[i_trial] = True
         # How long the animal spent waiting for the reward (whether in correct
         # or in incorrect ports)
-        self.Trials.FeedbackTime[i_trial] = None
+        self.trials.feedback_time[i_trial] = None
         # Signals whether the animal broke fixation during stimulus delay state
-        self.Trials.FixBroke[i_trial] = False
+        self.trials.fix_broke[i_trial] = False
         # Signals whether the animal broke fixation during sampling but before
         # min-sampling ends
-        self.Trials.EarlyWithdrawal[i_trial] = False
+        self.trials.early_withdrawal[i_trial] = False
         # Signals whether the animal correctly finished min-sampling but failed
         # to poke any of the lateral ports within ChoiceDeadLine period
-        self.Trials.MissedChoice[i_trial] = False
+        self.trials.missed_choice[i_trial] = False
         # How long the animal remained fixated in center poke
-        self.Trials.FixDur[i_trial] = None
+        self.trials.fix_dur[i_trial] = None
         # How long between sample end and making a choice (timeout-choice
         # trials are excluded)
-        self.Trials.MT[i_trial] = None
-        # How long the animal sampled. If RewardAfterMinSampling is enabled and
-        # animal completed min sampling, then it's equal to MinSample time,
+        self.trials.mt[i_trial] = None
+        # How long the animal sampled. If reward_after_min_sampling is enabled and
+        # animal completed min sampling, then it's equal to min_sample time,
         # otherwise it's how long the animal remained fixated in center-port
         # until it either poked-out or the max allowed sampling time was
         # reached.
-        self.Trials.ST[i_trial] = None
+        self.trials.st[i_trial] = None
         # Signals whether a reward was given to the animal (it also includes
         # if the animal poked into the correct reward port but poked out
         # afterwards and didn't receive a reward, due to 'RewardGrace' being
         # counted as reward).
-        self.Trials.Rewarded[i_trial] = False
+        self.trials.rewarded[i_trial] = False
         # Signals whether a center-port reward was given after min-sampling
         # ends.
-        self.Trials.RewardAfterMinSampling[i_trial] = False
+        self.trials.reward_after_min_sampling[i_trial] = False
         # Tracks the amount of water the animal received up tp this point
-        # TODO: Check if RewardReceivedTotal is needed and calculate it using
+        # TODO: Check if reward_received_total is needed and calculate it using
         # CalcRewObtained() function.
         # We will updated later
-        self.Trials.RewardReceivedTotal[i_trial + 1] = 0
+        self.trials.reward_received_total[i_trial + 1] = 0
 
-        self.Trials.TrialNumber[i_trial] = i_trial
+        self.trials.trial_number[i_trial] = i_trial
 
-        self.Timer.customInitialize[i_trial] = time.time()
+        self.timer.custom_initialize[i_trial] = time.time()
 
         # Checking states and rewriting standard
 
         # Extract the states that were used in the last trial
-        statesVisitedThisTrialNames = self.RawData.StatesVisitedNames(i_trial)
-        statesVisitedThisTrialTimes = self.RawData.StatesVisitedTimes(i_trial)
-        if str(MatrixState.WaitForStimulus) in statesVisitedThisTrialNames:
-            lastWaitForStimulusStateTimes = statesVisitedThisTrialTimes[
+        states_visited_this_trial_names = self.raw_data.states_visited_names(i_trial)
+        states_visited_this_trial_times = self.raw_data.states_visited_times(i_trial)
+        if str(MatrixState.WaitForStimulus) in states_visited_this_trial_names:
+            last_wait_for_stimulus_states_times = states_visited_this_trial_times[
                 str(MatrixState.WaitForStimulus)][-1]
-            lastTriggerWaitForStimulusStateTimes = statesVisitedThisTrialTimes[
+            last_trigger_wait_for_stimulus_state_times = states_visited_this_trial_times[
                 str(MatrixState.TriggerWaitForStimulus)][-1]
-            self.Trials.FixDur[i_trial] = lastWaitForStimulusStateTimes[1] - \
-                lastWaitForStimulusStateTimes[0] + \
-                lastTriggerWaitForStimulusStateTimes[1] - \
-                lastTriggerWaitForStimulusStateTimes[0]
-        if str(MatrixState.stimulus_delivery) in statesVisitedThisTrialNames:
-            stimulus_deliveryStateTimes = statesVisitedThisTrialTimes[
-                str(MatrixState.stimulus_delivery)]
-            if self.task_parameters.RewardAfterMinSampling:
-                self.Trials.ST[i_trial] = diff(stimulus_deliveryStateTimes)
+            self.trials.fix_dur[i_trial] = last_wait_for_stimulus_states_times[1] - \
+                last_wait_for_stimulus_states_times[0] + \
+                last_trigger_wait_for_stimulus_state_times[1] - \
+                last_trigger_wait_for_stimulus_state_times[0]
+        if str(MatrixState.StimulusDelivery) in states_visited_this_trial_names:
+            stimulus_delivery_state_times = states_visited_this_trial_times[
+                str(MatrixState.StimulusDelivery)]
+            if self.task_parameters.reward_after_min_sampling:
+                self.trials.st[i_trial] = diff(stimulus_delivery_state_times)
             else:
                 # 'CenterPortRewardDelivery' state would exist even if no
-                # 'RewardAfterMinSampling' is active, in such case it means
+                # 'reward_after_min_sampling' is active, in such case it means
                 # that min sampling is done and we are in the optional
                 # sampling stage.
                 if str(MatrixState.CenterPortRewardDelivery) in \
-                        statesVisitedThisTrialNames and \
-                        self.task_parameters.StimulusTime > \
-                        self.task_parameters.MinSample:
-                    CenterPortRewardDeliveryStateTimes = \
-                        statesVisitedThisTrialTimes[
+                        states_visited_this_trial_names and \
+                        self.task_parameters.stimulus_time > \
+                        self.task_parameters.min_sample:
+                    center_port_reward_delivery_state_times = \
+                        states_visited_this_trial_times[
                             str(MatrixState.CenterPortRewardDelivery)]
-                    self.ST[i_trial] = [
-                        CenterPortRewardDeliveryStateTimes[0][
-                            1] - stimulus_deliveryStateTimes[0][0]
+                    self.trials.st[i_trial] = [
+                        center_port_reward_delivery_state_times[0][
+                            1] - stimulus_delivery_state_times[0][0]
                     ]
                 else:
                     # This covers early_withdrawal
-                    self.ST[i_trial] = diff(stimulus_deliveryStateTimes)
+                    self.trials.st[i_trial] = diff(stimulus_delivery_state_times)
 
-        if str(MatrixState.WaitForChoice) in statesVisitedThisTrialNames and \
-            str(MatrixState.timeOut_missed_choice) not in \
-                statesVisitedThisTrialNames:
-            WaitForChoiceStateTimes = statesVisitedThisTrialTimes[
+        if str(MatrixState.WaitForChoice) in states_visited_this_trial_names and \
+            str(MatrixState.TimeoutMissedChoice) not in \
+                states_visited_this_trial_names:
+            wait_for_choice_state_times = states_visited_this_trial_times[
                 str(MatrixState.WaitForChoice)]
-            WaitForChoiceStateStartTimes = [
-                start_time for start_time, end_time in WaitForChoiceStateTimes]
+            wait_for_choice_state_start_times = [
+                start_time for start_time, end_time in wait_for_choice_state_times]
             # We might have more than multiple WaitForChoice if
-            # HabituateIgnoreIncorrect is enabeld
-            self.Trials.MT[-1] = diff(WaitForChoiceStateStartTimes[:2])
+            # Habituate Ignore Incorrect is enabeld
+            self.trials.mt[-1] = diff(wait_for_choice_state_start_times[:2])
 
         # Extract trial outcome. Check first if it's a wrong choice or a
-        # HabituateIgnoreIncorrect but first choice was wrong choice
+        # Habituate Ignore Incorrect but first choice was wrong choice
         if str(MatrixState.WaitForPunishStart) in \
-            statesVisitedThisTrialNames or \
+            states_visited_this_trial_names or \
            str(MatrixState.RegisterWrongWaitCorrect) in \
-                statesVisitedThisTrialNames:
-            self.Trials.ChoiceCorrect[i_trial] = False
+                states_visited_this_trial_names:
+            self.trials.choice_correct[i_trial] = False
             # Correct choice = left
-            if self.Trials.LeftRewarded[i_trial]:
-                self.Trials.ChoiceLeft[i_trial] = False  # Left not chosen
+            if self.trials.left_rewarded[i_trial]:
+                self.trials.choice_left[i_trial] = False  # Left not chosen
             else:
-                self.Trials.ChoiceLeft[i_trial] = True
+                self.trials.choice_left[i_trial] = True
             # Feedback waiting time
-            if str(MatrixState.WaitForPunish) in statesVisitedThisTrialNames:
-                WaitForPunishStateTimes = statesVisitedThisTrialTimes[
+            if str(MatrixState.WaitForPunish) in states_visited_this_trial_names:
+                wait_for_punish_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForPunish)]
-                WaitForPunishStartStateTimes = statesVisitedThisTrialTimes[
+                wait_for_punish_start_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForPunishStart)]
-                self.Trials.FeedbackTime[i_trial] = WaitForPunishStateTimes[
-                    -1][1] - WaitForPunishStartStateTimes[0][0]
+                self.trials.feedback_time[i_trial] = wait_for_punish_state_times[
+                    -1][1] - wait_for_punish_start_state_times[0][0]
             else:  # It was a  RegisterWrongWaitCorrect state
-                self.Trials.FeedbackTime[i_trial] = None
+                self.trials.feedback_time[i_trial] = None
         # CorrectChoice
         elif str(MatrixState.WaitForRewardStart) in \
-                statesVisitedThisTrialNames:
-            self.Trials.ChoiceCorrect[i_trial] = True
-            if self.Trials.CatchTrial[i_trial]:
-                catch_stim_idx = GetCatchStimIdx(
-                    self.Trials.StimulusOmega[i_trial])
+                states_visited_this_trial_names:
+            self.trials.choice_correct[i_trial] = True
+            if self.trials.catch_trial[i_trial]:
+                catch_stim_idx = get_catch_stim_idx(
+                    self.trials.stimulus_omega[i_trial])
                 # Lookup the stimulus probability and increase by its
                 # 1/frequency.
-                stim_val = self.StimulusOmega[i_trial] * 100
+                stim_val = self.trials.stimulus_omega[i_trial] * 100
                 if stim_val < 50:
                     stim_val = 100 - stim_val
-                stim_prob = self.task_parameters.OmegaTable.columns.OmegaProb[
-                    self.task_parameters.OmegaTable.columns.Omega.index(
+                stim_prob = self.task_parameters.omega_table.columns.omega_prob[
+                    self.task_parameters.omega_table.columns.omega.index(
                         stim_val)]
                 sum_all_prob = sum(
-                    self.task_parameters.OmegaTable.columns.OmegaProb)
+                    self.task_parameters.omega_table.columns.omega_prob)
                 stim_prob = (1 + sum_all_prob - stim_prob) / sum_all_prob
-                self.Trials.CatchCount[catch_stim_idx] += stim_prob
-                self.Trials.LastSuccessCatchTial = i_trial
+                self.trials.catch_count[catch_stim_idx] += stim_prob
+                self.trials.last_success_catch_trial = i_trial
             # Feedback waiting time
-            if str(MatrixState.WaitForReward) in statesVisitedThisTrialNames:
-                WaitForRewardStateTimes = statesVisitedThisTrialTimes[
+            if str(MatrixState.WaitForReward) in states_visited_this_trial_names:
+                wait_for_reward_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForReward)]
-                WaitForRewardStartStateTimes = statesVisitedThisTrialTimes[
+                wait_for_reward_start_state_times = states_visited_this_trial_times[
                     str(MatrixState.WaitForRewardStart)]
-                self.Trials.FeedbackTime[i_trial] = WaitForRewardStateTimes[
-                    -1][1] - WaitForRewardStartStateTimes[0][0]
+                self.trials.feedback_time[i_trial] = wait_for_reward_state_times[
+                    -1][1] - wait_for_reward_start_state_times[0][0]
                 # Correct choice = left
-                if self.Trials.LeftRewarded[i_trial]:
-                    self.Trials.ChoiceLeft[i_trial] = True  # Left chosen
+                if self.trials.left_rewarded[i_trial]:
+                    self.trials.choice_left[i_trial] = True  # Left chosen
                 else:
-                    self.Trials.ChoiceLeft[i_trial] = False
+                    self.trials.choice_left[i_trial] = False
             else:
                 warning("'WaitForReward' state should always appear"
                         " if 'WaitForRewardStart' was initiated")
-        elif str(MatrixState.broke_fixation) in statesVisitedThisTrialNames:
-            self.Trials.FixBroke[i_trial] = True
-        elif str(MatrixState.early_withdrawal) in statesVisitedThisTrialNames:
-            self.Trials.EarlyWithdrawal[i_trial] = True
-        elif str(MatrixState.timeOut_missed_choice) in \
-                statesVisitedThisTrialNames:
-            self.Trials.Feedback[i_trial] = False
-            self.Trials.MissedChoice[i_trial] = True
-        if str(MatrixState.timeOut_SkippedFeedback) in \
-                statesVisitedThisTrialNames:
-            self.Trials.Feedback[i_trial] = False
-        if str(MatrixState.Reward) in statesVisitedThisTrialNames:
-            self.Trials.Rewarded[i_trial] = True
-            self.Trials.RewardReceivedTotal[i_trial] += \
-                self.task_parameters.RewardAmount
+        elif str(MatrixState.BrokeFixation) in states_visited_this_trial_names:
+            self.trials.fix_broke[i_trial] = True
+        elif str(MatrixState.EarlyWithdrawal) in states_visited_this_trial_names:
+            self.trials.early_withdrawal[i_trial] = True
+        elif str(MatrixState.TimeoutMissedChoice) in \
+                states_visited_this_trial_names:
+            self.trials.feedback[i_trial] = False
+            self.trials.missed_choice[i_trial] = True
+        if str(MatrixState.TimeoutSkippedFeedback) in \
+                states_visited_this_trial_names:
+            self.trials.feedback[i_trial] = False
+        if str(MatrixState.Reward) in states_visited_this_trial_names:
+            self.trials.rewarded[i_trial] = True
+            self.trials.reward_received_total[i_trial] += \
+                self.task_parameters.reward_amount
         if str(MatrixState.CenterPortRewardDelivery) in \
-                statesVisitedThisTrialNames and \
-           self.task_parameters.RewardAfterMinSampling:
-            self.Trials.RewardAfterMinSampling[i_trial] = True
-            self.Trials.RewardReceivedTotal[i_trial] += \
-                self.task_parameters.CenterPortRewAmount
-        if str(MatrixState.WaitCenterPortOut) in statesVisitedThisTrialNames:
-            WaitCenterPortOutStateTimes = statesVisitedThisTrialTimes[
+                states_visited_this_trial_names and \
+           self.task_parameters.reward_after_min_sampling:
+            self.trials.reward_after_min_sampling[i_trial] = True
+            self.trials.reward_received_total[i_trial] += \
+                self.task_parameters.center_port_rew_amount
+        if str(MatrixState.WaitCenterPortOut) in states_visited_this_trial_names:
+            wait_center_port_out_state_times = states_visited_this_trial_times[
                 str(MatrixState.WaitCenterPortOut)]
-            self.Trials.ReactionTime[i_trial] = diff(
-                WaitCenterPortOutStateTimes)
+            self.trials.reaction_time[i_trial] = diff(
+                wait_center_port_out_state_times)
         else:
             # Assign with -1 so we can differentiate it from None trials
             # where the state potentially existed but we didn't calculate it
-            self.Trials.ReactionTime[i_trial] = -1
+            self.trials.reaction_time[i_trial] = -1
         # State-independent fields
-        self.Trials.StimDelay[i_trial] = self.task_parameters.StimDelay
-        self.Trials.FeedbackDelay[i_trial] = self.task_parameters.FeedbackDelay
-        self.Trials.MinSample[i_trial] = self.task_parameters.MinSample
-        self.Trials.RewardMagnitude[i_trial + 1] = [
-            self.task_parameters.RewardAmount,
-            self.task_parameters.RewardAmount]
-        self.Trials.CenterPortRewAmount[
-            i_trial + 1] = self.task_parameters.CenterPortRewAmount
-        self.Trials.PreStimCntrReward[
-            i_trial + 1] = self.task_parameters.PreStimDelayCntrReward
-        self.Timer.customExtractData[i_trial] = time.time()
+        self.trials.stim_delay[i_trial] = self.task_parameters.stim_delay
+        self.trials.feedback_delay[i_trial] = self.task_parameters.feedback_delay
+        self.trials.min_sample[i_trial] = self.task_parameters.min_sample
+        self.trials.reward_magnitude[i_trial + 1] = [
+            self.task_parameters.reward_amount,
+            self.task_parameters.reward_amount]
+        self.trials.center_port_rew_amount[
+            i_trial + 1] = self.task_parameters.center_port_rew_amount
+        self.trials.pre_stim_cntr_reward[
+            i_trial + 1] = self.task_parameters.pre_stim_delay_cntr_reward
+        self.timer.custom_extract_data[i_trial] = time.time()
 
         # IF we are running grating experiments,
         # add the grating orientation that was used
-        if self.task_parameters.ExperimentType == \
-                ExperimentType.GratingOrientation:
-            self.GratingOrientation[
-                i_trial] = self.drawParams.gratingOrientation
+        if self.task_parameters.experiment_type == \
+                ExperimentType.grating_orientation:
+            self.trials.grating_orientation[
+                i_trial] = self.draw_params.grating_orientation
 
         # Updating Delays
         # stimulus delay
-        if self.task_parameters.StimDelayAutoincrement:
-            if self.FixBroke[i_trial]:
-                self.task_parameters.StimDelay = max(
-                    self.task_parameters.StimDelayMin,
-                    min(self.task_parameters.StimDelayMax,
-                        self.StimDelay[
-                            i_trial] - self.task_parameters.StimDelayDecr))
+        if self.task_parameters.stim_delay_auto_increment:
+            if self.trials.fix_broke[i_trial]:
+                self.task_parameters.stim_delay = max(
+                    self.task_parameters.stim_delay_min,
+                    min(self.task_parameters.stim_delay_max,
+                        self.trials.stim_delay[
+                            i_trial] - self.task_parameters.stim_delay_decr))
             else:
-                self.task_parameters.StimDelay = min(
-                    self.task_parameters.StimDelayMax,
-                    max(self.task_parameters.StimDelayMin,
-                        self.StimDelay[
-                            i_trial] + self.task_parameters.StimDelayIncr))
+                self.task_parameters.stim_delay = min(
+                    self.task_parameters.stim_delay_max,
+                    max(self.task_parameters.stim_delay_min,
+                        self.trials.stim_delay[
+                            i_trial] + self.task_parameters.stim_delay_incr))
         else:
-            if not self.Trials.FixBroke[i_trial]:
-                self.task_parameters.StimDelay = random_unif(
-                    self.task_parameters.StimDelayMin,
-                    self.task_parameters.StimDelayMax)
+            if not self.trials.fix_broke[i_trial]:
+                self.task_parameters.stim_delay = random_unif(
+                    self.task_parameters.stim_delay_min,
+                    self.task_parameters.stim_delay_max)
             else:
-                self.task_parameters.StimDelay = self.StimDelay[i_trial]
-        self.Timer.customStimDelay[i_trial] = time.time()
+                self.task_parameters.stim_delay = self.trials.stim_delay[i_trial]
+        self.timer.custom_stim_delay[i_trial] = time.time()
 
         # min sampling time
-        if self.task_parameters.MinSampleType == MinSampleType.FixMin:
-            self.task_parameters.MinSample = \
-                self.task_parameters.MinSampleMin
-        elif self.task_parameters.MinSampleType == \
-                MinSampleType.AutoIncr:
+        if self.task_parameters.min_sample_type == MinSampleType.fix_min:
+            self.task_parameters.min_sample = \
+                self.task_parameters.min_sample_min
+        elif self.task_parameters.min_sample_type == \
+                MinSampleType.auto_incr:
             # Check if animal completed pre-stimulus delay successfully
-            if not self.Trials.FixBroke[i_trial] and i_trial > self.task_parameters.StartEasyTrials:
-                if self.Trials.Rewarded[i_trial]:
-                    min_sample_incremented = self.Trials.MinSample[
-                        i_trial] + self.task_parameters.MinSampleIncr
-                    self.task_parameters.MinSample = min(
-                        self.task_parameters.MinSampleMax,
-                        max(self.task_parameters.MinSampleMin,
+            if not (self.trials.fix_broke[i_trial] and i_trial >
+                    self.task_parameters.start_easy_trials):
+                if self.trials.rewarded[i_trial]:
+                    min_sample_incremented = self.trials.min_sample[
+                        i_trial] + self.task_parameters.min_sample_incr
+                    self.task_parameters.min_sample = min(
+                        self.task_parameters.min_sample_max,
+                        max(self.task_parameters.min_sample_min,
                             min_sample_incremented))
-                elif self.Trials.EarlyWithdrawal[i_trial]:
-                    min_sample_decremented = self.MinSample[
-                        i_trial] - self.task_parameters.MinSampleDecr
-                    self.task_parameters.MinSample = max(
-                        self.task_parameters.MinSampleMin,
-                        min(self.task_parameters.MinSampleMax,
+                elif self.trials.early_withdrawal[i_trial]:
+                    min_sample_decremented = self.trials.min_sample[
+                        i_trial] - self.task_parameters.min_sample_decr
+                    self.task_parameters.min_sample = max(
+                        self.task_parameters.min_sample_min,
+                        min(self.task_parameters.min_sample_max,
                             min_sample_decremented))
             else:
                 # Read new updated GUI values
-                self.task_parameters.MinSample = max(
-                    self.task_parameters.MinSampleMin,
-                    min(self.task_parameters.MinSampleMax,
-                        self.Trials.MinSample[i_trial]))
-        elif self.task_parameters.MinSampleType == \
-                MinSampleType.RandBetMinMax_DefIsMax:
+                self.task_parameters.min_sample = max(
+                    self.task_parameters.min_sample_min,
+                    min(self.task_parameters.min_sample_max,
+                        self.trials.min_sample[i_trial]))
+        elif self.task_parameters.min_sample_type == \
+                MinSampleType.rand_bet_min_max_def_is_max:
             use_rand = rand(
-                1, 1) < self.task_parameters.MinSampleRandProb
-            if not use_rand or i_trial <= self.task_parameters.StartEasyTrials:
-                self.task_parameters.MinSample = \
-                    self.task_parameters.MinSampleMax
+                1, 1) < self.task_parameters.min_sample_rand_prob
+            if not use_rand or i_trial <= self.task_parameters.start_easy_trials:
+                self.task_parameters.min_sample = \
+                    self.task_parameters.min_sample_max
             else:
                 min_sample_difference = \
-                    self.task_parameters.MinSampleMax - \
-                    self.task_parameters.MinSampleMin
-                self.task_parameters.MinSample = \
+                    self.task_parameters.min_sample_max - \
+                    self.task_parameters.min_sample_min
+                self.task_parameters.min_sample = \
                     min_sample_difference * \
-                    rand(1, 1) + self.task_parameters.MinSampleMin
-        elif MinSampleType.RandNumIntervalsMinMax_DefIsMax:
+                    rand(1, 1) + self.task_parameters.min_sample_min
+        elif MinSampleType.rand_num_intervals_min_max_def_is_max:
             use_rand = rand(
-                1, 1) < self.task_parameters.MinSampleRandProb
-            if not use_rand or i_trial <= self.task_parameters.StartEasyTrials:
-                self.task_parameters.MinSample = \
-                    self.task_parameters.MinSampleMax
+                1, 1) < self.task_parameters.min_sample_rand_prob
+            if not use_rand or i_trial <= self.task_parameters.start_easy_trials:
+                self.task_parameters.min_sample = \
+                    self.task_parameters.min_sample_max
             else:
-                self.task_parameters.MinSampleNumInterval = round(
-                    self.task_parameters.MinSampleNumInterval)
-                if self.task_parameters.MinSampleNumInterval == 0 or \
-                    self.task_parameters.MinSampleNumInterval == 1:
-                    self.task_parameters.MinSample = \
-                        self.task_parameters.MinSampleMin
+                self.task_parameters.min_sample_num_interval = round(
+                    self.task_parameters.min_sample_num_interval)
+                if self.task_parameters.min_sample_num_interval == 0 or \
+                    self.task_parameters.min_sample_num_interval == 1:
+                    self.task_parameters.min_sample = \
+                        self.task_parameters.min_sample_min
                 else:
                     min_sample_difference = \
-                        self.task_parameters.MinSampleMax - \
-                        self.task_parameters.MinSampleMin
+                        self.task_parameters.min_sample_max - \
+                        self.task_parameters.min_sample_min
                     step = min_sample_difference / (
-                        self.task_parameters.MinSampleNumInterval - 1)
-                    intervals = list(range(
-                        self.task_parameters.MinSampleMin,
-                        self.task_parameters.MinSampleMax + 1,
+                        self.task_parameters.min_sample_num_interval - 1)
+                    intervals = list(arange(
+                        self.task_parameters.min_sample_min,
+                        self.task_parameters.min_sample_max + 1,
                         step))
                     intervals_idx = randi(
-                        1, self.task_parameters.MinSampleNumInterval)
+                        1, self.task_parameters.min_sample_num_interval)
                     print("Intervals:")  # disp("Intervals:");
                     print(intervals)  # disp(intervals)
-                    self.task_parameters.MinSample = intervals[
+                    self.task_parameters.min_sample = intervals[
                         intervals_idx]
         else:
-            error('Unexpected MinSampleType value')
-        self.Timer.customMinSampling[i_trial] = time.time()
+            error('Unexpected Min Sample Type value')
+        self.timer.custom_min_sampling[i_trial] = time.time()
 
         # feedback delay
-        if self.task_parameters.FeedbackDelaySelection == \
+        if self.task_parameters.feedback_delay_selection == \
                 FeedbackDelaySelection.none:
-            self.task_parameters.FeedbackDelay = 0
-        elif self.task_parameters.FeedbackDelaySelection == \
-                FeedbackDelaySelection.AutoIncr:
+            self.task_parameters.feedback_delay = 0
+        elif self.task_parameters.feedback_delay_selection == \
+                FeedbackDelaySelection.auto_incr:
             # if no feedback was not completed then use the last value unless
             # then decrement the feedback.
-            # Do we consider the case where 'broke_fixation' or
+            # Do we consider the case where 'BrokeFixation' or
             # 'early_withdrawal' terminated early the trial?
-            if not self.Feedback[i_trial]:
-                feedback_delay_decremented = self.FeedbackDelay[
-                    i_trial] - self.task_parameters.FeedbackDelayDecr
-                self.task_parameters.FeedbackDelay = max(
-                    self.task_parameters.FeedbackDelayMin,
-                    min(self.task_parameters.FeedbackDelayMax,
+            if not self.trials.feedback[i_trial]:
+                feedback_delay_decremented = self.trials.feedback_delay[
+                    i_trial] - self.task_parameters.feedback_delay_decr
+                self.task_parameters.feedback_delay = max(
+                    self.task_parameters.feedback_delay_min,
+                    min(self.task_parameters.feedback_delay_max,
                         feedback_delay_decremented))
             else:
                 # Increase the feedback if the feedback was successfully
                 # completed in the last trial, or use the the GUI value that
                 # the user updated if needed.
-                # Do we also here consider the case where 'broke_fixation' or
+                # Do we also here consider the case where 'BrokeFixation' or
                 # 'early_withdrawal' terminated early the trial?
-                feedback_delay_incremented = self.FeedbackDelay[
-                    i_trial] + self.task_parameters.FeedbackDelayIncr
-                self.task_parameters.FeedbackDelay = min(
-                    self.task_parameters.FeedbackDelayMax,
-                    max(self.task_parameters.FeedbackDelayMin,
+                feedback_delay_incremented = self.trials.feedback_delay[
+                    i_trial] + self.task_parameters.feedback_delay_incr
+                self.task_parameters.feedback_delay = min(
+                    self.task_parameters.feedback_delay_max,
+                    max(self.task_parameters.feedback_delay_min,
                         feedback_delay_incremented))
-        elif FeedbackDelaySelection.TruncExp:
-            self.task_parameters.FeedbackDelay = TruncatedExponential(
-                self.task_parameters.FeedbackDelayMin,
-                self.task_parameters.FeedbackDelayMax,
-                self.task_parameters.FeedbackDelayTau)
-        elif FeedbackDelaySelection.Fix:
+        elif FeedbackDelaySelection.trunc_exp:
+            self.task_parameters.feedback_delay = truncated_exponential(
+                self.task_parameters.feedback_delay_min,
+                self.task_parameters.feedback_delay_max,
+                self.task_parameters.feedback_delay_tau)
+        elif FeedbackDelaySelection.fix:
             #     ATTEMPT TO GRAY OUT FIELDS
-            if self.task_parametersMeta.FeedbackDelay.Style != 'edit':
-                self.task_parametersMeta.FeedbackDelay.Style = 'edit'
-            self.task_parameters.FeedbackDelay = \
-                self.task_parameters.FeedbackDelayMax
+            if self.task_parametersMeta.feedback_delay.Style != 'edit':
+                self.task_parametersMeta.feedback_delay.Style = 'edit'
+            self.task_parameters.feedback_delay = \
+                self.task_parameters.feedback_delay_max
         else:
-            error('Unexpected FeedbackDelaySelection value')
-        self.Timer.customFeedbackDelay[i_trial] = time.time()
+            error('Unexpected Feedback Delay Selection value')
+        self.timer.custom_feedback_delay[i_trial] = time.time()
 
         # Drawing future trials
 
         # Calculate bias
         # Consider bias only on the last 8 trials/
-        # indicesRwdLi = find(self.Rewarded,8,'last');
+        # indicesRwdLi = find(self.trials.rewarded,8,'last');
         # if length(indicesRwdLi) ~= 0
-        #   indicesRwd = indicesRwdLi(1);
+        #   indices_rwd = indicesRwdLi(1);
         # else
-        #   indicesRwd = 1;
+        #   indices_rwd = 1;
         # end
         LAST_TRIALS = 10
-        indicesRwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 0)
-        # ndxRewd = self.Rewarded(indicesRwd:i_trial);
-        choice_correct_slice = self.Trials.ChoiceCorrect[
-            indicesRwd: i_trial + 1]
-        choice_left_slice = self.Trials.ChoiceLeft[indicesRwd: i_trial + 1]
-        left_rewarded_slice = self.Trials.LeftRewarded[indicesRwd: i_trial + 1]
-        ndxLeftRewd = [choice_c and choice_l for choice_c, choice_l in zip(
+        indices_rwd = iff(i_trial > LAST_TRIALS, i_trial - LAST_TRIALS, 0)
+        # ndxRewd = self.trials.rewarded(indices_rwd:i_trial);
+        choice_correct_slice = self.trials.choice_correct[
+            indices_rwd: i_trial + 1]
+        choice_left_slice = self.trials.choice_left[indices_rwd: i_trial + 1]
+        left_rewarded_slice = self.trials.left_rewarded[indices_rwd: i_trial + 1]
+        ndx_left_rewd = [choice_c and choice_l for choice_c, choice_l in zip(
             choice_correct_slice, choice_left_slice)]
-        ndxLeftRewDone = [l_rewarded and choice_l is not None
+        ndx_left_rew_done = [l_rewarded and choice_l is not None
                           for l_rewarded, choice_l in zip(
                               left_rewarded_slice, choice_left_slice)]
-        ndxRightRewd = [choice_c and not choice_l
+        ndx_right_rewd = [choice_c and not choice_l
                         for choice_c, choice_l in zip(
                             choice_correct_slice, choice_left_slice)]
-        ndxRightRewDone = [not l_rewarded and choice_l is not None
+        ndx_right_rew_done = [not l_rewarded and choice_l is not None
                            for l_rewarded, choice_l in zip(
                                left_rewarded_slice, choice_left_slice)]
-        if not any(ndxLeftRewDone):
+        if not any(ndx_left_rew_done):
             # Since we don't have trials on this side, then measure by how good
             # the animals was performing on the other side. If it did bad on
             # the side then then consider this side performance to be good so
             # it'd still get more trials on the other side.
-            denominator = iff(sum(filter(None,ndxRightRewDone)),sum(filter(None,ndxRightRewDone)) * 2, 1)
-            PerfL = 1 - (sum(filter(None,ndxRightRewd)) / (denominator * 2))
+            denominator = iff(sum(filter(None,ndx_right_rew_done)),
+                              sum(filter(None,ndx_right_rew_done)) * 2,
+                              1)
+            perf_left = 1 - (sum(filter(None,ndx_right_rewd)) / (denominator * 2))
         else:
-            PerfL = sum(filter(None,ndxLeftRewd)) / sum(filter(None,ndxLeftRewDone))
-        if not any(ndxRightRewDone):
-            denominator = iff(sum(filter(None,ndxLeftRewDone)),sum(filter(None,ndxLeftRewDone)) * 2, 1)
-            PerfR = 1 - (sum(filter(None,ndxLeftRewd)) / (denominator* 2))
+            perf_left = (sum(filter(None,ndx_left_rewd)) /
+                         sum(filter(None,ndx_left_rew_done)))
+        if not any(ndx_right_rew_done):
+            denominator = iff(sum(filter(None,ndx_left_rew_done)),
+                              sum(filter(None,ndx_left_rew_done)) * 2,
+                              1)
+            perf_right = 1 - (sum(filter(None,ndx_left_rewd)) / (denominator* 2))
         else:
-            PerfR = sum(filter(None,ndxRightRewd)) / sum(filter(None,ndxRightRewDone))
-        self.task_parameters.CalcLeftBias = (PerfL - PerfR) / 2 + 0.5
+            perf_right = sum(filter(None,ndx_right_rewd)) / sum(filter(None,ndx_right_rew_done))
+        self.task_parameters.calc_left_bias = (perf_left - perf_right) / 2 + 0.5
 
-        choiceMadeTrials = [
-            choice_c is not None for choice_c in self.Trials.ChoiceCorrect]
-        rewardedTrialsCount = sum([r is True for r in self.Trials.Rewarded])
-        lengthChoiceMadeTrials = sum([x for x in choiceMadeTrials if True])
-        if lengthChoiceMadeTrials >= 1:
-            performance = rewardedTrialsCount / lengthChoiceMadeTrials
-            self.task_parameters.Performance = [
+        choice_made_trials = [
+            choice_c is not None for choice_c in self.trials.choice_correct]
+        rewarded_trials_count = sum(r is True for r in self.trials.rewarded)
+        length_choice_made_trials = sum(x for x in choice_made_trials if True)
+        if length_choice_made_trials >= 1:
+            performance = rewarded_trials_count / length_choice_made_trials
+            self.task_parameters.performance = [
                 f'{performance * 100:.2f}', '#/',
-                str(lengthChoiceMadeTrials), 'T']
-            performance = rewardedTrialsCount / (i_trial + 1)
-            self.task_parameters.AllPerformance = [
+                str(length_choice_made_trials), 'T']
+            performance = rewarded_trials_count / (i_trial + 1)
+            self.task_parameters.all_preformance = [
                 f'{performance * 100:.2f}', '#/', str(i_trial + 1), 'T']
             NUM_LAST_TRIALS = 20
             if i_trial > NUM_LAST_TRIALS:
-                if lengthChoiceMadeTrials > NUM_LAST_TRIALS:
-                    rewardedTrials_ = choiceMadeTrials[
-                        lengthChoiceMadeTrials - NUM_LAST_TRIALS + 1:
-                        lengthChoiceMadeTrials + 1]
-                    performance = sum(rewardedTrials_) / NUM_LAST_TRIALS
-                    self.task_parameters.Performance = [
-                        self.task_parameters.Performance, ' - ',
+                if length_choice_made_trials > NUM_LAST_TRIALS:
+                    rewarded_trials_ = choice_made_trials[
+                        length_choice_made_trials - NUM_LAST_TRIALS + 1:
+                        length_choice_made_trials + 1]
+                    performance = sum(rewarded_trials_) / NUM_LAST_TRIALS
+                    self.task_parameters.performance = [
+                        self.task_parameters.performance, ' - ',
                         f'{performance * 100:.2f}', '#/',
                         str(NUM_LAST_TRIALS), 'T']
-                rewardedTrialsCount = sum(self.Trials.Rewarded[
+                rewarded_trials_count = sum(self.trials.rewarded[
                     i_trial - NUM_LAST_TRIALS + 1: i_trial + 1])
-                performance = rewardedTrialsCount / NUM_LAST_TRIALS
-                self.task_parameters.AllPerformance = [
-                    self.task_parameters.AllPerformance, ' - ',
+                performance = rewarded_trials_count / NUM_LAST_TRIALS
+                self.task_parameters.all_preformance = [
+                    self.task_parameters.all_preformance, ' - ',
                     f'{performance * 100:.2f}', '#/', str(NUM_LAST_TRIALS),
                     'T']
-        self.Timer.customCalcBias[i_trial] = time.time()
+        self.timer.custom_calc_bias[i_trial] = time.time()
 
         # Create future trials
         # Check if its time to generate more future trials
-        if i_trial+1 >= self.DVsAlreadyGenerated:
+        if i_trial+1 >= self.DVs_already_generated:
             # Do bias correction only if we have enough trials
             # sum(ndxRewd) > Const.BIAS_CORRECT_MIN_RWD_TRIALS
-            if self.task_parameters.CorrectBias and i_trial+1 > 7:
-                LeftBias = self.task_parameters.CalcLeftBias
-                # if LeftBias < 0.2 || LeftBias > 0.8 # Bias is too much,
+            if self.task_parameters.correct_bias and i_trial+1 > 7:
+                left_bias = self.task_parameters.calc_left_bias
+                # if left_bias < 0.2 || left_bias > 0.8 # Bias is too much,
                 # swing it all the way to the other side
-                # LeftBias = round(LeftBias);
+                # left_bias = round(left_bias);
                 # else
-                if 0.45 <= LeftBias and LeftBias <= 0.55:
-                    LeftBias = 0.5
-                if LeftBias is None:
-                    print(f'Left bias is None.')
-                    LeftBias = 0.5
+                if 0.45 <= left_bias <= 0.55:
+                    left_bias = 0.5
+                if left_bias is None:
+                    print('Left bias is None.')
+                    left_bias = 0.5
             else:
-                LeftBias = self.task_parameters.LeftBias
-            self.Timer.customAdjustBias[i_trial] = time.time()
+                left_bias = self.task_parameters.left_bias
+            self.timer.custom_adjust_bias[i_trial] = time.time()
 
             # Adjustment of P(Omega) to make sure that sum(P(Omega))=1
-            if self.task_parameters.StimulusSelectionCriteria != \
-                    StimulusSelectionCriteria.BetaDistribution:
+            if self.task_parameters.stimulus_selection_criteria != \
+                    StimulusSelectionCriteria.beta_distribution:
                 omega_prob_sum = sum(
-                    self.task_parameters.OmegaTable.columns.OmegaProb)
+                    self.task_parameters.omega_table.columns.omega_prob)
                 # Avoid having no probability and avoid dividing by zero
                 if omega_prob_sum == 0:
-                    self.task_parameters.OmegaTable.columns.OmegaProb = [1] * \
-                        len(self.task_parameters.OmegaTable.columns.OmegaProb)
-                self.task_parameters.OmegaTable.columns.OmegaProb = [
+                    self.task_parameters.omega_table.columns.omega_prob = [1] * \
+                        len(self.task_parameters.omega_table.columns.omega_prob)
+                self.task_parameters.omega_table.columns.omega_prob = [
                     omega_prob / omega_prob_sum
                     for omega_prob
-                    in self.task_parameters.OmegaTable.columns.OmegaProb
+                    in self.task_parameters.omega_table.columns.omega_prob
                 ]
-            self.Timer.customCalcOmega[i_trial] = time.time()
+            self.timer.custom_calc_omega[i_trial] = time.time()
             self.assign_future_trials(i_trial+1,Const.PRE_GENERATE_TRIAL_COUNT)
 
-            self.Timer.customGenNewTrials[i_trial] = time.time()
+            self.timer.custom_gen_new_trials[i_trial] = time.time()
         else:
-            self.Timer.customAdjustBias[i_trial] = 0
-            self.Timer.customCalcOmega[i_trial] = 0
-            self.Timer.customPrepNewTrials[i_trial] = 0
-            self.Timer.customGenNewTrials[i_trial] = 0
+            self.timer.custom_adjust_bias[i_trial] = 0
+            self.timer.custom_calc_omega[i_trial] = 0
+            self.timer.custom_prep_new_trials[i_trial] = 0
+            self.timer.custom_gen_new_trials[i_trial] = 0
 
-        if self.task_parameters.ExperimentType == \
-                    ExperimentType.Auditory:
-                DV = CalcAudClickTrain(self,i_trial+1)
-        elif self.task_parameters.ExperimentType == \
-                ExperimentType.LightIntensity:
-            DV = CalcLightIntensity(self, i_trial+1)
-        elif self.task_parameters.ExperimentType == \
-                ExperimentType.GratingOrientation:
-            DV = CalcGratingOrientation(self,i_trial+1)
-        elif self.task_parameters.ExperimentType == \
-                ExperimentType.RandomDots:
-            DV = CalcDotsCoherence(self, i_trial+1)
+        if self.task_parameters.experiment_type == \
+                    ExperimentType.auditory:
+            DV = calc_aud_click_train(self,i_trial+1)
+        elif self.task_parameters.experiment_type == \
+                ExperimentType.light_intensity:
+            DV = calc_light_intensity(self, i_trial+1)
+        elif self.task_parameters.experiment_type == \
+                ExperimentType.grating_orientation:
+            DV = calc_grating_orientation(self,i_trial+1)
+        elif self.task_parameters.experiment_type == \
+                ExperimentType.random_dots:
+            DV = calc_dots_coherence(self, i_trial+1)
         else:
-            error('Unexpected ExperimentType')
-        self.Trials.DV[i_trial+1] = DV
+            error('Unexpected Experiment Type')
+        self.trials.DV[i_trial+1] = DV
 
         # Update RDK GUI
-        self.task_parameters.OmegaTable.columns.RDK = [
+        self.task_parameters.omega_table.columns.rdk = [
             (value - 50) * 2
-            for value in self.task_parameters.OmegaTable.columns.Omega
+            for value in self.task_parameters.omega_table.columns.omega
         ]
         # Set current stimulus for next trial
-        DV = self.Trials.DV[i_trial + 1]
-        if self.task_parameters.ExperimentType == \
-                ExperimentType.RandomDots:
-            self.task_parameters.CurrentStim = \
+        DV = self.trials.DV[i_trial + 1]
+        if self.task_parameters.experiment_type == \
+                ExperimentType.random_dots:
+            self.task_parameters.current_stim = \
                 f"{abs(DV / 0.01)}{iff(DV < 0, '# R cohr.', '# L cohr.')}"
         else:
             # Set between -100 to +100
-            StimIntensity = f'{iff(DV > 0, (DV + 1) / 0.02, (DV - 1) / -0.02)}'
-            self.task_parameters.CurrentStim = \
-                f"{StimIntensity}{iff(DV < 0, '# R', '# L')}"
+            stim_intensity = f'{iff(DV > 0, (DV + 1) / 0.02, (DV - 1) / -0.02)}'
+            self.task_parameters.current_stim = \
+                f"{stim_intensity}{iff(DV < 0, '# R', '# L')}"
 
-        self.Timer.customFinalizeUpdate[i_trial] = time.time()
+        self.timer.custom_finalize_update[i_trial] = time.time()
 
         # determine if optogentics trial
-        OptoEnabled = rand(1, 1) < self.task_parameters.OptoProb
-        if i_trial < self.task_parameters.StartEasyTrials:
-            OptoEnabled = False
-        self.Trials.OptoEnabled[i_trial + 1] = OptoEnabled
-        self.task_parameters.IsOptoTrial = iff(
-            OptoEnabled, 'true', 'false')
+        opto_enabled = rand(1, 1) < self.task_parameters.opto_prob
+        if i_trial < self.task_parameters.start_easy_trials:
+            opto_enabled = False
+        self.trials.opto_enabled[i_trial + 1] = opto_enabled
+        self.task_parameters.is_opto_trial = iff(
+            opto_enabled, 'true', 'false')
 
         # determine if catch trial
-        if i_trial < self.task_parameters.StartEasyTrials or \
-                self.task_parameters.PercentCatch == 0:
-            self.Trials.CatchTrial[i_trial + 1] = False
+        if i_trial < self.task_parameters.start_easy_trials or \
+                self.task_parameters.percent_catch == 0:
+            self.trials.catch_trial[i_trial + 1] = False
         else:
-            every_n_trials = round(1 / self.task_parameters.PercentCatch)
+            every_n_trials = round(1 / self.task_parameters.percent_catch)
             limit = round(every_n_trials * 0.2)
             lower_limit = every_n_trials - limit
             upper_limit = every_n_trials + limit
-            if not self.Trials.Rewarded[i_trial] or i_trial + 1 < \
-                    self.Trials.LastSuccessCatchTial + lower_limit:
-                self.Trials.CatchTrial[i_trial + 1] = False
-            elif i_trial + 1 < self.Trials.LastSuccessCatchTial + upper_limit:
-                # TODO: If OmegaProb changed since last time, then redo it
+            if not self.trials.rewarded[i_trial] or i_trial + 1 < \
+                    self.trials.last_success_catch_trial + lower_limit:
+                self.trials.catch_trial[i_trial + 1] = False
+            elif i_trial + 1 < self.trials.last_success_catch_trial + upper_limit:
+                # TODO: If Omega Prob changed since last time, then redo it
                 non_zero_prob = [
-                    self.task_parameters.OmegaTable.Omega[i] / 100
+                    self.task_parameters.omega_table.omega[i] / 100
                     for i, prob in enumerate(
-                        self.task_parameters.OmegaTable.columns.OmegaProb)
+                        self.task_parameters.omega_table.columns.omega_prob)
                     if prob > 0]
                 complement_non_zero_prob = [1 - prob for prob in non_zero_prob]
                 inverse_non_zero_prob = non_zero_prob[::-1]
-                active_stim_idxs = GetCatchStimIdx(
+                active_stim_idxs = get_catch_stim_idx(
                     complement_non_zero_prob + inverse_non_zero_prob)
-                cur_stim_idx = GetCatchStimIdx(
-                    self.Trials.StimulusOmega[i_trial + 1])
+                cur_stim_idx = get_catch_stim_idx(
+                    self.trials.stimulus_omega[i_trial + 1])
                 min_catch_counts = min(
-                    self.Trials.CatchCount[i] for i in active_stim_idxs)
+                    self.trials.catch_count[i] for i in active_stim_idxs)
                 min_catch_idxs = list(set(active_stim_idxs).intersection(
                     {i for i, cc in enumerate(
-                        self.Trials.CatchCount)
+                        self.trials.catch_count)
                      if floor(cc) == min_catch_counts}))
-                self.Trials.CatchTrial[
+                self.trials.catch_trial[
                     i_trial + 1] = cur_stim_idx in min_catch_idxs
             else:
-                self.Trials.CatchTrial[i_trial + 1] = True
+                self.trials.catch_trial[i_trial + 1] = True
         # Create as char vector rather than string so that
         # GUI sync doesn't complain
-        self.task_parameters.IsCatch = iff(
-            self.Trials.CatchTrial[i_trial + 1], 'true', 'false')
+        self.task_parameters.is_catch = iff(
+            self.trials.catch_trial[i_trial + 1], 'true', 'false')
         # Determine if Forced LED trial:
-        if self.task_parameters.PortLEDtoCueReward:
-            self.Trials.ForcedLEDTrial[i_trial + 1] = rand(1, 1) < \
-                self.task_parameters.PercentForcedLEDTrial
+        if self.task_parameters.port_led_to_cue_reward:
+            self.trials.forced_led_trial[i_trial + 1] = rand(1, 1) < \
+                self.task_parameters.percent_forced_led_trial
         else:
-            self.Trials.ForcedLEDTrial[i_trial + 1] = False
-        self.Timer.customCatchNForceLed[i_trial] = time.time()
+            self.trials.forced_led_trial[i_trial + 1] = False
+        self.timer.custom_catch_n_force_led[i_trial] = time.time()
 
 
 class TimerData:
+    "Initialize class variables"
     def __init__(self):
-        self.StartNewIter = datalist()
-        self.SyncGUI = datalist()
-        self.BuildStateMatrix = datalist()
-        self.SendStateMatrix = datalist()
-        self.AppendData = datalist()
-        self.HandlePause = datalist()
-        self.UpdateCustomDataFields = datalist()
-        self.SendPlotData = datalist()
-        self.SaveData = datalist()
-        self.CalculateTimeout = datalist()
-        self.customExtractData = datalist()
-        self.customAdjustBias = datalist()
-        self.customCalcOmega = datalist()
-        self.customInitialize = datalist()
-        self.customFinalizeUpdate = datalist()
-        self.customCatchNForceLed = datalist()
-        self.customStimDelay = datalist()
-        self.customMinSampling = datalist()
-        self.customFeedbackDelay = datalist()
-        self.customCalcBias = datalist()
-        self.customPrepNewTrials = datalist()
-        self.customGenNewTrials = datalist()
+        self.start_new_iter = datalist()
+        self.sync_gui = datalist()
+        self.build_state_matrix = datalist()
+        self.send_state_matrix = datalist()
+        self.append_data = datalist()
+        self.handle_pause = datalist()
+        self.update_custom_data_fields = datalist()
+        self.send_plot_data = datalist()
+        self.save_data = datalist()
+        self.calcilate_timeout = datalist()
+        self.custom_extract_data = datalist()
+        self.custom_adjust_bias = datalist()
+        self.custom_calc_omega = datalist()
+        self.custom_initialize = datalist()
+        self.custom_finalize_update = datalist()
+        self.custom_catch_n_force_led = datalist()
+        self.custom_stim_delay = datalist()
+        self.custom_min_sampling = datalist()
+        self.custom_feedback_delay = datalist()
+        self.custom_calc_bias = datalist()
+        self.custom_prep_new_trials = datalist()
+        self.custom_gen_new_trials = datalist()
 
 
-class drawParams:
+class DrawParams:
+    "Initialize class variables"
     def __init__(self):
-        self.StimType = None
-        self.GratingOrientation = None
-        self.NumCycles = None
-        self.CyclesPerSecondDrift = None
-        self.Phase = None
-        self.GaborSizeFactor = None
-        self.GaussianFilterRatio = None
-        self.CenterX = None
-        self.CenterY = None
-        self.ApertureSizeWidth = None
-        self.ApertureSizeHeight = None
-        self.DrawRatio = None
-        self.MainDirection = None
-        self.DotSpeed = None
-        self.DotLifetimeSecs = None
-        self.Coherence = None
-        self.ScreenWidthCm = None
-        self.ScreenDistCm = None
-        self.DotSizeInDegs = None
+        self.stim_type = None
+        self.grating_orientation = None
+        self.num_cycles = None
+        self.cycles_per_second_drift = None
+        self.phase = None
+        self.gabor_size_factor = None
+        self.gaussian_filter_ratio = None
+        self.center_x = None
+        self.center_y = None
+        self.aperture_size_width = None
+        self.aperture_size_height = None
+        self.draw_ratio = None
+        self.main_direction = None
+        self.dot_speed = None
+        self.dot_lifetime_secs = None
+        self.coherence = None
+        self.screen_width_cm = None
+        self.screen_dist_cm = None
+        self.dot_size_in_degs = None
 
-class trials:
-
+class Trials:
+    "Initialize class variables"
     _DEFAULT_CATCH_COUNT_LEN = 21
     def __init__(self,task_parameters):
         self.task_parameters = task_parameters
-        self.ChoiceLeft = datalist(None)
-        self.ChoiceCorrect = datalist(None)
-        self.Feedback = datalist(None)
-        self.FeedbackTime = datalist(None)
-        self.FeedbackDelay = datalist(None)
-        self.FixBroke = datalist(None)
-        self.EarlyWithdrawal = datalist(None)
-        self.MissedChoice = datalist(None)
-        self.FixDur = datalist(None)
-        self.MT = datalist(None)
-        self.CatchTrial = datalist(None)
-        self.ST = datalist(None)
-        self.OptoEnabled = datalist(None)
-        self.Rewarded = datalist(None)
-        self.RewardAfterMinSampling = datalist(False)
-        self.PreStimCounterReward = datalist(None)
-        self.PreStimCntrReward = datalist(size=NUM_OF_TRIALS + 1)
-        self.MinSample = datalist(None)
-        self.LightIntensityLeft = datalist()
-        self.LightIntensityRight = datalist()
-        self.GratingOrientation = datalist(None)
-        self.RewardMagnitude = datalist([
-            self.task_parameters.RewardAmount,
-            self.task_parameters.RewardAmount
+        self.choice_left = datalist(None)
+        self.choice_correct = datalist(None)
+        self.feedback = datalist(None)
+        self.feedback_time = datalist(None)
+        self.feedback_delay = datalist(None)
+        self.fix_broke = datalist(None)
+        self.early_withdrawal = datalist(None)
+        self.missed_choice = datalist(None)
+        self.fix_dur = datalist(None)
+        self.mt = datalist(None)
+        self.catch_trial = datalist(None)
+        self.st = datalist(None)
+        self.opto_enabled = datalist(None)
+        self.rewarded = datalist(None)
+        self.reward_after_min_sampling = datalist(False)
+        self.pre_stim_counter_reward = datalist(None)
+        self.pre_stim_cntr_reward = datalist(size=NUM_OF_TRIALS + 1)
+        self.min_sample = datalist(None)
+        self.light_intensity_left = datalist()
+        self.light_intensity_right = datalist()
+        self.grating_orientation = datalist(None)
+        self.reward_magnitude = datalist([
+            self.task_parameters.reward_amount,
+            self.task_parameters.reward_amount
         ])
-        self.RewardReceivedTotal = datalist(size=NUM_OF_TRIALS + 1)
-        self.ReactionTime = datalist(None)
-        self.CenterPortRewAmount = datalist(
-            self.task_parameters.CenterPortRewAmount)
-        self.TrialNumber = datalist(None)
-        self.ForcedLEDTrial = datalist(None)
-        self.CatchCount = datalist(size=self._DEFAULT_CATCH_COUNT_LEN)
-        self.LastSuccessCatchTrial = True
-        self.StimulusOmega = datalist(None)
-        self.StimDelay = datalist(None)
-        self.LeftRewarded = datalist(None)
+        self.reward_received_total = datalist(size=NUM_OF_TRIALS + 1)
+        self.reaction_time = datalist(None)
+        self.center_port_rew_amount = datalist(
+            self.task_parameters.center_port_rew_amount)
+        self.trial_number = datalist(None)
+        self.forced_led_trial = datalist(None)
+        self.catch_count = datalist(size=self._DEFAULT_CATCH_COUNT_LEN)
+        self.last_success_catch_trial = True
+        self.stimulus_omega = datalist(None)
+        self.stim_delay = datalist(None)
+        self.left_rewarded = datalist(None)
         self.DV = datalist()
-        self.TrialStartSysTime = datalist(None)
-        self.DotsCoherence = datalist(None)
-        self.EarlyWithdrawalTimerStart = None
+        self.trial_start_sys_time = datalist(None)
+        self.dots_coherence = datalist(None)
+        self.early_withdrawal_timer_start = None
 
 class Data:
+    "Initialize class variables"
     def __init__(self, session, task_parameters):
         self.task_parameters = task_parameters
-        self.RawData = RawData(session)
-        self.Timer = TimerData()
-        self.Custom = CustomData(task_parameters, self.Timer, self.RawData)
-        self.TrialStartTimestamp = datalist()
-        self.TrialEndTimestamp = datalist()
-        self.SettingsFile = None
+        self.raw_data = RawData(session)
+        self.timer = TimerData()
+        self.custom = CustomData(task_parameters, self.timer, self.raw_data)
+        self.trail_start_timestamp = datalist()
+        self.trail_start_timestamp = datalist()
+        self.settings_file = None
         self.dots_mapped_file = None

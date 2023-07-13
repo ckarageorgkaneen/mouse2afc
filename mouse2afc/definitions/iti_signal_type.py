@@ -1,7 +1,7 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class ITISignalType(SpecialEnum):
     none = 1
-    Beep = 2
-    PortLED = 3
+    beep = 2
+    port_led = 3
