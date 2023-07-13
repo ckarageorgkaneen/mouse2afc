@@ -99,41 +99,41 @@ class CustomData:
 
     def assign_future_trials(self,start_from,num_trials_to_generate):
         "Assigns left_rewarded as true or false for future trials "
-        is_left_rewarded = controlled_random((1 -self.task_parameters.LeftBias),
+        is_left_rewarded = controlled_random((1 -self.task_parameters.left_bias),
                                               num_trials_to_generate)
         last_idx = start_from
         for a in range(num_trials_to_generate):
             #If it's a fifty-fifty trial, then place stimulus in the middle
-            if (rand(1,1) < self.task_parameters.Percent50Fifty and
-                (last_idx+a) > self.task_parameters.StartEasyTrials):
+            if (rand(1,1) < self.task_parameters.percent_50_fifty and
+                (last_idx+a) > self.task_parameters.start_easy_trials):
                 stimulus_omega = .5
             else:
-                gui_ssc = self.task_parameters.StimulusSelectionCriteria
-                beta_dist = self.task_parameters.BetaDistAlphaNBeta
+                gui_ssc = self.task_parameters.stimulus_selection_criteria
+                beta_dist = self.task_parameters.beta_dist_alpha_n_beta
                 if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
                     # Divide beta by 4 if we are in an easy trial
-                    beta_div = iff((last_idx+a) <= self.task_parameters.StartEasyTrials,4,1)
+                    beta_div = iff((last_idx+a) <= self.task_parameters.start_easy_trials,4,1)
                     stimulus_omega = betarnd(beta_dist/beta_div,beta_dist/beta_div,1)
                     stimulus_omega = iff(stimulus_omega < 0.1, 0.1, stimulus_omega)
                     stimulus_omega = iff(stimulus_omega > 0.9,0.9,stimulus_omega)
                 elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
-                    omega_prob = self.task_parameters.OmegaTable.columns.OmegaProb
-                    if (last_idx+a) <= self.task_parameters.StartEasyTrials:
+                    omega_prob = self.task_parameters.omega_table.columns.omega_prob
+                    if (last_idx+a) <= self.task_parameters.start_easy_trials:
                         index = next(omega_prob.index(prob)
                                     for prob in omega_prob if prob > 0)
-                        stimulus_omega = self.task_parameters.OmegaTable.columns.Omega[
+                        stimulus_omega = self.task_parameters.omega_table.columns.omega[
                             index] / 100
                     else:
                         #Choose a value randomly given the each value probability
                         stimulus_omega = (
                             (randsample
-                             (self.task_parameters.OmegaTable.columns.Omega,
+                             (self.task_parameters.omega_table.columns.omega,
                               1,
                               1,
                               omega_prob)
                               / 100).tolist())[0]
                 else:
-                    error('Unexpected StimulusSelectionCriteria')
+                    error('Unexpected Stimulus Selection Criteria')
 
                 if ((is_left_rewarded[a] and stimulus_omega < 0.5) or
                      (not is_left_rewarded[a] and stimulus_omega >= 0.5)):
@@ -218,7 +218,7 @@ class CustomData:
         if str(MatrixState.stimulus_delivery) in states_visited_this_trial_names:
             stimulus_delivery_state_times = states_visited_this_trial_times[
                 str(MatrixState.stimulus_delivery)]
-            if self.task_parameters.RewardAfterMinSampling:
+            if self.task_parameters.reward_after_min_sampling:
                 self.trials.st[i_trial] = diff(stimulus_delivery_state_times)
             else:
                 # 'CenterPortRewardDelivery' state would exist even if no
@@ -227,8 +227,8 @@ class CustomData:
                 # sampling stage.
                 if str(MatrixState.CenterPortRewardDelivery) in \
                         states_visited_this_trial_names and \
-                        self.task_parameters.StimulusTime > \
-                        self.task_parameters.MinSample:
+                        self.task_parameters.stimulus_time > \
+                        self.task_parameters.min_sample:
                     center_port_reward_delivery_state_times = \
                         states_visited_this_trial_times[
                             str(MatrixState.CenterPortRewardDelivery)]
@@ -248,11 +248,11 @@ class CustomData:
             wait_for_choice_state_start_times = [
                 start_time for start_time, end_time in wait_for_choice_state_times]
             # We might have more than multiple WaitForChoice if
-            # HabituateIgnoreIncorrect is enabeld
+            # Habituate Ignore Incorrect is enabeld
             self.trials.mt[-1] = diff(wait_for_choice_state_start_times[:2])
 
         # Extract trial outcome. Check first if it's a wrong choice or a
-        # HabituateIgnoreIncorrect but first choice was wrong choice
+        # Habituate Ignore Incorrect but first choice was wrong choice
         if str(MatrixState.WaitForPunishStart) in \
             states_visited_this_trial_names or \
            str(MatrixState.RegisterWrongWaitCorrect) in \
@@ -285,11 +285,11 @@ class CustomData:
                 stim_val = self.trials.stimulus_omega[i_trial] * 100
                 if stim_val < 50:
                     stim_val = 100 - stim_val
-                stim_prob = self.task_parameters.OmegaTable.columns.OmegaProb[
-                    self.task_parameters.OmegaTable.columns.Omega.index(
+                stim_prob = self.task_parameters.omega_table.columns.omega_prob[
+                    self.task_parameters.omega_table.columns.omega.index(
                         stim_val)]
                 sum_all_prob = sum(
-                    self.task_parameters.OmegaTable.columns.OmegaProb)
+                    self.task_parameters.omega_table.columns.omega_prob)
                 stim_prob = (1 + sum_all_prob - stim_prob) / sum_all_prob
                 self.trials.catch_count[catch_stim_idx] += stim_prob
                 self.trials.last_success_catch_trial = i_trial
@@ -323,13 +323,13 @@ class CustomData:
         if str(MatrixState.Reward) in states_visited_this_trial_names:
             self.trials.rewarded[i_trial] = True
             self.trials.reward_received_total[i_trial] += \
-                self.task_parameters.RewardAmount
+                self.task_parameters.reward_amount
         if str(MatrixState.CenterPortRewardDelivery) in \
                 states_visited_this_trial_names and \
-           self.task_parameters.RewardAfterMinSampling:
+           self.task_parameters.reward_after_min_sampling:
             self.trials.reward_after_min_sampling[i_trial] = True
             self.trials.reward_received_total[i_trial] += \
-                self.task_parameters.CenterPortRewAmount
+                self.task_parameters.center_port_rew_amount
         if str(MatrixState.WaitCenterPortOut) in states_visited_this_trial_names:
             wait_center_port_out_state_times = states_visited_this_trial_times[
                 str(MatrixState.WaitCenterPortOut)]
@@ -340,130 +340,130 @@ class CustomData:
             # where the state potentially existed but we didn't calculate it
             self.trials.reaction_time[i_trial] = -1
         # State-independent fields
-        self.trials.stim_delay[i_trial] = self.task_parameters.StimDelay
-        self.trials.feedback_delay[i_trial] = self.task_parameters.FeedbackDelay
-        self.trials.min_sample[i_trial] = self.task_parameters.MinSample
+        self.trials.stim_delay[i_trial] = self.task_parameters.stim_delay
+        self.trials.feedback_delay[i_trial] = self.task_parameters.feedback_delay
+        self.trials.min_sample[i_trial] = self.task_parameters.min_sample
         self.trials.reward_magnitude[i_trial + 1] = [
-            self.task_parameters.RewardAmount,
-            self.task_parameters.RewardAmount]
+            self.task_parameters.reward_amount,
+            self.task_parameters.reward_amount]
         self.trials.center_port_rew_amount[
-            i_trial + 1] = self.task_parameters.CenterPortRewAmount
+            i_trial + 1] = self.task_parameters.center_port_rew_amount
         self.trials.pre_stim_cntr_reward[
-            i_trial + 1] = self.task_parameters.PreStimDelayCntrReward
+            i_trial + 1] = self.task_parameters.pre_stim_delay_cntr_reward
         self.timer.custom_extract_data[i_trial] = time.time()
 
         # IF we are running grating experiments,
         # add the grating orientation that was used
-        if self.task_parameters.ExperimentType == \
+        if self.task_parameters.experiment_type == \
                 ExperimentType.GratingOrientation:
             self.trials.grating_orientation[
                 i_trial] = self.draw_params.grating_orientation
 
         # Updating Delays
         # stimulus delay
-        if self.task_parameters.StimDelayAutoincrement:
+        if self.task_parameters.stim_delay_auto_increment:
             if self.trials.fix_broke[i_trial]:
-                self.task_parameters.StimDelay = max(
-                    self.task_parameters.StimDelayMin,
-                    min(self.task_parameters.StimDelayMax,
+                self.task_parameters.stim_delay = max(
+                    self.task_parameters.stim_delay_min,
+                    min(self.task_parameters.stim_delay_max,
                         self.trials.stim_delay[
-                            i_trial] - self.task_parameters.StimDelayDecr))
+                            i_trial] - self.task_parameters.stim_delay_decr))
             else:
-                self.task_parameters.StimDelay = min(
-                    self.task_parameters.StimDelayMax,
-                    max(self.task_parameters.StimDelayMin,
+                self.task_parameters.stim_delay = min(
+                    self.task_parameters.stim_delay_max,
+                    max(self.task_parameters.stim_delay_min,
                         self.trials.stim_delay[
-                            i_trial] + self.task_parameters.StimDelayIncr))
+                            i_trial] + self.task_parameters.stim_delay_incr))
         else:
             if not self.trials.fix_broke[i_trial]:
-                self.task_parameters.StimDelay = random_unif(
-                    self.task_parameters.StimDelayMin,
-                    self.task_parameters.StimDelayMax)
+                self.task_parameters.stim_delay = random_unif(
+                    self.task_parameters.stim_delay_min,
+                    self.task_parameters.stim_delay_max)
             else:
-                self.task_parameters.StimDelay = self.trials.stim_delay[i_trial]
+                self.task_parameters.stim_delay = self.trials.stim_delay[i_trial]
         self.timer.custom_stim_delay[i_trial] = time.time()
 
         # min sampling time
-        if self.task_parameters.MinSampleType == MinSampleType.FixMin:
-            self.task_parameters.MinSample = \
-                self.task_parameters.MinSampleMin
-        elif self.task_parameters.MinSampleType == \
+        if self.task_parameters.min_sample_type == MinSampleType.FixMin:
+            self.task_parameters.min_sample = \
+                self.task_parameters.min_sample_min
+        elif self.task_parameters.min_sample_type == \
                 MinSampleType.AutoIncr:
             # Check if animal completed pre-stimulus delay successfully
             if not (self.trials.fix_broke[i_trial] and i_trial >
-                    self.task_parameters.StartEasyTrials):
+                    self.task_parameters.start_easy_trials):
                 if self.trials.rewarded[i_trial]:
                     min_sample_incremented = self.trials.min_sample[
-                        i_trial] + self.task_parameters.MinSampleIncr
-                    self.task_parameters.MinSample = min(
-                        self.task_parameters.MinSampleMax,
-                        max(self.task_parameters.MinSampleMin,
+                        i_trial] + self.task_parameters.min_sample_incr
+                    self.task_parameters.min_sample = min(
+                        self.task_parameters.min_sample_max,
+                        max(self.task_parameters.min_sample_min,
                             min_sample_incremented))
                 elif self.trials.early_withdrawal[i_trial]:
                     min_sample_decremented = self.trials.min_sample[
-                        i_trial] - self.task_parameters.MinSampleDecr
-                    self.task_parameters.MinSample = max(
-                        self.task_parameters.MinSampleMin,
-                        min(self.task_parameters.MinSampleMax,
+                        i_trial] - self.task_parameters.min_sample_decr
+                    self.task_parameters.min_sample = max(
+                        self.task_parameters.min_sample_min,
+                        min(self.task_parameters.min_sample_max,
                             min_sample_decremented))
             else:
                 # Read new updated GUI values
-                self.task_parameters.MinSample = max(
-                    self.task_parameters.MinSampleMin,
-                    min(self.task_parameters.MinSampleMax,
+                self.task_parameters.min_sample = max(
+                    self.task_parameters.min_sample_min,
+                    min(self.task_parameters.min_sample_max,
                         self.trials.min_sample[i_trial]))
-        elif self.task_parameters.MinSampleType == \
+        elif self.task_parameters.min_sample_type == \
                 MinSampleType.RandBetMinMax_DefIsMax:
             use_rand = rand(
-                1, 1) < self.task_parameters.MinSampleRandProb
-            if not use_rand or i_trial <= self.task_parameters.StartEasyTrials:
-                self.task_parameters.MinSample = \
-                    self.task_parameters.MinSampleMax
+                1, 1) < self.task_parameters.min_sample_rand_prob
+            if not use_rand or i_trial <= self.task_parameters.start_easy_trials:
+                self.task_parameters.min_sample = \
+                    self.task_parameters.min_sample_max
             else:
                 min_sample_difference = \
-                    self.task_parameters.MinSampleMax - \
-                    self.task_parameters.MinSampleMin
-                self.task_parameters.MinSample = \
+                    self.task_parameters.min_sample_max - \
+                    self.task_parameters.min_sample_min
+                self.task_parameters.min_sample = \
                     min_sample_difference * \
-                    rand(1, 1) + self.task_parameters.MinSampleMin
+                    rand(1, 1) + self.task_parameters.min_sample_min
         elif MinSampleType.RandNumIntervalsMinMax_DefIsMax:
             use_rand = rand(
-                1, 1) < self.task_parameters.MinSampleRandProb
-            if not use_rand or i_trial <= self.task_parameters.StartEasyTrials:
-                self.task_parameters.MinSample = \
-                    self.task_parameters.MinSampleMax
+                1, 1) < self.task_parameters.min_sample_rand_prob
+            if not use_rand or i_trial <= self.task_parameters.start_easy_trials:
+                self.task_parameters.min_sample = \
+                    self.task_parameters.min_sample_max
             else:
-                self.task_parameters.MinSampleNumInterval = round(
-                    self.task_parameters.MinSampleNumInterval)
-                if self.task_parameters.MinSampleNumInterval == 0 or \
-                    self.task_parameters.MinSampleNumInterval == 1:
-                    self.task_parameters.MinSample = \
-                        self.task_parameters.MinSampleMin
+                self.task_parameters.min_sample_num_interval = round(
+                    self.task_parameters.min_sample_num_interval)
+                if self.task_parameters.min_sample_num_interval == 0 or \
+                    self.task_parameters.min_sample_num_interval == 1:
+                    self.task_parameters.min_sample = \
+                        self.task_parameters.min_sample_min
                 else:
                     min_sample_difference = \
-                        self.task_parameters.MinSampleMax - \
-                        self.task_parameters.MinSampleMin
+                        self.task_parameters.min_sample_max - \
+                        self.task_parameters.min_sample_min
                     step = min_sample_difference / (
-                        self.task_parameters.MinSampleNumInterval - 1)
+                        self.task_parameters.min_sample_num_interval - 1)
                     intervals = list(arange(
-                        self.task_parameters.MinSampleMin,
-                        self.task_parameters.MinSampleMax + 1,
+                        self.task_parameters.min_sample_min,
+                        self.task_parameters.min_sample_max + 1,
                         step))
                     intervals_idx = randi(
-                        1, self.task_parameters.MinSampleNumInterval)
+                        1, self.task_parameters.min_sample_num_interval)
                     print("Intervals:")  # disp("Intervals:");
                     print(intervals)  # disp(intervals)
-                    self.task_parameters.MinSample = intervals[
+                    self.task_parameters.min_sample = intervals[
                         intervals_idx]
         else:
-            error('Unexpected MinSampleType value')
+            error('Unexpected Min Sample Type value')
         self.timer.custom_min_sampling[i_trial] = time.time()
 
         # feedback delay
-        if self.task_parameters.FeedbackDelaySelection == \
+        if self.task_parameters.feedback_delay_selection == \
                 FeedbackDelaySelection.none:
-            self.task_parameters.FeedbackDelay = 0
-        elif self.task_parameters.FeedbackDelaySelection == \
+            self.task_parameters.feedback_delay = 0
+        elif self.task_parameters.feedback_delay_selection == \
                 FeedbackDelaySelection.AutoIncr:
             # if no feedback was not completed then use the last value unless
             # then decrement the feedback.
@@ -471,10 +471,10 @@ class CustomData:
             # 'early_withdrawal' terminated early the trial?
             if not self.trials.feedback[i_trial]:
                 feedback_delay_decremented = self.trials.feedback_delay[
-                    i_trial] - self.task_parameters.FeedbackDelayDecr
-                self.task_parameters.FeedbackDelay = max(
-                    self.task_parameters.FeedbackDelayMin,
-                    min(self.task_parameters.FeedbackDelayMax,
+                    i_trial] - self.task_parameters.feedback_delay_decr
+                self.task_parameters.feedback_delay = max(
+                    self.task_parameters.feedback_delay_min,
+                    min(self.task_parameters.feedback_delay_max,
                         feedback_delay_decremented))
             else:
                 # Increase the feedback if the feedback was successfully
@@ -483,24 +483,24 @@ class CustomData:
                 # Do we also here consider the case where 'broke_fixation' or
                 # 'early_withdrawal' terminated early the trial?
                 feedback_delay_incremented = self.trials.feedback_delay[
-                    i_trial] + self.task_parameters.FeedbackDelayIncr
-                self.task_parameters.FeedbackDelay = min(
-                    self.task_parameters.FeedbackDelayMax,
-                    max(self.task_parameters.FeedbackDelayMin,
+                    i_trial] + self.task_parameters.feedback_delay_incr
+                self.task_parameters.feedback_delay = min(
+                    self.task_parameters.feedback_delay_max,
+                    max(self.task_parameters.feedback_delay_min,
                         feedback_delay_incremented))
         elif FeedbackDelaySelection.TruncExp:
-            self.task_parameters.FeedbackDelay = truncated_exponential(
-                self.task_parameters.FeedbackDelayMin,
-                self.task_parameters.FeedbackDelayMax,
-                self.task_parameters.FeedbackDelayTau)
+            self.task_parameters.feedback_delay = truncated_exponential(
+                self.task_parameters.feedback_delay_min,
+                self.task_parameters.feedback_delay_max,
+                self.task_parameters.feedback_delay_tau)
         elif FeedbackDelaySelection.Fix:
             #     ATTEMPT TO GRAY OUT FIELDS
             if self.task_parametersMeta.feedback_delay.Style != 'edit':
                 self.task_parametersMeta.feedback_delay.Style = 'edit'
-            self.task_parameters.FeedbackDelay = \
-                self.task_parameters.FeedbackDelayMax
+            self.task_parameters.feedback_delay = \
+                self.task_parameters.feedback_delay_max
         else:
-            error('Unexpected FeedbackDelaySelection value')
+            error('Unexpected Feedback Delay Selection value')
         self.timer.custom_feedback_delay[i_trial] = time.time()
 
         # Drawing future trials
@@ -550,7 +550,7 @@ class CustomData:
             perf_right = 1 - (sum(filter(None,ndx_left_rewd)) / (denominator* 2))
         else:
             perf_right = sum(filter(None,ndx_right_rewd)) / sum(filter(None,ndx_right_rew_done))
-        self.task_parameters.CalcLeftBias = (perf_left - perf_right) / 2 + 0.5
+        self.task_parameters.calc_left_bias = (perf_left - perf_right) / 2 + 0.5
 
         choice_made_trials = [
             choice_c is not None for choice_c in self.trials.choice_correct]
@@ -558,11 +558,11 @@ class CustomData:
         length_choice_made_trials = sum(x for x in choice_made_trials if True)
         if length_choice_made_trials >= 1:
             performance = rewarded_trials_count / length_choice_made_trials
-            self.task_parameters.Performance = [
+            self.task_parameters.performance = [
                 f'{performance * 100:.2f}', '#/',
                 str(length_choice_made_trials), 'T']
             performance = rewarded_trials_count / (i_trial + 1)
-            self.task_parameters.AllPerformance = [
+            self.task_parameters.all_preformance = [
                 f'{performance * 100:.2f}', '#/', str(i_trial + 1), 'T']
             NUM_LAST_TRIALS = 20
             if i_trial > NUM_LAST_TRIALS:
@@ -571,15 +571,15 @@ class CustomData:
                         length_choice_made_trials - NUM_LAST_TRIALS + 1:
                         length_choice_made_trials + 1]
                     performance = sum(rewarded_trials_) / NUM_LAST_TRIALS
-                    self.task_parameters.Performance = [
-                        self.task_parameters.Performance, ' - ',
+                    self.task_parameters.performance = [
+                        self.task_parameters.performance, ' - ',
                         f'{performance * 100:.2f}', '#/',
                         str(NUM_LAST_TRIALS), 'T']
                 rewarded_trials_count = sum(self.trials.rewarded[
                     i_trial - NUM_LAST_TRIALS + 1: i_trial + 1])
                 performance = rewarded_trials_count / NUM_LAST_TRIALS
-                self.task_parameters.AllPerformance = [
-                    self.task_parameters.AllPerformance, ' - ',
+                self.task_parameters.all_preformance = [
+                    self.task_parameters.all_preformance, ' - ',
                     f'{performance * 100:.2f}', '#/', str(NUM_LAST_TRIALS),
                     'T']
         self.timer.custom_calc_bias[i_trial] = time.time()
@@ -589,8 +589,8 @@ class CustomData:
         if i_trial+1 >= self.DVs_already_generated:
             # Do bias correction only if we have enough trials
             # sum(ndxRewd) > Const.BIAS_CORRECT_MIN_RWD_TRIALS
-            if self.task_parameters.CorrectBias and i_trial+1 > 7:
-                left_bias = self.task_parameters.CalcLeftBias
+            if self.task_parameters.correct_bias and i_trial+1 > 7:
+                left_bias = self.task_parameters.calc_left_bias
                 # if left_bias < 0.2 || left_bias > 0.8 # Bias is too much,
                 # swing it all the way to the other side
                 # left_bias = round(left_bias);
@@ -601,22 +601,22 @@ class CustomData:
                     print('Left bias is None.')
                     left_bias = 0.5
             else:
-                left_bias = self.task_parameters.LeftBias
+                left_bias = self.task_parameters.left_bias
             self.timer.custom_adjust_bias[i_trial] = time.time()
 
             # Adjustment of P(Omega) to make sure that sum(P(Omega))=1
-            if self.task_parameters.StimulusSelectionCriteria != \
+            if self.task_parameters.stimulus_selection_criteria != \
                     StimulusSelectionCriteria.BetaDistribution:
                 omega_prob_sum = sum(
-                    self.task_parameters.OmegaTable.columns.OmegaProb)
+                    self.task_parameters.omega_table.columns.omega_prob)
                 # Avoid having no probability and avoid dividing by zero
                 if omega_prob_sum == 0:
-                    self.task_parameters.OmegaTable.columns.OmegaProb = [1] * \
-                        len(self.task_parameters.OmegaTable.columns.OmegaProb)
-                self.task_parameters.OmegaTable.columns.OmegaProb = [
+                    self.task_parameters.omega_table.columns.omega_prob = [1] * \
+                        len(self.task_parameters.omega_table.columns.omega_prob)
+                self.task_parameters.omega_table.columns.omega_prob = [
                     omega_prob / omega_prob_sum
                     for omega_prob
-                    in self.task_parameters.OmegaTable.columns.OmegaProb
+                    in self.task_parameters.omega_table.columns.omega_prob
                 ]
             self.timer.custom_calc_omega[i_trial] = time.time()
             self.assign_future_trials(i_trial+1,Const.PRE_GENERATE_TRIAL_COUNT)
@@ -628,55 +628,55 @@ class CustomData:
             self.timer.custom_prep_new_trials[i_trial] = 0
             self.timer.custom_gen_new_trials[i_trial] = 0
 
-        if self.task_parameters.ExperimentType == \
+        if self.task_parameters.experiment_type == \
                     ExperimentType.Auditory:
             DV = calc_aud_click_train(self,i_trial+1)
-        elif self.task_parameters.ExperimentType == \
+        elif self.task_parameters.experiment_type == \
                 ExperimentType.LightIntensity:
             DV = calc_light_intensity(self, i_trial+1)
-        elif self.task_parameters.ExperimentType == \
+        elif self.task_parameters.experiment_type == \
                 ExperimentType.GratingOrientation:
             DV = calc_grating_orientation(self,i_trial+1)
-        elif self.task_parameters.ExperimentType == \
+        elif self.task_parameters.experiment_type == \
                 ExperimentType.RandomDots:
             DV = calc_dots_coherence(self, i_trial+1)
         else:
-            error('Unexpected ExperimentType')
+            error('Unexpected Experiment Type')
         self.trials.DV[i_trial+1] = DV
 
         # Update RDK GUI
-        self.task_parameters.OmegaTable.columns.RDK = [
+        self.task_parameters.omega_table.columns.RDK = [
             (value - 50) * 2
-            for value in self.task_parameters.OmegaTable.columns.Omega
+            for value in self.task_parameters.omega_table.columns.omega
         ]
         # Set current stimulus for next trial
         DV = self.trials.DV[i_trial + 1]
-        if self.task_parameters.ExperimentType == \
+        if self.task_parameters.experiment_type == \
                 ExperimentType.RandomDots:
-            self.task_parameters.CurrentStim = \
+            self.task_parameters.current_stim = \
                 f"{abs(DV / 0.01)}{iff(DV < 0, '# R cohr.', '# L cohr.')}"
         else:
             # Set between -100 to +100
             stim_intensity = f'{iff(DV > 0, (DV + 1) / 0.02, (DV - 1) / -0.02)}'
-            self.task_parameters.CurrentStim = \
+            self.task_parameters.current_stim = \
                 f"{stim_intensity}{iff(DV < 0, '# R', '# L')}"
 
         self.timer.custom_finalize_update[i_trial] = time.time()
 
         # determine if optogentics trial
-        opto_enabled = rand(1, 1) < self.task_parameters.OptoProb
-        if i_trial < self.task_parameters.StartEasyTrials:
+        opto_enabled = rand(1, 1) < self.task_parameters.opto_prob
+        if i_trial < self.task_parameters.start_easy_trials:
             opto_enabled = False
         self.trials.opto_enabled[i_trial + 1] = opto_enabled
-        self.task_parameters.IsOptoTrial = iff(
+        self.task_parameters.is_opto_trial = iff(
             opto_enabled, 'true', 'false')
 
         # determine if catch trial
-        if i_trial < self.task_parameters.StartEasyTrials or \
-                self.task_parameters.PercentCatch == 0:
+        if i_trial < self.task_parameters.start_easy_trials or \
+                self.task_parameters.percent_catch == 0:
             self.trials.catch_trial[i_trial + 1] = False
         else:
-            every_n_trials = round(1 / self.task_parameters.PercentCatch)
+            every_n_trials = round(1 / self.task_parameters.percent_catch)
             limit = round(every_n_trials * 0.2)
             lower_limit = every_n_trials - limit
             upper_limit = every_n_trials + limit
@@ -684,11 +684,11 @@ class CustomData:
                     self.trials.last_success_catch_trial + lower_limit:
                 self.trials.catch_trial[i_trial + 1] = False
             elif i_trial + 1 < self.trials.last_success_catch_trial + upper_limit:
-                # TODO: If OmegaProb changed since last time, then redo it
+                # TODO: If Omega Prob changed since last time, then redo it
                 non_zero_prob = [
-                    self.task_parameters.OmegaTable.Omega[i] / 100
+                    self.task_parameters.omega_table.omega[i] / 100
                     for i, prob in enumerate(
-                        self.task_parameters.OmegaTable.columns.OmegaProb)
+                        self.task_parameters.omega_table.columns.omega_prob)
                     if prob > 0]
                 complement_non_zero_prob = [1 - prob for prob in non_zero_prob]
                 inverse_non_zero_prob = non_zero_prob[::-1]
@@ -708,12 +708,12 @@ class CustomData:
                 self.trials.catch_trial[i_trial + 1] = True
         # Create as char vector rather than string so that
         # GUI sync doesn't complain
-        self.task_parameters.IsCatch = iff(
+        self.task_parameters.is_catch = iff(
             self.trials.catch_trial[i_trial + 1], 'true', 'false')
         # Determine if Forced LED trial:
-        if self.task_parameters.PortLEDtoCueReward:
+        if self.task_parameters.port_led_to_cue_reward:
             self.trials.forced_led_trial[i_trial + 1] = rand(1, 1) < \
-                self.task_parameters.PercentForcedLEDTrial
+                self.task_parameters.percent_forced_led_trial
         else:
             self.trials.forced_led_trial[i_trial + 1] = False
         self.timer.custom_catch_n_force_led[i_trial] = time.time()
@@ -771,7 +771,6 @@ class DrawParams:
 
 class Trials:
     "Initialize class variables"
-
     _DEFAULT_CATCH_COUNT_LEN = 21
     def __init__(self,task_parameters):
         self.task_parameters = task_parameters
@@ -797,13 +796,13 @@ class Trials:
         self.light_intensity_right = datalist()
         self.grating_orientation = datalist(None)
         self.reward_magnitude = datalist([
-            self.task_parameters.RewardAmount,
-            self.task_parameters.RewardAmount
+            self.task_parameters.reward_amount,
+            self.task_parameters.reward_amount
         ])
         self.reward_received_total = datalist(size=NUM_OF_TRIALS + 1)
         self.reaction_time = datalist(None)
         self.center_port_rew_amount = datalist(
-            self.task_parameters.CenterPortRewAmount)
+            self.task_parameters.center_port_rew_amount)
         self.trial_number = datalist(None)
         self.forced_led_trial = datalist(None)
         self.catch_count = datalist(size=self._DEFAULT_CATCH_COUNT_LEN)
