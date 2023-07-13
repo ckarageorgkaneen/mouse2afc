@@ -7,7 +7,7 @@ PYBPOD_API_LOG_FILE  = 'pybpod-api.log'
 TARGET_BPOD_FIRMWARE_VERSION = "22"
 EMULATOR_BPOD_MACHINE_TYPE = 1
 
-PYBPOD_SESSION_PATH = '/home/henry/Documents/mouse2afc/mouse2afc/sessions' 
+PYBPOD_SESSION_PATH = '/home/henry/Documents/mouse2afc/mouse2afc/sessions'
 PYBPOD_SESSION 		= datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
 PYBPOD_SERIAL_PORT 	= '/dev/ttyACM0'

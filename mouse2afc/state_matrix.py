@@ -24,7 +24,6 @@ from  mouse2afc.utils import round
 
 logger = logging.getLogger(__name__)
 
-# TODO: Properly pass emulator mode
 EMULATOR_MODE = True
 
 PORT_STR = 'Port'
@@ -85,7 +84,7 @@ class StateMatrix(StateMachine):
         right_pwm = round(
             (100 - task_parameters.right_poke_atten_prcnt) * 2.55)
 
-        LED_error_rate = DEFAULT_LED_ERROR_RATE
+        led_error_rate = DEFAULT_LED_ERROR_RATE
 
         is_left_rewarded = data.custom.trials.left_rewarded[i_trial]
 
@@ -439,8 +438,6 @@ class StateMatrix(StateMachine):
                            center_port_out: str(MatrixState.TriggerWaitChoiceTimer),
                            Bpod.Events.Tup: str(MatrixState.WaitCenterPortOut)},
                        output_actions=cont_deliver_stimulus)
-        # TODO: Stop stimulus is fired twice in case of center reward and then
-        # wait for choice. Fix it such that it'll be always fired once.
         self.add_state(state_name=str(MatrixState.TriggerWaitChoiceTimer),
                        state_timer=0,
                        state_change_conditions={
@@ -495,7 +492,8 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.ext_ITI),
                            reward_out: str(MatrixState.ext_ITI)},
-                       output_actions= ([('GlobalTimerTrig', enc_trig(5))] + wait_for_poke_out_stim) )
+                       output_actions= ([('GlobalTimerTrig', enc_trig(5))]
+                                        + wait_for_poke_out_stim) )
         self.add_state(state_name=str(MatrixState.RegisterWrongWaitCorrect),
                        state_timer=0,
                        state_change_conditions={
@@ -533,15 +531,16 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.TimeoutIncorrectChoice),
                            punish_out: str(MatrixState.TimeoutIncorrectChoice)},
-                       output_actions= ([('GlobalTimerTrig', enc_trig(4))] + wait_for_poke_out_stim))
+                       output_actions= ([('GlobalTimerTrig', enc_trig(4))] 
+                                        + wait_for_poke_out_stim))
         self.add_state(state_name=str(MatrixState.TimeoutEarlyWithdrawal),
-                       state_timer=LED_error_rate,
+                       state_timer=led_error_rate,
                        state_change_conditions={
                            'SoftCode1': str(MatrixState.ITI),
                            Bpod.Events.Tup: str(MatrixState.TimeoutEarlyWithdrawalFlashOn)},
                        output_actions=(stop_stimulus + error_feedback + [('SoftCode',2)]))
         self.add_state(state_name=str(MatrixState.TimeoutEarlyWithdrawalFlashOn),
-                       state_timer=LED_error_rate,
+                       state_timer=led_error_rate,
                        state_change_conditions={
                            'SoftCode1': str(MatrixState.ITI),
                            Bpod.Events.Tup: str(MatrixState.TimeoutEarlyWithdrawal)},
@@ -558,7 +557,7 @@ class StateMatrix(StateMachine):
                                        task_parameters.timeout_skipped_feedback,
                                        0.01),
                        state_change_conditions={
-                          Bpod.Events.Tup: str(MatrixState.ITI)},# TODO: See how to get around this if pc_timeout
+                          Bpod.Events.Tup: str(MatrixState.ITI)},
                        output_actions=(stop_stimulus + skipped_feeback_signal))
         self.add_state(state_name=str(MatrixState.TimeoutMissedChoice),
                        state_timer=iff(not pc_timeout,
