@@ -1,4 +1,4 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class BrainRegion(SpecialEnum):

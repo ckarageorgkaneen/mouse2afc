@@ -1,6 +1,6 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class TTLWireUsage(SpecialEnum):
-    Optogenetics = 1
-    TwoPhoton_Shutter = 2
+    optogenetics = 1
+    two_photon_shutter = 2

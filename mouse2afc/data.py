@@ -110,13 +110,13 @@ class CustomData:
             else:
                 gui_ssc = self.task_parameters.stimulus_selection_criteria
                 beta_dist = self.task_parameters.beta_dist_alpha_n_beta
-                if gui_ssc == StimulusSelectionCriteria.BetaDistribution:
+                if gui_ssc == StimulusSelectionCriteria.beta_distribution:
                     # Divide beta by 4 if we are in an easy trial
                     beta_div = iff((last_idx+a) <= self.task_parameters.start_easy_trials,4,1)
                     stimulus_omega = betarnd(beta_dist/beta_div,beta_dist/beta_div,1)
                     stimulus_omega = iff(stimulus_omega < 0.1, 0.1, stimulus_omega)
                     stimulus_omega = iff(stimulus_omega > 0.9,0.9,stimulus_omega)
-                elif gui_ssc == StimulusSelectionCriteria.DiscretePairs:
+                elif gui_ssc == StimulusSelectionCriteria.discrete_pairs:
                     omega_prob = self.task_parameters.omega_table.columns.omega_prob
                     if (last_idx+a) <= self.task_parameters.start_easy_trials:
                         index = next(omega_prob.index(prob)
@@ -215,9 +215,9 @@ class CustomData:
                 last_wait_for_stimulus_states_times[0] + \
                 last_trigger_wait_for_stimulus_state_times[1] - \
                 last_trigger_wait_for_stimulus_state_times[0]
-        if str(MatrixState.stimulus_delivery) in states_visited_this_trial_names:
+        if str(MatrixState.StimulusDelivery) in states_visited_this_trial_names:
             stimulus_delivery_state_times = states_visited_this_trial_times[
-                str(MatrixState.stimulus_delivery)]
+                str(MatrixState.StimulusDelivery)]
             if self.task_parameters.reward_after_min_sampling:
                 self.trials.st[i_trial] = diff(stimulus_delivery_state_times)
             else:
@@ -241,7 +241,7 @@ class CustomData:
                     self.trials.st[i_trial] = diff(stimulus_delivery_state_times)
 
         if str(MatrixState.WaitForChoice) in states_visited_this_trial_names and \
-            str(MatrixState.timeOut_missed_choice) not in \
+            str(MatrixState.TimeoutMissedChoice) not in \
                 states_visited_this_trial_names:
             wait_for_choice_state_times = states_visited_this_trial_times[
                 str(MatrixState.WaitForChoice)]
@@ -309,15 +309,15 @@ class CustomData:
             else:
                 warning("'WaitForReward' state should always appear"
                         " if 'WaitForRewardStart' was initiated")
-        elif str(MatrixState.broke_fixation) in states_visited_this_trial_names:
+        elif str(MatrixState.BrokeFixation) in states_visited_this_trial_names:
             self.trials.fix_broke[i_trial] = True
-        elif str(MatrixState.early_withdrawal) in states_visited_this_trial_names:
+        elif str(MatrixState.EarlyWithdrawal) in states_visited_this_trial_names:
             self.trials.early_withdrawal[i_trial] = True
-        elif str(MatrixState.timeOut_missed_choice) in \
+        elif str(MatrixState.TimeoutMissedChoice) in \
                 states_visited_this_trial_names:
             self.trials.feedback[i_trial] = False
             self.trials.missed_choice[i_trial] = True
-        if str(MatrixState.timeOut_SkippedFeedback) in \
+        if str(MatrixState.TimeoutSkippedFeedback) in \
                 states_visited_this_trial_names:
             self.trials.feedback[i_trial] = False
         if str(MatrixState.Reward) in states_visited_this_trial_names:
@@ -355,7 +355,7 @@ class CustomData:
         # IF we are running grating experiments,
         # add the grating orientation that was used
         if self.task_parameters.experiment_type == \
-                ExperimentType.GratingOrientation:
+                ExperimentType.grating_orientation:
             self.trials.grating_orientation[
                 i_trial] = self.draw_params.grating_orientation
 
@@ -384,11 +384,11 @@ class CustomData:
         self.timer.custom_stim_delay[i_trial] = time.time()
 
         # min sampling time
-        if self.task_parameters.min_sample_type == MinSampleType.FixMin:
+        if self.task_parameters.min_sample_type == MinSampleType.fix_min:
             self.task_parameters.min_sample = \
                 self.task_parameters.min_sample_min
         elif self.task_parameters.min_sample_type == \
-                MinSampleType.AutoIncr:
+                MinSampleType.auto_incr:
             # Check if animal completed pre-stimulus delay successfully
             if not (self.trials.fix_broke[i_trial] and i_trial >
                     self.task_parameters.start_easy_trials):
@@ -413,7 +413,7 @@ class CustomData:
                     min(self.task_parameters.min_sample_max,
                         self.trials.min_sample[i_trial]))
         elif self.task_parameters.min_sample_type == \
-                MinSampleType.RandBetMinMax_DefIsMax:
+                MinSampleType.rand_bet_min_max_def_is_max:
             use_rand = rand(
                 1, 1) < self.task_parameters.min_sample_rand_prob
             if not use_rand or i_trial <= self.task_parameters.start_easy_trials:
@@ -426,7 +426,7 @@ class CustomData:
                 self.task_parameters.min_sample = \
                     min_sample_difference * \
                     rand(1, 1) + self.task_parameters.min_sample_min
-        elif MinSampleType.RandNumIntervalsMinMax_DefIsMax:
+        elif MinSampleType.rand_num_intervals_min_max_def_is_max:
             use_rand = rand(
                 1, 1) < self.task_parameters.min_sample_rand_prob
             if not use_rand or i_trial <= self.task_parameters.start_easy_trials:
@@ -464,10 +464,10 @@ class CustomData:
                 FeedbackDelaySelection.none:
             self.task_parameters.feedback_delay = 0
         elif self.task_parameters.feedback_delay_selection == \
-                FeedbackDelaySelection.AutoIncr:
+                FeedbackDelaySelection.auto_incr:
             # if no feedback was not completed then use the last value unless
             # then decrement the feedback.
-            # Do we consider the case where 'broke_fixation' or
+            # Do we consider the case where 'BrokeFixation' or
             # 'early_withdrawal' terminated early the trial?
             if not self.trials.feedback[i_trial]:
                 feedback_delay_decremented = self.trials.feedback_delay[
@@ -480,7 +480,7 @@ class CustomData:
                 # Increase the feedback if the feedback was successfully
                 # completed in the last trial, or use the the GUI value that
                 # the user updated if needed.
-                # Do we also here consider the case where 'broke_fixation' or
+                # Do we also here consider the case where 'BrokeFixation' or
                 # 'early_withdrawal' terminated early the trial?
                 feedback_delay_incremented = self.trials.feedback_delay[
                     i_trial] + self.task_parameters.feedback_delay_incr
@@ -488,12 +488,12 @@ class CustomData:
                     self.task_parameters.feedback_delay_max,
                     max(self.task_parameters.feedback_delay_min,
                         feedback_delay_incremented))
-        elif FeedbackDelaySelection.TruncExp:
+        elif FeedbackDelaySelection.trunc_exp:
             self.task_parameters.feedback_delay = truncated_exponential(
                 self.task_parameters.feedback_delay_min,
                 self.task_parameters.feedback_delay_max,
                 self.task_parameters.feedback_delay_tau)
-        elif FeedbackDelaySelection.Fix:
+        elif FeedbackDelaySelection.fix:
             #     ATTEMPT TO GRAY OUT FIELDS
             if self.task_parametersMeta.feedback_delay.Style != 'edit':
                 self.task_parametersMeta.feedback_delay.Style = 'edit'
@@ -606,7 +606,7 @@ class CustomData:
 
             # Adjustment of P(Omega) to make sure that sum(P(Omega))=1
             if self.task_parameters.stimulus_selection_criteria != \
-                    StimulusSelectionCriteria.BetaDistribution:
+                    StimulusSelectionCriteria.beta_distribution:
                 omega_prob_sum = sum(
                     self.task_parameters.omega_table.columns.omega_prob)
                 # Avoid having no probability and avoid dividing by zero
@@ -629,30 +629,30 @@ class CustomData:
             self.timer.custom_gen_new_trials[i_trial] = 0
 
         if self.task_parameters.experiment_type == \
-                    ExperimentType.Auditory:
+                    ExperimentType.auditory:
             DV = calc_aud_click_train(self,i_trial+1)
         elif self.task_parameters.experiment_type == \
-                ExperimentType.LightIntensity:
+                ExperimentType.light_intensity:
             DV = calc_light_intensity(self, i_trial+1)
         elif self.task_parameters.experiment_type == \
-                ExperimentType.GratingOrientation:
+                ExperimentType.grating_orientation:
             DV = calc_grating_orientation(self,i_trial+1)
         elif self.task_parameters.experiment_type == \
-                ExperimentType.RandomDots:
+                ExperimentType.random_dots:
             DV = calc_dots_coherence(self, i_trial+1)
         else:
             error('Unexpected Experiment Type')
         self.trials.DV[i_trial+1] = DV
 
         # Update RDK GUI
-        self.task_parameters.omega_table.columns.RDK = [
+        self.task_parameters.omega_table.columns.rdk = [
             (value - 50) * 2
             for value in self.task_parameters.omega_table.columns.omega
         ]
         # Set current stimulus for next trial
         DV = self.trials.DV[i_trial + 1]
         if self.task_parameters.experiment_type == \
-                ExperimentType.RandomDots:
+                ExperimentType.random_dots:
             self.task_parameters.current_stim = \
                 f"{abs(DV / 0.01)}{iff(DV < 0, '# R cohr.', '# L cohr.')}"
         else:

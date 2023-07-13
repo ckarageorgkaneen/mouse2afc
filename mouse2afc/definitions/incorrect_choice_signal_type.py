@@ -1,8 +1,8 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class IncorrectChoiceSignalType(SpecialEnum):
     none = 1
-    NoisePulsePal = 2
-    PortLED = 3
-    BeepOnWire_1 = 4
+    noise_pulse_pal = 2
+    port_led = 3
+    beep_on_wire1 = 4

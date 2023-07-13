@@ -1014,7 +1014,7 @@
         <item row="0" column="1" rowspan="3">
          <widget class="QGroupBox" name="lightIntensityBox">
           <property name="title">
-           <string>LightIntensity</string>
+           <string>Light Intensity</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_21">
            <item row="0" column="0">
@@ -1197,7 +1197,7 @@
         <item row="1" column="1">
          <widget class="QGroupBox" name="randomDotsBox">
           <property name="title">
-           <string>RandomDots</string>
+           <string>Random Dots</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_31">
            <item row="0" column="0">

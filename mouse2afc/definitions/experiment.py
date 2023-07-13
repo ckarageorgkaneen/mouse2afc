@@ -1,8 +1,8 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class ExperimentType(SpecialEnum):
-    Auditory = 1
-    LightIntensity = 2
-    GratingOrientation = 3
-    RandomDots = 4
+    auditory = 1
+    light_intensity = 2
+    grating_orientation = 3
+    random_dots = 4

@@ -1,6 +1,6 @@
-from .special_enum import SpecialEnum
+from mouse2afc.definitions.special_enum import SpecialEnum
 
 
 class MouseState(SpecialEnum):
-    FreelyMoving = 1
-    HeadFixed = 2
+    freely_moving = 1
+    head_fixed = 2
