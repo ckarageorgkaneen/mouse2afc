@@ -1,3 +1,4 @@
+"User settings for 'emulator_run' and 'emulator_run_manual_override'"
 import datetime, time, logging
 
 PYBPOD_API_LOG_LEVEL = logging.DEBUG #logging.WARNING; logging.DEBUG
