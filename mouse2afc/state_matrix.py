@@ -242,7 +242,7 @@ class StateMatrix(StateMachine):
             str(MatrixState.RegisterWrongWaitCorrect))
         left_action_state = iff(is_left_rewarded, str(
             MatrixState.WaitForRewardStart), incorrect_consequence)
-        left_action_state = iff(is_left_rewarded, incorrect_consequence, str(
+        right_action_state = iff(is_left_rewarded, incorrect_consequence, str(
             MatrixState.WaitForRewardStart))
         reward_in = iff(is_left_rewarded, left_port_in, right_port_in)
         reward_out = iff(is_left_rewarded, left_port_out, right_port_out)
@@ -449,7 +449,7 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
                            center_port_out: str(MatrixState.WaitForChoice),
                            left_port_in: left_action_state,
-                           right_port_in: left_action_state,
+                           right_port_in: right_action_state,
                            'GlobalTimer1_End': str(MatrixState.TimeoutMissedChoice
                                     )},
                        output_actions=(wait_for_decision_stim + extended_stimulus
@@ -458,7 +458,7 @@ class StateMatrix(StateMachine):
                        state_timer=0,
                        state_change_conditions={
                            left_port_in: left_action_state,
-                           right_port_in: left_action_state,
+                           right_port_in: right_action_state,
                            'GlobalTimer1_End': str(MatrixState.TimeoutMissedChoice)},
                        output_actions=(wait_for_decision_stim + extended_stimulus))
         self.add_state(state_name=str(MatrixState.WaitForRewardStart),
