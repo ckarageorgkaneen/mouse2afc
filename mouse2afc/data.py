@@ -324,7 +324,8 @@ class CustomData:
         if str(MatrixState.TimeoutSkippedFeedback) in \
                 states_visited_this_trial_names:
             self.trials.feedback[i_trial] = False
-        if str(MatrixState.Reward) in states_visited_this_trial_names:
+        if str(MatrixState.Reward) in states_visited_this_trial_names \
+            and not self.trials.catch_trial:
             self.trials.rewarded[i_trial] = True
             self.trials.reward_received_total[i_trial] += \
                 self.task_parameters.reward_amount
@@ -347,13 +348,6 @@ class CustomData:
         self.trials.stim_delay[i_trial] = self.task_parameters.stim_delay
         self.trials.feedback_delay[i_trial] = self.task_parameters.feedback_delay
         self.trials.min_sample[i_trial] = self.task_parameters.min_sample
-        self.trials.reward_magnitude[i_trial + 1] = [
-            self.task_parameters.reward_amount,
-            self.task_parameters.reward_amount]
-        self.trials.center_port_rew_amount[
-            i_trial + 1] = self.task_parameters.center_port_rew_amount
-        self.trials.pre_stim_cntr_reward[
-            i_trial + 1] = self.task_parameters.pre_stim_delay_cntr_reward
         self.timer.custom_extract_data[i_trial] = time.time()
 
         # IF we are running grating experiments,
@@ -498,9 +492,6 @@ class CustomData:
                 self.task_parameters.feedback_delay_max,
                 self.task_parameters.feedback_delay_tau)
         elif FeedbackDelaySelection.fix:
-            #     ATTEMPT TO GRAY OUT FIELDS
-            if self.task_parametersMeta.feedback_delay.Style != 'edit':
-                self.task_parametersMeta.feedback_delay.Style = 'edit'
             self.task_parameters.feedback_delay = \
                 self.task_parameters.feedback_delay_max
         else:
@@ -555,6 +546,7 @@ class CustomData:
         else:
             perf_right = sum(filter(None,ndx_right_rewd)) / sum(filter(None,ndx_right_rew_done))
         self.task_parameters.calc_left_bias = (perf_left - perf_right) / 2 + 0.5
+        self.timer.custom_calc_bias[i_trial] = time.time()
 
         choice_made_trials = [
             choice_c is not None for choice_c in self.trials.choice_correct]
