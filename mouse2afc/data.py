@@ -239,7 +239,11 @@ class CustomData:
                 else:
                     # This covers early_withdrawal
                     self.trials.st[i_trial] = diff(stimulus_delivery_state_times)
-
+        if str(MatrixState.StimulusTime) in states_visited_this_trial_names:
+            stimulus_time_state_times = states_visited_this_trial_times[
+                str(MatrixState.StimulusTime)][-1]
+            self.trials.st[i_trial] = stimulus_time_state_times[-1] - \
+                stimulus_delivery_state_times[0][1]
         if str(MatrixState.WaitForChoice) in states_visited_this_trial_names and \
             str(MatrixState.TimeoutMissedChoice) not in \
                 states_visited_this_trial_names:
