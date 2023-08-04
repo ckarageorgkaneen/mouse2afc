@@ -28,11 +28,6 @@ class Mouse2AFC:
             file_=config_file).task_parameters
         self._data = Data(self._bpod.session, self._task_parameters)
 
-    def _set_current_stimulus(self):
-        "Set current stimulus for next trial - set between -100 to +100"
-        self._task_parameters.current_stim = (self._data.custom.trials.DV[0] + (
-            int(self._data.custom.trials.DV[0] > 0) or -1)) / 0.02
-
     def my_softcode_handler(self,_softcode):
         "Defines what each SoftCode output does"
         if _softcode == 1:
@@ -47,9 +42,9 @@ class Mouse2AFC:
 
     def run(self):
         "Runs the protocol"
-        self._data.custom.assign_future_trials(START_FROM,NUM_TRIALS_TO_GENERATE)
-        self._set_current_stimulus()
         i_trial = 0
+        self._data.custom.assign_future_trials(START_FROM,NUM_TRIALS_TO_GENERATE)
+        self._data.custom.generate_next_trial(i_trial)
         self._bpod.softcode_handler_function = self.my_softcode_handler
         while True:
             logger.error('Before StateMatrix()')

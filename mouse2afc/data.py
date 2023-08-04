@@ -147,6 +147,56 @@ class CustomData:
 
         self.DVs_already_generated = start_from + num_trials_to_generate
 
+    def generate_next_trial(self,trial_num):
+        #Calc Trial DV
+        if self.task_parameters.experiment_type == \
+                    ExperimentType.auditory:
+            DV = calc_aud_click_train(self,trial_num)
+        elif self.task_parameters.experiment_type == \
+                ExperimentType.light_intensity:
+            DV = calc_light_intensity(self, trial_num)
+        elif self.task_parameters.experiment_type == \
+                ExperimentType.grating_orientation:
+            DV = calc_grating_orientation(self,trial_num)
+        elif self.task_parameters.experiment_type == \
+                ExperimentType.random_dots:
+            DV = calc_dots_coherence(self, trial_num)
+        else:
+            error('Unexpected Experiment Type')
+        self.trials.DV[trial_num] = DV
+
+        #Set current stimulus for next trial - set between -100 to +100
+        self.task_parameters.current_stim = (self.trials.DV[0] + (
+            int(self.trials.DV[0] > 0) or -1)) / 0.02
+
+        # Set current stimulus for next trial
+        DV = self.trials.DV[trial_num ]
+        if self.task_parameters.experiment_type == \
+                ExperimentType.random_dots:
+            self.task_parameters.current_stim = \
+                f"{abs(DV / 0.01)}{iff(DV < 0, '# R cohr.', '# L cohr.')}"
+        else:
+            # Set between -100 to +100
+            stim_intensity = f'{iff(DV > 0, (DV + 1) / 0.02, (DV - 1) / -0.02)}'
+            self.task_parameters.current_stim = \
+                f"{stim_intensity}{iff(DV < 0, '# R', '# L')}"
+
+        # determine if optogentics trial
+        opto_enabled = rand(1, 1) < self.task_parameters.opto_prob
+        if trial_num < self.task_parameters.start_easy_trials:
+            opto_enabled = False
+        self.trials.opto_enabled[trial_num] = opto_enabled
+        self.task_parameters.is_opto_trial = iff(
+            opto_enabled, 'true', 'false')
+
+        # Determine if Forced LED trial:
+        if self.task_parameters.port_led_to_cue_reward:
+            self.trials.forced_led_trial[trial_num] = rand(1, 1) < \
+                self.task_parameters.percent_forced_led_trial
+        else:
+            self.trials.forced_led_trial[trial_num] = False
+        self.timer.custom_catch_n_force_led[trial_num] = time.time()
+
     def update(self, i_trial):
         "Update variables according to data from pervious trials. Called after every trial"
         # Standard values
@@ -624,48 +674,15 @@ class CustomData:
             self.timer.custom_prep_new_trials[i_trial] = 0
             self.timer.custom_gen_new_trials[i_trial] = 0
 
-        if self.task_parameters.experiment_type == \
-                    ExperimentType.auditory:
-            DV = calc_aud_click_train(self,i_trial+1)
-        elif self.task_parameters.experiment_type == \
-                ExperimentType.light_intensity:
-            DV = calc_light_intensity(self, i_trial+1)
-        elif self.task_parameters.experiment_type == \
-                ExperimentType.grating_orientation:
-            DV = calc_grating_orientation(self,i_trial+1)
-        elif self.task_parameters.experiment_type == \
-                ExperimentType.random_dots:
-            DV = calc_dots_coherence(self, i_trial+1)
-        else:
-            error('Unexpected Experiment Type')
-        self.trials.DV[i_trial+1] = DV
-
-        # Update RDK GUI
-        self.task_parameters.omega_table.columns.rdk = [
-            (value - 50) * 2
-            for value in self.task_parameters.omega_table.columns.omega
-        ]
-        # Set current stimulus for next trial
-        DV = self.trials.DV[i_trial + 1]
-        if self.task_parameters.experiment_type == \
-                ExperimentType.random_dots:
-            self.task_parameters.current_stim = \
-                f"{abs(DV / 0.01)}{iff(DV < 0, '# R cohr.', '# L cohr.')}"
-        else:
-            # Set between -100 to +100
-            stim_intensity = f'{iff(DV > 0, (DV + 1) / 0.02, (DV - 1) / -0.02)}'
-            self.task_parameters.current_stim = \
-                f"{stim_intensity}{iff(DV < 0, '# R', '# L')}"
+        self.generate_next_trial(i_trial+1)
 
         self.timer.custom_finalize_update[i_trial] = time.time()
 
-        # determine if optogentics trial
-        opto_enabled = rand(1, 1) < self.task_parameters.opto_prob
-        if i_trial < self.task_parameters.start_easy_trials:
-            opto_enabled = False
-        self.trials.opto_enabled[i_trial + 1] = opto_enabled
-        self.task_parameters.is_opto_trial = iff(
-            opto_enabled, 'true', 'false')
+        # Update RDK GUI  #TODO:Figure out where this goes
+        self.task_parameters.omega_table.columns.rdk = [
+            (value - 50) * 2
+            for value in self.task_parameters.omega_table.columns.omega
+            ]
 
         # determine if catch trial
         if i_trial < self.task_parameters.start_easy_trials or \
@@ -706,13 +723,6 @@ class CustomData:
         # GUI sync doesn't complain
         self.task_parameters.is_catch = iff(
             self.trials.catch_trial[i_trial + 1], 'true', 'false')
-        # Determine if Forced LED trial:
-        if self.task_parameters.port_led_to_cue_reward:
-            self.trials.forced_led_trial[i_trial + 1] = rand(1, 1) < \
-                self.task_parameters.percent_forced_led_trial
-        else:
-            self.trials.forced_led_trial[i_trial + 1] = False
-        self.timer.custom_catch_n_force_led[i_trial] = time.time()
 
 
 class TimerData:
