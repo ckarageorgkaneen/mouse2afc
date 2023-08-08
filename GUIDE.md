@@ -1,9 +1,12 @@
 # Installation
 
 1. Do steps 1-3 from [Installation for developers](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html#installation-for-developers)
+     - For Linux: Follow the intructions normally
+     - For Windows: Open the yml file and modify `sqlite=3.19.3=vc14_1` by deleting the build and version numbers before finishing step 2. It should now be `sqlite`
 
 2. Verify
 
+For Linux:
 ```bash
 echo $CONDA_DEFAULT_ENV
 ```
@@ -13,9 +16,22 @@ yields
 ```
 pybpod-environment
 ```
+For Windows:
+```bash
+conda env list
+```
+yields
+```bash
+# conda environments:
+#
+base                    /...
+pybpod-environment     */...
+```
+with the asterik `*` next to `pybpod-environment`
 
 3. Verify the executable is inside the conda environment path. E.g.
 
+For Linux:
 ```bash
 which pip
 ```
@@ -26,6 +42,17 @@ yields
 /home/USER/anaconda3/envs/pybpod-environment/bin/pip
 ```
 
+
+For Windows:
+
+```
+pip --version
+```
+yeilds
+
+```
+home/username/anaconda3/envs/pybpod-env/lib/python3.6/site-packages/pip (python 3.6)
+```
 4. Upgrade pip
 
 ```bash
