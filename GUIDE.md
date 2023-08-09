@@ -78,14 +78,17 @@ pip install -e .
 # Setting Up the Protocol in PyBpod
 
 ### 1. Start the pybpod GUI.
-#### Linux:
+First,
 ```bash
 cd <REPONAME>
+```
+Next,
+#### Linux:
+```bash
 python -c 'import pybpodgui_plugin.__main__ as Main; Main.start()'
 ```
 #### Windows:
 ```bash
-cd <REPONAME>
 python -c "import pybpodgui_plugin.__main__ as Main; Main.start()"
 ```
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/520fb3cd-6d37-4749-9103-3b93f2294cc7)
