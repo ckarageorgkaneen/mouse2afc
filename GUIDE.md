@@ -78,17 +78,14 @@ pip install -e .
 # Setting Up the Protocol in PyBpod
 
 ### 1. Start the pybpod GUI.
-First,
-```bash
-cd <REPONAME>
-```
-Next,
 #### Linux:
 ```bash
+cd <REPONAME>
 python -c 'import pybpodgui_plugin.__main__ as Main; Main.start()'
 ```
 #### Windows:
 ```bash
+cd <REPONAME>
 python -c "import pybpodgui_plugin.__main__ as Main; Main.start()"
 ```
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/520fb3cd-6d37-4749-9103-3b93f2294cc7)
@@ -111,7 +108,7 @@ BPOD_WIRED_PORTS_ENABLED = [True, True, True, True]
 BPOD_BEHAVIOR_PORTS_ENABLED = [True, True, True, False, False, False, False, False]
 ```
 
-replace `PYBPOD_SESSION_PATH` with the path of the folder you want the session to be saved into. (e.g. Linux: `/home/user/Documents/mouse2afc_sessions`, Windows:``"C:\\Users\\mouse2afc\\mouse2afc_sessions"`)
+replace `PYBPOD_SESSION_PATH` with the path of the folder you want the session to be saved into. (e.g. Linux: `/home/user/Documents/mouse2afc_sessions`, Windows: `"C:\\Users\\mouse2afc\\mouse2afc_sessions"`)
 
 ### 3. Save the changes
 Click `Save` and close the program.
