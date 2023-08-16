@@ -234,8 +234,6 @@ class StateMatrix(StateMachine):
         right_valve_time = get_valve_times(
             data.custom.trials.reward_magnitude[i_trial][1], right_port)
 
-        rewarded_port = iff(is_left_rewarded, left_port, right_port)
-        rewarded_port_pwm = iff(is_left_rewarded, left_pwm, right_pwm)
         incorrect_consequence = iff(
             not task_parameters.habituate_ignore_incorrect,
             str(MatrixState.WaitForPunishStart),
@@ -341,14 +339,16 @@ class StateMatrix(StateMachine):
         # beginning of the training. On auditory discrimination task, both
         # lateral ports are illuminated after end of stimulus delivery.
         if data.custom.trials.forced_led_trial[i_trial]:
-            extended_stimulus = [(pwm_str(rewarded_port), rewarded_port_pwm)]
+            rewarded_port = iff(is_left_rewarded, left_port, right_port)
+            rewarded_port_pwm = iff(is_left_rewarded, left_pwm, right_pwm)
+            forced_led_stim = [(pwm_str(rewarded_port), rewarded_port_pwm)]
         elif task_parameters.experiment_type == ExperimentType.auditory:
-            extended_stimulus = [
+            forced_led_stim = [
                 (pwm_str(left_port), left_pwm),
                 (pwm_str(right_port), right_pwm)
             ]
         else:
-            extended_stimulus = []
+            forced_led_stim = []
 
         pc_timeout = task_parameters.pc_timeout
         # Build state matrix
@@ -442,7 +442,7 @@ class StateMatrix(StateMachine):
                        state_timer=0,
                        state_change_conditions={
                            Bpod.Events.Tup: str(MatrixState.WaitForChoice)},
-                       output_actions=(wait_for_decision_stim + extended_stimulus
+                       output_actions=(wait_for_decision_stim + forced_led_stim
                                        + [('GlobalTimerTrig', enc_trig(1))]))
         self.add_state(state_name=str(MatrixState.WaitCenterPortOut),
                        state_timer=0,
@@ -452,7 +452,7 @@ class StateMatrix(StateMachine):
                            right_port_in: right_action_state,
                            'GlobalTimer1_End': str(MatrixState.TimeoutMissedChoice
                                     )},
-                       output_actions=(wait_for_decision_stim + extended_stimulus
+                       output_actions=(wait_for_decision_stim + forced_led_stim
                                        + [('GlobalTimerTrig', enc_trig(1))]))
         self.add_state(state_name=str(MatrixState.WaitForChoice),
                        state_timer=0,
@@ -460,7 +460,7 @@ class StateMatrix(StateMachine):
                            left_port_in: left_action_state,
                            right_port_in: right_action_state,
                            'GlobalTimer1_End': str(MatrixState.TimeoutMissedChoice)},
-                       output_actions=(wait_for_decision_stim + extended_stimulus))
+                       output_actions=(wait_for_decision_stim + forced_led_stim))
         self.add_state(state_name=str(MatrixState.WaitForRewardStart),
                        state_timer=0,
                        state_change_conditions={
