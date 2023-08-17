@@ -135,43 +135,45 @@ Click `Open` and select `pybpod-project` located in the `mouse2afc` repository f
 ### 3. Select user
 Under `Users`, double-click on `Default-User` to select it
 
-### 4. Edit protocol sessions path
-Under `Protocols`, Double-click on `Mouse2AFC` and in the task editor change `MOUSE2AFC_PATH` to the path of your `mouse2afc` repository (e.g. Linux: `'/home/user/mouse2afc'`, Windows:`"C:\\Users\\mouse2afc"`)
+### 4. Select Bpod board information
+In the `Projects` window, go to `Bpod boards`, select `Default-Box` then in the `Details` window select the serial port your Bpod is connected to. For Linux the serial port will look like `/dev/tty`, for Windows `COM`
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/34e52d64-ed1e-42b0-9377-09989f249c5e)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/c82364bc-c492-4ebf-941a-9869ed7d8467)
 
-### 5. Select Bpod board information
-In the `Projects` window, go to `Bpod boards`, select `Default-Box` then in the `Details` window select the serial port your Bpod is connected to, if you wish to test a protocol without a device check `Emulator mode` (as seen below)
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/2c3dd1ee-4dab-4863-9885-eb8219d20c83)
 
 and click `Console`:
 
-![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/8c11c7ce-87c3-46e5-baa5-c338a86ae989)
+![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/ae4e52e0-aabc-4dc2-acc8-baae1e36198e)
 
-### 6. Assign subjects to setup
+### 5. Assign subjects to setup
 Under `Subjects`, click on `Default-Subject`. If not already selected, click on the dropdown widget next to `Setup` and select the setup you would like this mouse to use:
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/70a85f8f-8348-418d-98b2-f607a3040c9a)
 
-### 7. Assign experiment setup, board, and protocol
+### 6. Assign experiment setup, board, and protocol
 Similarly, under `Default Experiment`, click on `Default-Setup` and, if not already selected, select a `Board` and `Procotol` for the experiment:
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7a90ca3f-5f96-44c5-a845-3f9e8907e121)
 
-### 8. Add subject to setup
+### 7. Add subject to setup
 In the `Subjects` tab, if not already selected, click `Add Subject` to select the subject(s) for the experiment:
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/42400e4e-8340-413d-8e92-098f3c65d926)
 
-### 9. Open emulator GUI
+### 8. Open emulator GUI
 Click `Test Protocol IO` and the following GUI window should pop up:
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/4a78ee03-a3da-4ac0-9539-2801fa4a6b65)
 
-### 10. Run the protocol using Pybpod
+### 9. Run the protocol using Pybpod
 Click `Save`, click `Run Protocol`, select the appropriate parameters in the task parameter GUI, click `Ok` and the protocol should run. Check the boxes of your choice in the `Poke` row to emulate a mouse poking in (checked) and out (unchecked):
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7e0afd02-d21d-4096-a843-90ff0fd3249b)
 
-## 11. Stop the experiment
+## 10. Stop the experiment
 When done using, click `Stop` or `Kill`, and then `Save`.
+
+### Note about emulator mode:
+If you wish to test a protocol without connecting to a Bpod:
+1. Instead of doing step five, check `Emulator mode`
+2. Under `Protocols`, open `Mouse2AFC` and edit line 6. Change `emulator_mode` to equal `True` instead of `False`
