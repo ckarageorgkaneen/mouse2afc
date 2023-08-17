@@ -140,9 +140,8 @@ Under `Protocols`, Double-click on `Mouse2AFC` and in the task editor change `MO
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/34e52d64-ed1e-42b0-9377-09989f249c5e)
 
-### 5. Select Bpod board
-In the `Projects` window, go to `Bpod boards`, select `Default-Box` then in the `Details` window check `Emulator mode`:
-
+### 5. Select Bpod board information
+In the `Projects` window, go to `Bpod boards`, select `Default-Box` then in the `Details` window select the serial port your Bpod is connected to, if you wish to test a protocol without a device check `Emulator mode` (as seen below)
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/2c3dd1ee-4dab-4863-9885-eb8219d20c83)
 
 and click `Console`:
@@ -170,7 +169,7 @@ Click `Test Protocol IO` and the following GUI window should pop up:
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/4a78ee03-a3da-4ac0-9539-2801fa4a6b65)
 
 ### 10. Run the protocol using Pybpod
-Click `Save`, click `Run Protocol`, select the appropriate parameters in the task parameter GUI, click `Ok` and the protocol should run. Now check the boxes of your choice in the `Poke` row to emulate a mouse poking in (checked) and out (unchecked):
+Click `Save`, click `Run Protocol`, select the appropriate parameters in the task parameter GUI, click `Ok` and the protocol should run. Check the boxes of your choice in the `Poke` row to emulate a mouse poking in (checked) and out (unchecked):
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/7e0afd02-d21d-4096-a843-90ff0fd3249b)
 
