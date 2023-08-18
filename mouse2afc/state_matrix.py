@@ -1,6 +1,7 @@
 import logging
 import math
 import numpy as np
+import itertools
 
 from pybpodapi.protocol import Bpod
 from pybpodapi.protocol import StateMachine
@@ -59,6 +60,133 @@ def pwm_str(port):
 def port_str(port, out=False):
     return f'{PORT_STR}{str(port)}{OUT_STR if out else IN_STR}'
 
+def single_experiment_stimulus(self,task_parameters,data,i_trial,experiment_level):
+    if experiment_level == ExperimentType.auditory:
+        # In MATLAB: 'BNCState' instead of 'BNC1'
+        _delivery_stimulus = [('BNC1', 1)]
+        _cont_deliver_stimulus = []
+        _stop_stimulus = [('BNC1', 0)]
+    elif experiment_level == \
+            ExperimentType.light_intensity:
+        # Divide Intensity by 100 to get fraction value
+        left_pwm_stim = round(
+            data.custom.trials.light_intensity_left[i_trial] * self.left_pwm / 100)
+        right_pwm_stim = round(
+            data.custom.trials.light_intensity_right[
+                i_trial] * self.right_pwm / 100)
+        _delivery_stimulus = [
+            (pwm_str(self.left_port), left_pwm_stim),
+            (pwm_str(self.right_port), right_pwm_stim)
+        ]
+        _cont_deliver_stimulus = _delivery_stimulus
+        _stop_stimulus =  []
+    elif experiment_level == \
+            ExperimentType.grating_orientation:
+        right_port_angle = VisualStimAngle.get_degrees(
+            task_parameters.visual_stim_angle_port_right.value)
+        left_port_angle = VisualStimAngle.get_degrees(
+            task_parameters.visual_stim_angle_port_left.value)
+        # Calculate the distance between right and left port angle to
+        # determine whether we should use the circle arc between the two
+        # values in the clock-wise or counter-clock-wise direction to
+        # calculate the different difficulties.
+        ccw = iff(mod(right_port_angle - left_port_angle, 360) < mod(
+            left_port_angle - right_port_angle, 360), True, False)
+        if ccw:
+            final_DV = data.custom.trials.DV[i_trial]
+            if right_port_angle < left_port_angle:
+                right_port_angle += 360
+            angle_diff = right_port_angle - left_port_angle
+            min_angle = left_port_angle
+        else:
+            final_DV = -data.custom.trials.DV[i_trial]
+            if left_port_angle < right_port_angle:
+                left_port_angle += 360
+            angle_diff = left_port_angle - right_port_angle
+            min_angle = right_port_angle
+        # orientation = ((DVMax - DV)*(DVMAX-DVMin)*(
+        #   MaxAngle - MinANgle)) + MinAngle
+        grating_orientation = ((1 - final_DV) * angle_diff / 2) + min_angle
+        grating_orientation = mod(grating_orientation, 360)
+        data.custom.draw_params.stim_type = DrawStimType.static_gratings
+        data.custom.draw_params.grating_orientation = grating_orientation
+        data.custom.draw_params.num_cycles = task_parameters.num_cycles
+        data.custom.draw_params.cycles_per_second_drift = \
+            task_parameters.cycles_per_second_drift
+        data.custom.draw_params.phase = task_parameters.phase
+        data.custom.draw_params.gabor_size_factor = \
+            task_parameters.gabor_size_factor
+        data.custom.draw_params.gaussian_filter_ratio = \
+            task_parameters.gaussian_filter_ratio
+        # Start from the 5th byte
+        # serializeAndWrite(data.dotsMapped_file, 5,
+        #                   data.custom.draw_params)
+        # data.dotsMapped_file.data(1: 4) = typecast(uint32(1), 'uint8');
+
+        _delivery_stimulus = [('SoftCode', 5)]
+        _cont_deliver_stimulus = []
+        _stop_stimulus =  [('SoftCode', 6)]
+    elif experiment_level == ExperimentType.random_dots:
+        # Setup the parameters
+        # Use 20% of the screen size. Assume apertureSize is the diameter
+        task_parameters.circleArea = math.pi * \
+            ((task_parameters.aperture_size_width / 2) ** 2)
+        task_parameters.n_dots = round(
+            task_parameters.circle_area * task_parameters.draw_ratio)
+
+        data.custom.draw_params.stimType = DrawStimType.rdk
+        data.custom.draw_params.center_x = task_parameters.center_x
+        data.custom.draw_params.center_y = task_parameters.center_y
+        data.custom.draw_params.aperture_size_width = \
+            task_parameters.aperture_size_width
+        data.custom.draw_params.aperture_size_height = \
+            task_parameters.aperture_size_height
+        data.custom.draw_params.draw_ratio = task_parameters.draw_ratio
+        data.custom.draw_params.main_direction = floor(
+            VisualStimAngle.get_degrees(
+                iff(self.is_left_rewarded,
+                    task_parameters.visual_stim_angle_port_left.value,
+                    task_parameters.visual_stim_angle_port_right.value)))
+        data.custom.draw_params.dot_speed = \
+            task_parameters.dot_speed_degs_per_sec
+        data.custom.draw_params.dot_lifetime_secs = \
+            task_parameters.dot_lifetime_secs
+        data.custom.draw_params.coherence = data.custom.trials.dots_coherence[
+            i_trial]
+        data.custom.draw_params.screen_width_cm = \
+            task_parameters.screen_width_cm
+        data.custom.draw_params.screen_dist_cm = \
+            task_parameters.screen_dist_cm
+        data.custom.draw_params.dot_size_in_degs = \
+            task_parameters.dot_size_in_degs
+
+        # Start from the 5th byte
+        # serializeAndWrite(data.dotsMapped_file, 5,
+        #                   data.custom.draw_params)
+        # data.dotsMapped_file.data(1: 4) = \
+        #   typecast(uint32(1), 'uint8');
+
+        _delivery_stimulus = [('SoftCode', 5)]
+        _cont_deliver_stimulus = []
+        _stop_stimulus = [('SoftCode', 6)]
+    elif experiment_level == ExperimentType.no_stimulus:
+        _delivery_stimulus = []
+        _cont_deliver_stimulus = []
+        _stop_stimulus = []
+    else:
+        error('Unexpected Experiment Type')
+
+    return _delivery_stimulus,_cont_deliver_stimulus,_stop_stimulus
+
+def handle_state_matrix_stim(self,task_parameters,data,i_trial):
+    primary_stimulus = single_experiment_stimulus(self,task_parameters,data,i_trial,task_parameters.primary_experiment_type)
+    secondary_stimulus = single_experiment_stimulus(self,task_parameters,data,i_trial,task_parameters.secondary_experiment_type)
+
+    delivery_stimulus = [primary_stimulus[0],secondary_stimulus[0]]
+    cont_deliver_stimulus = [primary_stimulus[1],secondary_stimulus[1]]
+    stop_stimulus = [primary_stimulus[2],secondary_stimulus[2]]
+
+    return delivery_stimulus,cont_deliver_stimulus,stop_stimulus
 
 class StateMatrix(StateMachine):
     def __init__(self, bpod, task_parameters, data, i_trial):
@@ -88,120 +216,18 @@ class StateMatrix(StateMachine):
 
         is_left_rewarded = data.custom.trials.left_rewarded[i_trial]
 
-        if task_parameters.primary_experiment_type == ExperimentType.auditory:
-            # In MATLAB: 'BNCState' instead of 'BNC1'
-            delivery_stimulus = [('BNC1', 1)]
-            cont_deliver_stimulus = []
-            stop_stimulus = [('BNC1', 0)]
-        elif task_parameters.primary_experiment_type == \
-                ExperimentType.light_intensity:
-            # Divide Intensity by 100 to get fraction value
-            left_pwm_stim = round(
-                data.custom.trials.light_intensity_left[i_trial] * left_pwm / 100)
-            right_pwm_stim = round(
-                data.custom.trials.light_intensity_right[
-                    i_trial] * right_pwm / 100)
-            delivery_stimulus = [
-                (pwm_str(left_port), left_pwm_stim),
-                (pwm_str(right_port), right_pwm_stim)
-            ]
-            cont_deliver_stimulus = delivery_stimulus
-            stop_stimulus =  []
-        elif task_parameters.primary_experiment_type == \
-                ExperimentType.grating_orientation:
-            right_port_angle = VisualStimAngle.get_degrees(
-                task_parameters.visual_stim_angle_port_right.value)
-            left_port_angle = VisualStimAngle.get_degrees(
-                task_parameters.visual_stim_angle_port_left.value)
-            # Calculate the distance between right and left port angle to
-            # determine whether we should use the circle arc between the two
-            # values in the clock-wise or counter-clock-wise direction to
-            # calculate the different difficulties.
-            ccw = iff(mod(right_port_angle - left_port_angle, 360) < mod(
-                left_port_angle - right_port_angle, 360), True, False)
-            if ccw:
-                final_DV = data.custom.trials.DV[i_trial]
-                if right_port_angle < left_port_angle:
-                    right_port_angle += 360
-                angle_diff = right_port_angle - left_port_angle
-                min_angle = left_port_angle
-            else:
-                final_DV = -data.custom.trials.DV[i_trial]
-                if left_port_angle < right_port_angle:
-                    left_port_angle += 360
-                angle_diff = left_port_angle - right_port_angle
-                min_angle = right_port_angle
-            # orientation = ((DVMax - DV)*(DVMAX-DVMin)*(
-            #   MaxAngle - MinANgle)) + MinAngle
-            grating_orientation = ((1 - final_DV) * angle_diff / 2) + min_angle
-            grating_orientation = mod(grating_orientation, 360)
-            data.custom.draw_params.stim_type = DrawStimType.static_gratings
-            data.custom.draw_params.grating_orientation = grating_orientation
-            data.custom.draw_params.num_cycles = task_parameters.num_cycles
-            data.custom.draw_params.cycles_per_second_drift = \
-                task_parameters.cycles_per_second_drift
-            data.custom.draw_params.phase = task_parameters.phase
-            data.custom.draw_params.gabor_size_factor = \
-                task_parameters.gabor_size_factor
-            data.custom.draw_params.gaussian_filter_ratio = \
-                task_parameters.gaussian_filter_ratio
-            # Start from the 5th byte
-            # serializeAndWrite(data.dotsMapped_file, 5,
-            #                   data.custom.draw_params)
-            # data.dotsMapped_file.data(1: 4) = typecast(uint32(1), 'uint8');
+        self.left_port = left_port
+        self.center_port = center_port
+        self.right_port = right_port
+        self.left_pwm = left_pwm
+        self.center_pwm = center_pwm
+        self.right_pwm = right_pwm
+        self.is_left_rewarded = is_left_rewarded
 
-            delivery_stimulus = [('SoftCode', 5)]
-            cont_deliver_stimulus = []
-            stop_stimulus =  [('SoftCode', 6)]
-        elif task_parameters.primary_experiment_type == ExperimentType.random_dots:
-            # Setup the parameters
-            # Use 20% of the screen size. Assume apertureSize is the diameter
-            task_parameters.circleArea = math.pi * \
-                ((task_parameters.aperture_size_width / 2) ** 2)
-            task_parameters.n_dots = round(
-                task_parameters.circle_area * task_parameters.draw_ratio)
-
-            data.custom.draw_params.stimType = DrawStimType.rdk
-            data.custom.draw_params.center_x = task_parameters.center_x
-            data.custom.draw_params.center_y = task_parameters.center_y
-            data.custom.draw_params.aperture_size_width = \
-                task_parameters.aperture_size_width
-            data.custom.draw_params.aperture_size_height = \
-                task_parameters.aperture_size_height
-            data.custom.draw_params.draw_ratio = task_parameters.draw_ratio
-            data.custom.draw_params.main_direction = floor(
-                VisualStimAngle.get_degrees(
-                    iff(is_left_rewarded,
-                        task_parameters.visual_stim_angle_port_left.value,
-                        task_parameters.visual_stim_angle_port_right.value)))
-            data.custom.draw_params.dot_speed = \
-                task_parameters.dot_speed_degs_per_sec
-            data.custom.draw_params.dot_lifetime_secs = \
-                task_parameters.dot_lifetime_secs
-            data.custom.draw_params.coherence = data.custom.trials.dots_coherence[
-                i_trial]
-            data.custom.draw_params.screen_width_cm = \
-                task_parameters.screen_width_cm
-            data.custom.draw_params.screen_dist_cm = \
-                task_parameters.screen_dist_cm
-            data.custom.draw_params.dot_size_in_degs = \
-                task_parameters.dot_size_in_degs
-
-            # Start from the 5th byte
-            # serializeAndWrite(data.dotsMapped_file, 5,
-            #                   data.custom.draw_params)
-            # data.dotsMapped_file.data(1: 4) = \
-            #   typecast(uint32(1), 'uint8');
-
-            delivery_stimulus = [('SoftCode', 5)]
-            cont_deliver_stimulus = []
-            stop_stimulus = [('SoftCode', 6)]
-        elif task_parameters.primary_experiment_type == ExperimentType.no_stimulus:
-            delivery_stimulus = []
-            cont_deliver_stimulus = []
-            stop_stimulus = []
-        else:
-            error('Unexpected Experiment Type')
+        stimuli = handle_state_matrix_stim(self,task_parameters,data,i_trial)
+        delivery_stimulus = list(itertools.chain.from_iterable(stimuli[0]))
+        cont_deliver_stimulus = list(itertools.chain.from_iterable(stimuli[1]))
+        stop_stimulus = list(itertools.chain.from_iterable(stimuli[2]))
 
         if task_parameters.stim_after_poke_out == StimAfterPokeOut.not_used:
             wait_for_decision_stim = stop_stimulus
