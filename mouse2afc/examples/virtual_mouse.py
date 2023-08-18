@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"Creates a 'virutal mouse' for testing the protocol without a BPod"
+"Creates a 'virutal mouse' for testing a protocol without a BPod"
 import itertools
 import logging
 import random
