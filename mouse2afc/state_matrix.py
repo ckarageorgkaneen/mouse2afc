@@ -88,12 +88,12 @@ class StateMatrix(StateMachine):
 
         is_left_rewarded = data.custom.trials.left_rewarded[i_trial]
 
-        if task_parameters.experiment_type == ExperimentType.auditory:
+        if task_parameters.primary_experiment_type == ExperimentType.auditory:
             # In MATLAB: 'BNCState' instead of 'BNC1'
             delivery_stimulus = [('BNC1', 1)]
             cont_deliver_stimulus = []
             stop_stimulus = [('BNC1', 0)]
-        elif task_parameters.experiment_type == \
+        elif task_parameters.primary_experiment_type == \
                 ExperimentType.light_intensity:
             # Divide Intensity by 100 to get fraction value
             left_pwm_stim = round(
@@ -107,7 +107,7 @@ class StateMatrix(StateMachine):
             ]
             cont_deliver_stimulus = delivery_stimulus
             stop_stimulus =  []
-        elif task_parameters.experiment_type == \
+        elif task_parameters.primary_experiment_type == \
                 ExperimentType.grating_orientation:
             right_port_angle = VisualStimAngle.get_degrees(
                 task_parameters.visual_stim_angle_port_right.value)
@@ -153,7 +153,7 @@ class StateMatrix(StateMachine):
             delivery_stimulus = [('SoftCode', 5)]
             cont_deliver_stimulus = []
             stop_stimulus =  [('SoftCode', 6)]
-        elif task_parameters.experiment_type == ExperimentType.random_dots:
+        elif task_parameters.primary_experiment_type == ExperimentType.random_dots:
             # Setup the parameters
             # Use 20% of the screen size. Assume apertureSize is the diameter
             task_parameters.circleArea = math.pi * \
@@ -196,7 +196,7 @@ class StateMatrix(StateMachine):
             delivery_stimulus = [('SoftCode', 5)]
             cont_deliver_stimulus = []
             stop_stimulus = [('SoftCode', 6)]
-        elif task_parameters.experiment_type == ExperimentType.no_stimulus:
+        elif task_parameters.primary_experiment_type == ExperimentType.no_stimulus:
             delivery_stimulus = []
             cont_deliver_stimulus = []
             stop_stimulus = []
@@ -346,7 +346,7 @@ class StateMatrix(StateMachine):
             rewarded_port = iff(is_left_rewarded, left_port, right_port)
             rewarded_port_pwm = iff(is_left_rewarded, left_pwm, right_pwm)
             forced_led_stim = [(pwm_str(rewarded_port), rewarded_port_pwm)]
-        elif task_parameters.experiment_type == ExperimentType.auditory:
+        elif task_parameters.primary_experiment_type == ExperimentType.auditory:
             forced_led_stim = [
                 (pwm_str(left_port), left_pwm),
                 (pwm_str(right_port), right_pwm)
