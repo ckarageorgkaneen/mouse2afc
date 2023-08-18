@@ -177,3 +177,6 @@ When done using, click `Stop` or `Kill`, and then `Save`.
 If you wish to test a protocol without connecting to a Bpod:
 1. Instead of doing step five, check `Emulator mode`
 2. Under `Protocols`, open `Mouse2AFC` and edit line 6 to be `bpod=Bpod(emulator_mode=True`)
+
+### Note about examples
+The examples are meant to be run outside of pybpod, inside of your IDE
