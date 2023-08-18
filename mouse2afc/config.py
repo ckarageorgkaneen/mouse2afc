@@ -30,6 +30,7 @@ computer_name = None
 correct_bias = True
 current_stim = 0
 experiment_type = ExperimentType.light_intensity
+secondary_experiment_type = ExperimentType.no_stimulus
 feedback_delay_max = 1.5
 feedback_delay_min = 0.5
 feedback_delay = feedback_delay_min

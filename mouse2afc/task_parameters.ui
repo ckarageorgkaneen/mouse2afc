@@ -12,8 +12,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1004</width>
-    <height>674</height>
+    <width>1131</width>
+    <height>770</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -56,8 +56,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>297</width>
-                <height>612</height>
+                <width>326</width>
+                <height>647</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_9">
@@ -86,179 +86,189 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="0">
+                 <item row="2" column="0">
                   <widget class="QLabel" name="iTILabel">
                    <property name="text">
                     <string>ITI</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="1">
+                 <item row="2" column="1">
                   <widget class="QSpinBox" name="iti"/>
                  </item>
-                 <item row="2" column="0">
+                 <item row="3" column="0">
                   <widget class="QLabel" name="rewardAmountLabel">
                    <property name="text">
                     <string>Reward Amount</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="1">
+                 <item row="3" column="1">
                   <widget class="QSpinBox" name="reward_amount"/>
                  </item>
-                 <item row="3" column="0">
+                 <item row="4" column="0">
                   <widget class="QLabel" name="choiceDeadlineLabel">
                    <property name="text">
                     <string>Choice Deadline</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="1">
+                 <item row="4" column="1">
                   <widget class="QSpinBox" name="choice_deadline"/>
                  </item>
-                 <item row="4" column="0">
+                 <item row="5" column="0">
                   <widget class="QLabel" name="timeOutIncorrectChoiceLabel">
                    <property name="text">
                     <string>Timeout Incorrect Choice</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
+                 <item row="5" column="1">
                   <widget class="QSpinBox" name="timeout_incorrect_choice"/>
                  </item>
-                 <item row="5" column="0">
+                 <item row="6" column="0">
                   <widget class="QLabel" name="timeOutBrokeFixationLabel">
                    <property name="text">
                     <string>Timeout Broke Fixation</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="1">
+                 <item row="6" column="1">
                   <widget class="QSpinBox" name="timeout_broke_fixation"/>
                  </item>
-                 <item row="6" column="0">
+                 <item row="7" column="0">
                   <widget class="QLabel" name="timeOutEarlyWithdrawalLabel">
                    <property name="text">
                     <string>Timeout Early Withdrawal</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="6" column="1">
+                 <item row="7" column="1">
                   <widget class="QSpinBox" name="timeout_early_withdrawal"/>
                  </item>
-                 <item row="7" column="0">
+                 <item row="8" column="0">
                   <widget class="QLabel" name="timeOutMissedChoiceLabel">
                    <property name="text">
                     <string>Timeout Missed Choice</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="7" column="1">
+                 <item row="8" column="1">
                   <widget class="QSpinBox" name="timeout_missed_choice"/>
                  </item>
-                 <item row="8" column="0">
+                 <item row="9" column="0">
                   <widget class="QLabel" name="timeOutSkippedFeedbackLabel">
                    <property name="text">
                     <string>Timeout Skipped Feedback</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="8" column="1">
+                 <item row="9" column="1">
                   <widget class="QSpinBox" name="timeout_skipped_feedback"/>
                  </item>
-                 <item row="9" column="0">
+                 <item row="10" column="0">
                   <widget class="QLabel" name="startEasyTrialsLabel">
                    <property name="text">
                     <string>Start Easy Trials</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="9" column="1">
+                 <item row="10" column="1">
                   <widget class="QSpinBox" name="start_easy_trials"/>
                  </item>
-                 <item row="10" column="0">
+                 <item row="11" column="0">
                   <widget class="QLabel" name="percent50FiftyLabel">
                    <property name="text">
                     <string>Percent 50 Fifty</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="10" column="1">
+                 <item row="11" column="1">
                   <widget class="QSpinBox" name="percent_50_fifty"/>
                  </item>
-                 <item row="11" column="0">
+                 <item row="12" column="0">
                   <widget class="QLabel" name="percentCatchLabel">
                    <property name="text">
                     <string>Percent Catch</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="11" column="1">
+                 <item row="12" column="1">
                   <widget class="QSpinBox" name="percent_catch"/>
                  </item>
-                 <item row="12" column="0">
+                 <item row="13" column="0">
                   <widget class="QLabel" name="ports_LMRAirLabel">
                    <property name="text">
                     <string>Ports LMR Air</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="12" column="1">
+                 <item row="13" column="1">
                   <widget class="QSpinBox" name="ports_lmr_air">
                    <property name="maximum">
                     <number>1000000</number>
                    </property>
                   </widget>
                  </item>
-                 <item row="13" column="0">
+                 <item row="14" column="0">
                   <widget class="QLabel" name="habituateIgnoreIncorrectLabel">
                    <property name="text">
                     <string>Habituate Ignore Incorrect</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="13" column="1">
+                 <item row="14" column="1">
                   <widget class="QCheckBox" name="habituate_ignore_incorrect"/>
                  </item>
-                 <item row="14" column="0">
+                 <item row="15" column="0">
                   <widget class="QLabel" name="playNoiseForErrorLabel">
                    <property name="text">
                     <string>PlayNoiseForError</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="14" column="1">
+                 <item row="15" column="1">
                   <widget class="QCheckBox" name="PlayNoiseForError"/>
                  </item>
-                 <item row="15" column="0">
+                 <item row="16" column="0">
                   <widget class="QLabel" name="pCTimeOutLabel">
                    <property name="text">
                     <string>PCTimeOut</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="15" column="1">
+                 <item row="16" column="1">
                   <widget class="QCheckBox" name="pc_timeout"/>
                  </item>
-                 <item row="16" column="0">
+                 <item row="17" column="0">
                   <widget class="QLabel" name="catchErrorLabel">
                    <property name="text">
                     <string>Catch Error</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="16" column="1">
+                 <item row="17" column="1">
                   <widget class="QCheckBox" name="catch_error"/>
                  </item>
-                 <item row="17" column="0">
+                 <item row="18" column="0">
                   <widget class="QLabel" name="wire1VideoTriggerLabel">
                    <property name="text">
                     <string>Wire1 Video Trigger</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="17" column="1">
+                 <item row="18" column="1">
                   <widget class="QCheckBox" name="wire1_video_trigger"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="secondary_experiment_type_label">
+                   <property name="text">
+                    <string>Secondary Experiment Type</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QComboBox" name="secondary_experiment_type"/>
                  </item>
                 </layout>
                </item>
@@ -288,8 +298,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>286</width>
-                <height>480</height>
+                <width>333</width>
+                <height>576</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_16">
@@ -399,8 +409,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>297</width>
-                <height>486</height>
+                <width>334</width>
+                <height>582</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_14">
@@ -531,8 +541,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>944</width>
-                <height>512</height>
+                <width>1071</width>
+                <height>608</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_29">
@@ -724,8 +734,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>323</width>
-                <height>366</height>
+                <width>352</width>
+                <height>462</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_24">
@@ -830,7 +840,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>323</width>
+                <width>352</width>
                 <height>68</height>
                </rect>
               </property>
@@ -869,8 +879,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>292</width>
-                <height>498</height>
+                <width>331</width>
+                <height>608</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_18">
@@ -1027,8 +1037,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>308</width>
-                <height>472</height>
+                <width>324</width>
+                <height>582</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_25">
@@ -1122,8 +1132,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>453</width>
-                <height>208</height>
+                <width>516</width>
+                <height>265</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_33">
@@ -1210,8 +1220,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>453</width>
-                <height>226</height>
+                <width>516</width>
+                <height>265</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_34">
@@ -1313,8 +1323,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>459</width>
-                <height>512</height>
+                <width>523</width>
+                <height>608</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_28">
@@ -1435,8 +1445,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>944</width>
-                <height>512</height>
+                <width>1071</width>
+                <height>608</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_36">
@@ -1560,8 +1570,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>938</width>
-                <height>217</height>
+                <width>1065</width>
+                <height>265</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_39">
@@ -1638,8 +1648,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>938</width>
-                <height>217</height>
+                <width>1065</width>
+                <height>265</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_40">
@@ -1739,7 +1749,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1004</width>
+     <width>1131</width>
      <height>22</height>
     </rect>
    </property>
