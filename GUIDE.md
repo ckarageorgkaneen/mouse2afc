@@ -173,7 +173,7 @@ Click `Save`, click `Run Protocol`, select the appropriate parameters in the tas
 ## 10. Stop the experiment
 When done using, click `Stop` or `Kill`, and then `Save`.
 
-### Note about emulator mode:
+### Note about emulator mode in Pybpod:
 If you wish to test a protocol without connecting to a Bpod:
 1. Instead of doing step five, check `Emulator mode`
 2. Under `Protocols`, open `Mouse2AFC` and edit line 6 to be `bpod=Bpod(emulator_mode=True`)
