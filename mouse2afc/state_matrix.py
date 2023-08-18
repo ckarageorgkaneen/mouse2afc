@@ -196,6 +196,10 @@ class StateMatrix(StateMachine):
             delivery_stimulus = [('SoftCode', 5)]
             cont_deliver_stimulus = []
             stop_stimulus = [('SoftCode', 6)]
+        elif task_parameters.experiment_type == ExperimentType.no_stimulus:
+            delivery_stimulus = []
+            cont_deliver_stimulus = []
+            stop_stimulus = []
         else:
             error('Unexpected Experiment Type')
 

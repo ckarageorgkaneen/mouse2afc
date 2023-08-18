@@ -6,3 +6,4 @@ class ExperimentType(SpecialEnum):
     light_intensity = 2
     grating_orientation = 3
     random_dots = 4
+    no_stimulus = 5

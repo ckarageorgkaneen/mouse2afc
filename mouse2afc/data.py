@@ -161,6 +161,9 @@ class CustomData:
         elif self.task_parameters.experiment_type == \
                 ExperimentType.random_dots:
             DV = calc_dots_coherence(self, trial_num)
+        elif self.task_parameters.experiment_type == \
+                ExperimentType.no_stimulus:
+            DV = 0
         else:
             error('Unexpected Experiment Type')
         self.trials.DV[trial_num] = DV
