@@ -222,6 +222,7 @@ class StateMatrix(StateMachine):
 
         is_left_rewarded = data.custom.trials.left_rewarded[i_trial]
 
+        #created to be used by `handle_state_matrix_stim`
         self.left_port = left_port
         self.center_port = center_port
         self.right_port = right_port
