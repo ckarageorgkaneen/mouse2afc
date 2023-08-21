@@ -63,7 +63,7 @@ def port_str(port, out=False):
 def single_experiment_stimulus(self,task_parameters,data,i_trial,experiment_level):
     if experiment_level == ExperimentType.auditory:
         # In MATLAB: 'BNCState' instead of 'BNC1'
-        _delivery_stimulus = [('BNC1', 1)]
+        _deliver_stimulus = [('BNC1', 1)]
         _cont_deliver_stimulus = []
         _stop_stimulus = [('BNC1', 0)]
     elif experiment_level == \
@@ -74,11 +74,11 @@ def single_experiment_stimulus(self,task_parameters,data,i_trial,experiment_leve
         right_pwm_stim = round(
             data.custom.trials.light_intensity_right[
                 i_trial] * self.right_pwm / 100)
-        _delivery_stimulus = [
+        _deliver_stimulus = [
             (pwm_str(self.left_port), left_pwm_stim),
             (pwm_str(self.right_port), right_pwm_stim)
         ]
-        _cont_deliver_stimulus = _delivery_stimulus
+        _cont_deliver_stimulus = _deliver_stimulus
         _stop_stimulus =  []
     elif experiment_level == \
             ExperimentType.grating_orientation:
@@ -123,7 +123,7 @@ def single_experiment_stimulus(self,task_parameters,data,i_trial,experiment_leve
         #                   data.custom.draw_params)
         # data.dotsMapped_file.data(1: 4) = typecast(uint32(1), 'uint8');
 
-        _delivery_stimulus = [('SoftCode', 5)]
+        _deliver_stimulus = [('SoftCode', 5)]
         _cont_deliver_stimulus = []
         _stop_stimulus =  [('SoftCode', 6)]
     elif experiment_level == ExperimentType.random_dots:
@@ -166,27 +166,27 @@ def single_experiment_stimulus(self,task_parameters,data,i_trial,experiment_leve
         # data.dotsMapped_file.data(1: 4) = \
         #   typecast(uint32(1), 'uint8');
 
-        _delivery_stimulus = [('SoftCode', 5)]
+        _deliver_stimulus = [('SoftCode', 5)]
         _cont_deliver_stimulus = []
         _stop_stimulus = [('SoftCode', 6)]
     elif experiment_level == ExperimentType.no_stimulus:
-        _delivery_stimulus = []
+        _deliver_stimulus = []
         _cont_deliver_stimulus = []
         _stop_stimulus = []
     else:
         error('Unexpected Experiment Type')
 
-    return _delivery_stimulus,_cont_deliver_stimulus,_stop_stimulus
+    return _deliver_stimulus,_cont_deliver_stimulus,_stop_stimulus
 
 def handle_state_matrix_stim(self,task_parameters,data,i_trial):
     primary_stimulus = single_experiment_stimulus(self,task_parameters,data,i_trial,task_parameters.primary_experiment_type)
     secondary_stimulus = single_experiment_stimulus(self,task_parameters,data,i_trial,task_parameters.secondary_experiment_type)
 
-    delivery_stimulus = [primary_stimulus[0],secondary_stimulus[0]]
+    deliver_stimulus = [primary_stimulus[0],secondary_stimulus[0]]
     cont_deliver_stimulus = [primary_stimulus[1],secondary_stimulus[1]]
     stop_stimulus = [primary_stimulus[2],secondary_stimulus[2]]
 
-    return delivery_stimulus,cont_deliver_stimulus,stop_stimulus
+    return deliver_stimulus,cont_deliver_stimulus,stop_stimulus
 
 class StateMatrix(StateMachine):
     def __init__(self, bpod, task_parameters, data, i_trial):
@@ -225,7 +225,7 @@ class StateMatrix(StateMachine):
         self.is_left_rewarded = is_left_rewarded
 
         stimuli = handle_state_matrix_stim(self,task_parameters,data,i_trial)
-        delivery_stimulus = list(itertools.chain.from_iterable(stimuli[0]))
+        deliver_stimulus = list(itertools.chain.from_iterable(stimuli[0]))
         cont_deliver_stimulus = list(itertools.chain.from_iterable(stimuli[1]))
         stop_stimulus = list(itertools.chain.from_iterable(stimuli[2]))
 
@@ -441,7 +441,7 @@ class StateMatrix(StateMachine):
                        state_change_conditions={
                            center_port_out: str(MatrixState.EarlyWithdrawal),
                            Bpod.Events.Tup: str(MatrixState.BeepMinSampling)},
-                       output_actions=delivery_stimulus)
+                       output_actions=deliver_stimulus)
         self.add_state(state_name=str(MatrixState.EarlyWithdrawal),
                        state_timer=0,
                        state_change_conditions={
