@@ -149,18 +149,21 @@ class CustomData:
 
     def generate_next_trial(self,trial_num):
         #Calc Trial DV
-        if self.task_parameters.experiment_type == \
+        if self.task_parameters.primary_experiment_type == \
                     ExperimentType.auditory:
             DV = calc_aud_click_train(self,trial_num)
-        elif self.task_parameters.experiment_type == \
+        elif self.task_parameters.primary_experiment_type == \
                 ExperimentType.light_intensity:
             DV = calc_light_intensity(self, trial_num)
-        elif self.task_parameters.experiment_type == \
+        elif self.task_parameters.primary_experiment_type == \
                 ExperimentType.grating_orientation:
             DV = calc_grating_orientation(self,trial_num)
-        elif self.task_parameters.experiment_type == \
+        elif self.task_parameters.primary_experiment_type == \
                 ExperimentType.random_dots:
             DV = calc_dots_coherence(self, trial_num)
+        elif self.task_parameters.primary_experiment_type == \
+                ExperimentType.no_stimulus:
+            DV = 0
         else:
             error('Unexpected Experiment Type')
         self.trials.DV[trial_num] = DV
@@ -171,7 +174,7 @@ class CustomData:
 
         # Set current stimulus for next trial
         DV = self.trials.DV[trial_num ]
-        if self.task_parameters.experiment_type == \
+        if self.task_parameters.primary_experiment_type == \
                 ExperimentType.random_dots:
             self.task_parameters.current_stim = \
                 f"{abs(DV / 0.01)}{iff(DV < 0, '# R cohr.', '# L cohr.')}"
@@ -402,7 +405,7 @@ class CustomData:
 
         # IF we are running grating experiments,
         # add the grating orientation that was used
-        if self.task_parameters.experiment_type == \
+        if self.task_parameters.primary_experiment_type == \
                 ExperimentType.grating_orientation:
             self.trials.grating_orientation[
                 i_trial] = self.draw_params.grating_orientation
