@@ -61,6 +61,7 @@ def port_str(port, out=False):
     return f'{PORT_STR}{str(port)}{OUT_STR if out else IN_STR}'
 
 def single_experiment_stimulus(self,task_parameters,data,i_trial,experiment_level):
+    "Assigns stimuli according to experiment type"
     if experiment_level == ExperimentType.auditory:
         # In MATLAB: 'BNCState' instead of 'BNC1'
         _deliver_stimulus = [('BNC1', 1)]
@@ -179,8 +180,13 @@ def single_experiment_stimulus(self,task_parameters,data,i_trial,experiment_leve
     return _deliver_stimulus,_cont_deliver_stimulus,_stop_stimulus
 
 def handle_state_matrix_stim(self,task_parameters,data,i_trial):
-    primary_stimulus = single_experiment_stimulus(self,task_parameters,data,i_trial,task_parameters.primary_experiment_type)
-    secondary_stimulus = single_experiment_stimulus(self,task_parameters,data,i_trial,task_parameters.secondary_experiment_type)
+    "combines the stimuli of the primary and secondary experiments"
+    primary_stimulus = single_experiment_stimulus(
+        self,task_parameters,data,i_trial,
+        task_parameters.primary_experiment_type)
+    secondary_stimulus = single_experiment_stimulus(
+        self,task_parameters,data,i_trial,
+        task_parameters.secondary_experiment_type)
 
     deliver_stimulus = [primary_stimulus[0],secondary_stimulus[0]]
     cont_deliver_stimulus = [primary_stimulus[1],secondary_stimulus[1]]
