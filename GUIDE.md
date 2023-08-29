@@ -7,7 +7,7 @@ Do steps 1-3 from [Installation for developers](https://pybpod.readthedocs.io/en
 - Before executing step 2, open the Windows 10 yml file and delete `sqlite=3.19.3=vc14_1`, `jpeg=9b=vc14_2` and `qt=5.6.2=vc14_1`
 - After activating the environment in step 3:
 ```bash
-conda install jpeg=9b=vc14h4d7706e_1 qt=5.6.2=vc14h6f8c307_12 --channel conda-forge --channel anaconda --channel defaults
+conda install jpeg=9b qt=5.6.2 matplotlib=2.0.2 tk --channel conda-forge --channel anaconda --channel defaults
 ```
 
 ### 2. Verify conda environment is activated
