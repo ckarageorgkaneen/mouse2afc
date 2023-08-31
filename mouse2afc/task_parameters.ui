@@ -1,0 +1,1772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1131</width>
+    <height>770</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Mouse2AFC Task Parameters</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="2" column="0">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="generalTab">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <attribute name="title">
+        <string>General</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QWidget" name="generalWidget" native="true">
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="generalScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="generalScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>326</width>
+                <height>647</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="generalFormLayout">
+                 <property name="rowWrapPolicy">
+                  <enum>QFormLayout::DontWrapRows</enum>
+                 </property>
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="primary_experiment_type_label">
+                   <property name="text">
+                    <string>Primary Experiment Type</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="primary_experiment_type">
+                   <property name="editable">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="iTILabel">
+                   <property name="text">
+                    <string>ITI</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="iti"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="rewardAmountLabel">
+                   <property name="text">
+                    <string>Reward Amount</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QSpinBox" name="reward_amount"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="choiceDeadlineLabel">
+                   <property name="text">
+                    <string>Choice Deadline</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QSpinBox" name="choice_deadline"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="timeOutIncorrectChoiceLabel">
+                   <property name="text">
+                    <string>Timeout Incorrect Choice</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QSpinBox" name="timeout_incorrect_choice"/>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="timeOutBrokeFixationLabel">
+                   <property name="text">
+                    <string>Timeout Broke Fixation</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QSpinBox" name="timeout_broke_fixation"/>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="timeOutEarlyWithdrawalLabel">
+                   <property name="text">
+                    <string>Timeout Early Withdrawal</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QSpinBox" name="timeout_early_withdrawal"/>
+                 </item>
+                 <item row="8" column="0">
+                  <widget class="QLabel" name="timeOutMissedChoiceLabel">
+                   <property name="text">
+                    <string>Timeout Missed Choice</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="1">
+                  <widget class="QSpinBox" name="timeout_missed_choice"/>
+                 </item>
+                 <item row="9" column="0">
+                  <widget class="QLabel" name="timeOutSkippedFeedbackLabel">
+                   <property name="text">
+                    <string>Timeout Skipped Feedback</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="1">
+                  <widget class="QSpinBox" name="timeout_skipped_feedback"/>
+                 </item>
+                 <item row="10" column="0">
+                  <widget class="QLabel" name="startEasyTrialsLabel">
+                   <property name="text">
+                    <string>Start Easy Trials</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="1">
+                  <widget class="QSpinBox" name="start_easy_trials"/>
+                 </item>
+                 <item row="11" column="0">
+                  <widget class="QLabel" name="percent50FiftyLabel">
+                   <property name="text">
+                    <string>Percent 50 Fifty</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="1">
+                  <widget class="QSpinBox" name="percent_50_fifty"/>
+                 </item>
+                 <item row="12" column="0">
+                  <widget class="QLabel" name="percentCatchLabel">
+                   <property name="text">
+                    <string>Percent Catch</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="1">
+                  <widget class="QSpinBox" name="percent_catch"/>
+                 </item>
+                 <item row="13" column="0">
+                  <widget class="QLabel" name="ports_LMRAirLabel">
+                   <property name="text">
+                    <string>Ports LMR Air</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="13" column="1">
+                  <widget class="QSpinBox" name="ports_lmr_air">
+                   <property name="maximum">
+                    <number>1000000</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="14" column="0">
+                  <widget class="QLabel" name="habituateIgnoreIncorrectLabel">
+                   <property name="text">
+                    <string>Habituate Ignore Incorrect</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="14" column="1">
+                  <widget class="QCheckBox" name="habituate_ignore_incorrect"/>
+                 </item>
+                 <item row="15" column="0">
+                  <widget class="QLabel" name="playNoiseForErrorLabel">
+                   <property name="text">
+                    <string>PlayNoiseForError</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="15" column="1">
+                  <widget class="QCheckBox" name="PlayNoiseForError"/>
+                 </item>
+                 <item row="16" column="0">
+                  <widget class="QLabel" name="pCTimeOutLabel">
+                   <property name="text">
+                    <string>PCTimeOut</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="16" column="1">
+                  <widget class="QCheckBox" name="pc_timeout"/>
+                 </item>
+                 <item row="17" column="0">
+                  <widget class="QLabel" name="catchErrorLabel">
+                   <property name="text">
+                    <string>Catch Error</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="17" column="1">
+                  <widget class="QCheckBox" name="catch_error"/>
+                 </item>
+                 <item row="18" column="0">
+                  <widget class="QLabel" name="wire1VideoTriggerLabel">
+                   <property name="text">
+                    <string>Wire1 Video Trigger</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="18" column="1">
+                  <widget class="QCheckBox" name="wire1_video_trigger"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="secondary_experiment_type_label">
+                   <property name="text">
+                    <string>Secondary Experiment Type</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QComboBox" name="secondary_experiment_type"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QGroupBox" name="stimDelayBox">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="title">
+           <string>Stim Delay</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="stimDelayScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="stimDelayScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>333</width>
+                <height>576</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_16">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="stimDelayFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="stimDelayAutoIncrementLabel">
+                   <property name="text">
+                    <string>StimDelayAutoIncrement</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QCheckBox" name="StimDelayAutoIncrement"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="stimDelayMinLabel">
+                   <property name="text">
+                    <string>Stim Delay Min</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="stim_delay_min"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="stimDelayMaxLabel">
+                   <property name="text">
+                    <string>Stim Delay Max</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QDoubleSpinBox" name="stim_delay_max"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="stimDelayIncrLabel">
+                   <property name="text">
+                    <string>Stim Delay Incr</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="stim_delay_incr"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="stimDelayDecrLabel">
+                   <property name="text">
+                    <string>Stim Delay Decr</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QDoubleSpinBox" name="stim_delay_decr"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="stimDelayGraceLabel">
+                   <property name="text">
+                    <string>StimDelayGrace</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QDoubleSpinBox" name="stim_delay_grace"/>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="preStimDelayCntrRewardLabel">
+                   <property name="text">
+                    <string>Pre Stim Delay Cntr Reward</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QDoubleSpinBox" name="pre_stim_delay_cntr_reward"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="2" rowspan="2">
+         <widget class="QGroupBox" name="feedbackDelayBox">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="title">
+           <string>Feedback Delay</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_12">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="feedbackDelayScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="feedbackDelayScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>334</width>
+                <height>582</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_14">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="feedbackDelayFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="feedbackDelaySelectionLabel">
+                   <property name="text">
+                    <string>Feedback Delay Selection</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="feedback_delay_selection"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="feedbackDelayMinLabel">
+                   <property name="text">
+                    <string>Feedback Delay Min</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="feedback_delay_min"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="feedbackDelayMaxLabel">
+                   <property name="text">
+                    <string>Feedback Delay Max</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QDoubleSpinBox" name="feedback_delay_max"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="feedbackDelayIncrLabel">
+                   <property name="text">
+                    <string>Feedback Delay Incr</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="feedback_delay_incr"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="feedbackDelayDecrLabel">
+                   <property name="text">
+                    <string>Feedback Delay Decr</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QDoubleSpinBox" name="feedback_delay_decr"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="feedbackDelayTauLabel">
+                   <property name="text">
+                    <string>Feedback Delay Tau</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QDoubleSpinBox" name="feedback_delay_tau"/>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="feedbackDelayGraceLabel">
+                   <property name="text">
+                    <string>Feedback Delay Grace</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QDoubleSpinBox" name="feedback_delay_grace"/>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="incorrectChoiceSignalTypeLabel">
+                   <property name="text">
+                    <string>Incorrect Choice Signal Type</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QComboBox" name="incorrect_choice_signal_type"/>
+                 </item>
+                 <item row="8" column="0">
+                  <widget class="QLabel" name="iTISignalTypeLabel">
+                   <property name="text">
+                    <string>ITI Signal Type</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="1">
+                  <widget class="QComboBox" name="iti_signal_type"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="currentTrialTab">
+       <attribute name="title">
+        <string>Current Trial</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_19">
+        <item row="0" column="0">
+         <widget class="QWidget" name="currentTrialWidget" native="true">
+          <layout class="QGridLayout" name="gridLayout_23">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="currentTrialScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="currentTrialScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1071</width>
+                <height>608</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_29">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="currentTrialFormLayout">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="mouseStateLabel">
+                   <property name="text">
+                    <string>Mouse State</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="mouse_state">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="mouseWeightLabel">
+                   <property name="text">
+                    <string>Mouse Weight</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="stimDelayLabel">
+                   <property name="text">
+                    <string>Stim Delay</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QDoubleSpinBox" name="stim_delay">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="minSampleLabel">
+                   <property name="text">
+                    <string>Min Sample</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="min_sample">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="currentStimLabel">
+                   <property name="text">
+                    <string>Current Stim</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QSpinBox" name="current_stim">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="calcLeftBiasLabel">
+                   <property name="text">
+                    <string>Calc Left Bias</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QDoubleSpinBox" name="calc_left_bias">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="feedbackDelayLabel">
+                   <property name="text">
+                    <string>Feedback Delay</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QSpinBox" name="feedback_delay">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="isCatchLabel">
+                   <property name="text">
+                    <string>Is Catch</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QLineEdit" name="is_catch">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="0">
+                  <widget class="QLabel" name="isOptoTrialLabel">
+                   <property name="text">
+                    <string>Is Opto Trial</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="0">
+                  <widget class="QLabel" name="performanceLabel">
+                   <property name="text">
+                    <string>Performance</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="1">
+                  <widget class="QLineEdit" name="performance">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="0">
+                  <widget class="QLabel" name="allPerformanceLabel">
+                   <property name="text">
+                    <string>All Performance</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="1">
+                  <widget class="QLineEdit" name="all_preformance">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="1">
+                  <widget class="QLineEdit" name="is_opto_trial">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="mouse_weight">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="samplingTab">
+       <attribute name="title">
+        <string>Sampling</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="2">
+         <widget class="QGroupBox" name="stimulusSelectionBox">
+          <property name="title">
+           <string>StimulusSelection</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_20">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="stimulusSelectionScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="stimulusSelectionScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>352</width>
+                <height>462</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_24">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="stimulusSelectionFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0" colspan="2">
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>Omega Table:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="tableNoteLabel">
+                   <property name="text">
+                    <string>Table Note</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLineEdit" name="table_note">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="betaDistAlphaNBetaLabel">
+                   <property name="text">
+                    <string>Beta Dist Alpha N Beta</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="beta_dist_alpha_n_beta"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="stimulusSelectionCriteriaLabel">
+                   <property name="text">
+                    <string>Stimulus Selection Criteria</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QComboBox" name="stimulus_selection_criteria"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="leftBiasLabel">
+                   <property name="text">
+                    <string>Left Bias</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QDoubleSpinBox" name="left_bias"/>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="correctBiasLabel">
+                   <property name="text">
+                    <string>Correct Bias</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QCheckBox" name="correct_bias"/>
+                 </item>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QTableWidget" name="omega_table">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="2" rowspan="2">
+         <widget class="QGroupBox" name="auditoryBox">
+          <property name="title">
+           <string>Auditory</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_22">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="auditoryScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="auditoryScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>352</width>
+                <height>68</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_26">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="auditoryFormLayout">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="sumRatesLabel">
+                   <property name="text">
+                    <string>Sum Rates</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="sum_rates"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="3">
+         <widget class="QWidget" name="samplingWidget" native="true">
+          <layout class="QGridLayout" name="gridLayout_17">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="samplingScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="samplingScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>331</width>
+                <height>608</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_18">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="samplingFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="rewardAfterMinSamplingLabel">
+                   <property name="text">
+                    <string>Reward After Min Sampling</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QCheckBox" name="reward_after_min_sampling"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="centerPortRewAmountLabel">
+                   <property name="text">
+                    <string>Center Port Rew Amount</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="center_port_rew_amount"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="minSampleMinLabel">
+                   <property name="text">
+                    <string>Min Sample Min</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QDoubleSpinBox" name="min_sample_min"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="minSampleMaxLabel">
+                   <property name="text">
+                    <string>Min Sample Max</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="min_sample_max"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="minSampleTypeLabel">
+                   <property name="text">
+                    <string>Min Sample Type</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QComboBox" name="min_sample_type"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="minSampleIncrLabel">
+                   <property name="text">
+                    <string>Min Sample Incr</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QDoubleSpinBox" name="min_sample_incr"/>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="minSampleDecrLabel">
+                   <property name="text">
+                    <string>Min Sample Decr</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QDoubleSpinBox" name="min_sample_decr"/>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="minSampleNumIntervalLabel">
+                   <property name="text">
+                    <string>Min Sample Num Interval</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QSpinBox" name="min_sample_num_interval"/>
+                 </item>
+                 <item row="8" column="0">
+                  <widget class="QLabel" name="minSampleRandProbLabel">
+                   <property name="text">
+                    <string>Min Sample Rand Prob</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="0">
+                  <widget class="QLabel" name="stimulusTimeLabel">
+                   <property name="text">
+                    <string>Stimulus Time</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="1">
+                  <widget class="QDoubleSpinBox" name="stimulus_time"/>
+                 </item>
+                 <item row="10" column="0">
+                  <widget class="QLabel" name="portLEDToCueRewardLabel">
+                   <property name="text">
+                    <string>PortLEDToCueReward</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="1">
+                  <widget class="QCheckBox" name="PortLEDToCueReward"/>
+                 </item>
+                 <item row="11" column="0">
+                  <widget class="QLabel" name="percentForcedLEDTrialLabel">
+                   <property name="text">
+                    <string>Percent Forced LED Trial</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="1">
+                  <widget class="QDoubleSpinBox" name="percent_forced_led_trial"/>
+                 </item>
+                 <item row="8" column="1">
+                  <widget class="QDoubleSpinBox" name="min_sample_rand_prob"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1" rowspan="3">
+         <widget class="QGroupBox" name="lightIntensityBox">
+          <property name="title">
+           <string>Light Intensity</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_21">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="lightIntensityScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="lightIntensityScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>324</width>
+                <height>582</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_25">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="lightIntensityFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="leftPokeAttenPrcntLabel">
+                   <property name="text">
+                    <string>Left Poke Atten Prcnt (%)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="centerPokeAttenPrcntLabel">
+                   <property name="text">
+                    <string>Center Poke Atten Prcnt (%)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="rightPokeAttenPrcntLabel">
+                   <property name="text">
+                    <string>Right Poke Atten Prcnt (%)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="stimAfterPokeOutLabel">
+                   <property name="text">
+                    <string>Stim After Poke Out</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="beepAfterMinSamplingLabel">
+                   <property name="text">
+                    <string>Beep After Min Sampling</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QCheckBox" name="beep_after_min_sampling"/>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="right_poke_atten_prcnt"/>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QSpinBox" name="center_poke_atten_prcnt"/>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="left_poke_atten_prcnt"/>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QComboBox" name="stim_after_poke_out"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="visualTab">
+       <attribute name="title">
+        <string>Visual</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="1">
+         <widget class="QGroupBox" name="gratingBox">
+          <property name="title">
+           <string>Grating</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_30">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="gratingScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="gratingScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>516</width>
+                <height>265</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_33">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="gratingFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="gaborSizeFactorLabel">
+                   <property name="text">
+                    <string>Gabor Size Factor</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QDoubleSpinBox" name="gabor_size_factor"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="phaseLabel">
+                   <property name="text">
+                    <string>Phase</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="phase"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="numCyclesLabel">
+                   <property name="text">
+                    <string>Num Cycles</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="num_cycles"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="cyclesPerSecondDriftLabel">
+                   <property name="text">
+                    <string>Cycles Per Second Drift</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QSpinBox" name="cycles_per_second_drift"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="gaussianFilterRatioLabel">
+                   <property name="text">
+                    <string>Gaussian Filter Ratio</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QDoubleSpinBox" name="gaussian_filter_ratio"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QGroupBox" name="randomDotsBox">
+          <property name="title">
+           <string>Random Dots</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_31">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="randomDotsScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="randomDotsScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>516</width>
+                <height>265</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_34">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="randomDotsFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="drawRatioLabel">
+                   <property name="text">
+                    <string>Draw Ratio</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QDoubleSpinBox" name="draw_ratio"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="circleAreaLabel">
+                   <property name="text">
+                    <string>Circle Area</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="circle_area">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="nDotsLabel">
+                   <property name="text">
+                    <string>n Dots</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="n_dots">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="dotSizeInDegsLabel">
+                   <property name="text">
+                    <string>Dot Size In Degs</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QSpinBox" name="dot_size_in_degs"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="dotSpeedDegsPerSecLabel">
+                   <property name="text">
+                    <string>Dot Speed Degs Per Sec</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QSpinBox" name="dot_speed_degs_per_sec"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="dotLifetimeSecsLabel">
+                   <property name="text">
+                    <string>Dot Lifetime Secs</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QSpinBox" name="dot_lifetime_secs"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="2">
+         <widget class="QWidget" name="visualWidget" native="true">
+          <layout class="QGridLayout" name="gridLayout_27">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="visualScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="visualScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>523</width>
+                <height>608</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_28">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="visualFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="visualStimAnglePortLeftLabel">
+                   <property name="text">
+                    <string>Visual Stim Angle Port Left</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="visual_stim_angle_port_left"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="visualStimAnglePortRightLabel">
+                   <property name="text">
+                    <string>Visual Stim Angle Port Right</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QComboBox" name="visual_stim_angle_port_right"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="screenDistLabel">
+                   <property name="text">
+                    <string>ScreenDist (cm)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="screen_dist_cm"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="screenWidthLabel">
+                   <property name="text">
+                    <string>ScreenWidth (cm)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QSpinBox" name="screen_width_cm"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="apertureSizeHeightLabel">
+                   <property name="text">
+                    <string>Aperture Size Height</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QSpinBox" name="aperture_size_height"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="apertureSizeWidthLabel">
+                   <property name="text">
+                    <string>Aperture Size Width</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QSpinBox" name="aperture_size_width"/>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="centerXLabel">
+                   <property name="text">
+                    <string>Center X</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QSpinBox" name="center_x"/>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="centerYLabel">
+                   <property name="text">
+                    <string>Center Y</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QSpinBox" name="center_y"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="optogeneticsTab">
+       <attribute name="title">
+        <string>Optogenetics</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QWidget" name="optogeneticsWidget" native="true">
+          <layout class="QGridLayout" name="gridLayout_35">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="optogeneticsScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="optogeneticsScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1071</width>
+                <height>608</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_36">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="optogeneticsFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="optoProbLabel">
+                   <property name="text">
+                    <string>Opto Prob</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QDoubleSpinBox" name="opto_prob"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="optoOr2PLabel">
+                   <property name="text">
+                    <string>Opto Or 2 Photon</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QComboBox" name="opto_or_2_photon"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="optoStartState1Label">
+                   <property name="text">
+                    <string>Opto Start State 1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QComboBox" name="opto_start_state_1"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="optoStartDelayLabel">
+                   <property name="text">
+                    <string>Opto Start Delay</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QSpinBox" name="opto_start_delay"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="optoMaxTimeLabel">
+                   <property name="text">
+                    <string>Opto Max Time</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QSpinBox" name="opto_max_time"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="optoEndState1Label">
+                   <property name="text">
+                    <string>Opto End State 1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QComboBox" name="opto_end_state_1"/>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="optoEndState2Label">
+                   <property name="text">
+                    <string>Opto End State 2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QComboBox" name="opto_end_state_2"/>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="optoBrainRegionLabel">
+                   <property name="text">
+                    <string>Opto Brain Region</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QComboBox" name="opto_brain_region"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="plotsTab">
+       <attribute name="title">
+        <string>Plots</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="showplotsBox">
+          <property name="title">
+           <string>Vevaiometric</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_37">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="showplotsScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="showplotsScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1065</width>
+                <height>265</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_39">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="showplotsFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="vevaiometricYLimLabel">
+                   <property name="text">
+                    <string>Vevaiometric Y Lim</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="vevaiometric_y_lim"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="vevaiometricMinWTLabel">
+                   <property name="text">
+                    <string>Vevaiometric Min WT</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="vevaiometric_min_wt"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="vevaiometricNBinLabel">
+                   <property name="text">
+                    <string>Vevaiometric N Bin</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="vevaiometric_n_bin"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="vevaiometricShowPointsLabel">
+                   <property name="text">
+                    <string>Vevaiometric Show Points</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QCheckBox" name="vevaiometric_show_points"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="vevaiometricBox">
+          <property name="title">
+           <string>ShowPlots</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_38">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="vevaiometricScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="vevaiometricScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1065</width>
+                <height>265</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_40">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="vevaiometricFormLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="showPsycStimLabel">
+                   <property name="text">
+                    <string>Show Psyc Stim</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QCheckBox" name="show_psyc_stim"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="showVevaiometricLabel">
+                   <property name="text">
+                    <string>Show Vevaiometric</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QCheckBox" name="show_vevaiometric"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="showTrialRateLabel">
+                   <property name="text">
+                    <string>Show Trial Rate</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QCheckBox" name="show_trial_rate"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="showFixLabel">
+                   <property name="text">
+                    <string>Show Fix</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QCheckBox" name="show_fix"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="showSTLabel">
+                   <property name="text">
+                    <string>Show ST</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QCheckBox" name="show_st"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="showFeedbackLabel">
+                   <property name="text">
+                    <string>Show Feedback</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QCheckBox" name="show_feedback"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1131</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionReload_defaults"/>
+   </widget>
+   <addaction name="menuOptions"/>
+  </widget>
+  <action name="actionReload_defaults">
+   <property name="text">
+    <string>Reload defaults</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
