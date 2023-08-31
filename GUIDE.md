@@ -1,13 +1,16 @@
+## About
+This guide is a modified version of [PyBpod's Installation Guide](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html) specific to the Poirazi Lab's Mouse2AFC protocol. For more detail on what PyBpod is and how to use other features please see their wiki [here](https://pybpod.readthedocs.io/en/v1.8.1/index.html). 
+
 # Installation
 
 ### 1. Create environment
-Do steps 1-3 from [Installation for developers](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html#installation-for-developers)
+Do steps 1-3 from [Installation for Developers](https://pybpod.readthedocs.io/en/v1.8.1/getting-started/install.html#installation-for-developers)
 
 **NOTE: If using Windows 11:**
-- Before executing step 2, open the Windows 10 yml file and delete `sqlite=3.19.3=vc14_1`, `jpeg=9b=vc14_2` and `qt=5.6.2=vc14_1`
-- After activating the environment in step 3:
+- Before executing step 2 of the Installation for Developers, open the Windows 10 yml file and delete `sqlite=3.19.3=vc14_1`,`jpeg=9b=vc14_2`,`qt=5.6.2=vc14_1`,`matplotlib=2.0.2=np113py36_0` and `tk=8.5.18=vc14_0`
+- After activating the environment in step 3 of the Installatin for Developers:
 ```bash
-conda install jpeg=9b=vc14h4d7706e_1 qt=5.6.2=vc14h6f8c307_12 --channel conda-forge --channel anaconda --channel defaults
+conda install jpeg=9b qt=5.6.2 matplotlib=2.0.2 tk --channel conda-forge --channel anaconda --channel defaults
 ```
 
 ### 2. Verify conda environment is activated
@@ -48,14 +51,7 @@ pip install --upgrade pip
 ```bash
 git clone --recurse-submodules -j8 https://github.com/ckarageorgkaneen/pybpod <REPONAME>
 ```
-
-or 
-
-```bash
-git clone https://github.com/ckarageorgkaneen/pybpod <REPONAME>
-git submodule update --init --recursive
-```
-
+Change`<REPONAME>` to whatever you like. The repository will be cloned into a new folder called `<REPONAME>`
 ### 6. Install pybpod
 
 ```bash
@@ -65,7 +61,7 @@ python utils/install.py  # may take a few minutes
 ### 7. Clone mouse2afc github repository
 Clone outside of `<REPONAME>`
 ```bash
-git clone https://github.com/HenryJFlynn/mouse2afc.git 
+git clone https://github.com/HenryJFlynn/mouse2afc.git mouse2afc
 ```
 
 ### 8. Install mouse2afc
@@ -133,7 +129,7 @@ Click `Open` and select `pybpod-project` located in the `mouse2afc` repository f
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/51a90a6b-64f2-4e51-84c6-63fb1c500427)
 
 ### 3. Select user
-Under `Users`, double-click on `Default-User` to select it
+In the `Projects` window, under `Users`, double-click on `Default-User` to select it
 
 ### 4. Select Bpod board information
 In the `Projects` window, go to `Bpod boards`, select `Default-Box` then in the `Details` window select the serial port your Bpod is connected to. For Linux the serial port will look like `/dev/tty`, for Windows `COM`
@@ -146,7 +142,7 @@ and click `Console`:
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/ae4e52e0-aabc-4dc2-acc8-baae1e36198e)
 
 ### 5. Assign subjects to setup
-Under `Subjects`, click on `Default-Subject`. If not already selected, click on the dropdown widget next to `Setup` and select the setup you would like this mouse to use:
+In the `Projects` window, under `Subjects`, click on `Default-Subject`. If not already selected, click on the dropdown widget next to `Setup` and select the setup you would like this mouse to use:
 
 ![image](https://github.com/HenryJFlynn/mouse2afc/assets/130571023/70a85f8f-8348-418d-98b2-f607a3040c9a)
 
@@ -176,7 +172,7 @@ When done using, click `Stop` or `Kill`, and then `Save`.
 ### Note about emulator mode in Pybpod:
 If you wish to test a protocol without connecting to a Bpod:
 1. Instead of doing step five, check `Emulator mode`
-2. Under `Protocols`, open `Mouse2AFC` and edit line 6 to be `bpod=Bpod(emulator_mode=True`)
+2. Under `Protocols`, open `Mouse2AFC_` and edit line 6 to be `bpod=Bpod(emulator_mode=True`)
 
 ### Note about examples
 The examples are meant to be run outside of pybpod, inside of your IDE
